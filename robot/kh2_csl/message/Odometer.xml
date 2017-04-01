@@ -1,0 +1,9 @@
+
+<Message name='Odometer' displayName='Wheel Position Counter'>
+	<Description>
+		This variable/message type is the initialiser for a wheel position counter.
+	</Description>
+	<Segment name='num' displayName='Counter ID number' unit='integer' segmentInContents='false' />
+	<Segment name='setval' displayName='Count Setter Value' unit='integer' segmentInContents='false' />
+</Message>
+

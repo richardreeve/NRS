@@ -1,0 +1,59 @@
+
+<NodeDescription name='Integrator' displayName='Integrator' rootNode='false'>
+	<Description>
+		Integrator Node: out = (x*y)/10^dps + z
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false'/>
+	<Attribute name='num' displayName='Integrator number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='dps' displayName='No. Decimal Places' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='4'/>
+	<Attribute name='x' displayName='X' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>	
+	<Attribute name='y' displayName='Y' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>	
+	<Attribute name='z' displayName='Z' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>	
+		
+	<Variable name='num' displayName='Integrator number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='12'/>
+	</Variable>
+		
+	<Variable name='dps' displayName='No. Decimal Places' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='dps' attributeReference='dps' />
+	</Variable>
+
+	<Variable name='x' displayName='X' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='x' attributeReference='x' />
+	</Variable>
+	
+	<Variable name='y' displayName='Y' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='y' attributeReference='y' />
+	</Variable>
+	
+	<Variable name='z' displayName='Z' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='z' attributeReference='z' />
+	</Variable>
+
+	<Variable name='out' displayName='Out' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='out' attributeReference='out' />
+	</Variable>
+</NodeDescription>

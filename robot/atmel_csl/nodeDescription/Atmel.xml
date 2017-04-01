@@ -1,0 +1,26 @@
+
+<NodeDescription name='Atmel' displayName='Atmel' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+	<Description>
+		Microcontroller ATMEGA128
+	</Description>
+	<Contains type='LED' minOccurs='0' maxOccurs='4' />
+	<Contains type='ADC' minOccurs='0' maxOccurs='8' />
+	<Contains type='Optomotor' minOccurs='0' maxOccurs='1' />
+        <Contains type='Integrator' minOccurs='0' maxOccurs='12' />
+	<Contains type='Stepper' minOccurs='0' maxOccurs='1' />
+	<Contains type='Servo' minOccurs='0' maxOccurs='1' />
+        <Contains type='Bandpass' minOccurs='0' maxOccurs='2' />
+        <Contains type='Delta' minOccurs='0' maxOccurs='4' />
+        <Contains type='OffsetGain' minOccurs='0' maxOccurs='4' />
+         
+	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='enable' displayName='enable node' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='true'/>
+	<Variable name='enable' displayName='enable node'
+	messageType='boolean' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='boolean' attributeReference='enable' />
+	</Variable>
+</NodeDescription>
+

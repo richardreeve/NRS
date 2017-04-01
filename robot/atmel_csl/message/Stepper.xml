@@ -1,0 +1,10 @@
+
+<Message name='Stepper' displayName='Stepper'>
+	<Description>
+		This variable/message type is the initialiser for a stepper.
+	</Description>
+	<Segment name='num' displayName='Number' unit='integer' segmentInContents='false' />
+	<Segment name='enable' displayName='Enable' unit='boolean' segmentInContents='false' />-->
+	<Segment name='microsteps' displayName='MicroSteps' unit='integer' segmentInContents='false' />
+	<Segment name='sensitivity' displayName='Sensitivity' unit='integer' segmentInContents='false' />
+</Message>

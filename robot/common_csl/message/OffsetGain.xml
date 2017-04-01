@@ -1,0 +1,9 @@
+
+<Message name='OffsetGain' displayName='OffsetGain'>
+	<Description>
+	  Simple node for offset and gain
+	</Description>
+	<Segment name='num' displayName='Offset-Gain' unit='integer' segmentInContents='false' />
+	<Segment name='offset' displayName='Offset' unit='integer' segmentInContents='false' />
+	<Segment name='gain' displayName='Gain' unit='integer' segmentInContents='false' />
+</Message>

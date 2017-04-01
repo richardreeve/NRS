@@ -1,0 +1,21 @@
+
+<NodeDescription name='OffsetGain' displayName='OffsetGain' rootNode='false'>
+	<Description>
+	  Simple node for Offset and Gain
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' transmit='false'/>
+	<Attribute name='num' displayName='OffsetGain Number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+	<Attribute name='offset' displayName='Offset' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+	<Attribute name='gain' displayName='Gain' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+
+	<Variable name='in' displayName='In' messageType='integer' selfUpdating='false'
+	stateHolding='true' variableMessageType='false'>
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+
+	<Variable name='out' displayName='Out' messageType='integer' selfUpdating='true'
+	stateHolding='true' variableMessageType='false'>
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+		
+</NodeDescription>

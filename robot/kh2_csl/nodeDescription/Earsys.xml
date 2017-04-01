@@ -1,0 +1,145 @@
+
+<NodeDescription name='Earsys' displayName='Ear System' rootNode='false'>
+	<Description>
+		Ear System
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='enable' displayName='Enable Node' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+	<Attribute name='pr1l' displayName='Left Preamp Gain 1' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='pr2l' displayName='Left Preamp Gain 2' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='pr1r' displayName='Right Preamp Gain 1' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='pr2r' displayName='Right Preamp Gain 2' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an1l' displayName='Left Mixer Gain 1' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an2l' displayName='Left Mixer Gain 2' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an3l' displayName='Left Mixer Gain 3' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an1r' displayName='Right Mixer Gain 1' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an2r' displayName='Right Mixer Gain 2' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='an3r' displayName='Right Mixer Gain 3' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='sdel1' displayName='Synth Delay 1' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='sdel2' displayName='Synth Delay 2' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	
+	<Variable name='enable' displayName='enable node'
+	messageType='boolean' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='boolean' attributeReference='enable' />
+	</Variable>
+	
+	<!--<Variable name='num' displayName='2/4 Ear Mode' messageType='void'
+	selfUpdating='false' occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+	</Variable>
+	-->
+	<Variable name='lsig' displayName='Left Ear Signal' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='lsig' attributeReference='lsig' />
+	</Variable>
+	
+	<Variable name='rsig' displayName='Right Ear Signal' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='rsig' attributeReference='rsig' />
+	</Variable>
+		
+	<Variable name='pr1l' displayName='Left Preamp Gain 1' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='pr1l' attributeReference='pr1l' />
+	</Variable>
+	
+	<Variable name='pr2l' displayName='Left Preamp Gain 2' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='pr2l' attributeReference='pr2l' />
+	</Variable>
+	
+	<Variable name='pr1r' displayName='Right Preamp Gain 1' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='pr1r' attributeReference='pr1r' />
+	</Variable>
+	
+	<Variable name='pr2r' displayName='Right Preamp Gain 2' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='pr2r' attributeReference='pr2r' />
+	</Variable>
+	
+	<Variable name='an1l' displayName='Left Mixer Gain 1' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an1l' attributeReference='an1l' />
+	</Variable>
+	
+	<Variable name='an2l' displayName='Left Mixer Gain 2' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an2l' attributeReference='an2l' />
+	</Variable>
+	
+	<Variable name='an3l' displayName='Left Mixer Gain 3' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an3l' attributeReference='an3l' />
+	</Variable>
+	
+	<Variable name='an1r' displayName='Right Mixer Gain 1' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an1r' attributeReference='an1r' />
+	</Variable>
+	
+	<Variable name='an2r' displayName='Right Mixer Gain 2' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an2r' attributeReference='an2r' />
+	</Variable>
+	
+	<Variable name='an3r' displayName='Right Mixer Gain 3' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='an3r' attributeReference='an3r' />
+	</Variable>
+	
+	<Variable name='sdel1' displayName='Synth Delay 1' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='sdel1' attributeReference='sdel1' />
+	</Variable>
+	
+	<Variable name='sdel2' displayName='Synth Delay 2' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='sdel2' attributeReference='sdel2' />
+	</Variable>
+	
+</NodeDescription>

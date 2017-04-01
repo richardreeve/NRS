@@ -1,0 +1,11 @@
+
+<Message name='LED' displayName='LED'>
+	<Description>
+		This variable/message type is the initialiser for an LED.
+	</Description>
+	<Segment name='num' displayName='LED number' unit='integer' segmentInContents='false' />
+	<Segment name='on' displayName='Default state' unit='boolean' segmentInContents='false' />
+	<Segment name='holdTime' displayName='hold time for blink' unit='integer' segmentInContents='false' />
+</Message>
+
+

@@ -1,0 +1,331 @@
+<Capabilities xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0' cType='Khepera II' cVersion='1.0'>
+<!-- Type name='boolean'>
+ <Description>
+The built-in type for messages with one truth value
+ </Description>
+</Type -->
+<!-- Type name='number'>
+ <Description>
+The built-in type for messages with one double or integer argument.
+ </Description>
+</Type -->
+<!-- Type name='route'>
+ <Description>
+The built-in type for messages with one route argument.
+ </Description>
+</Type -->
+<!-- Type name='string'>
+ <Description>
+The built-in type for messages with one string argument.
+ </Description>
+</Type -->
+<!-- Type name='integer'>
+ <Description>
+The built-in type for messages with an integer integer argument, generally for an id.
+ </Description>
+</Type -->
+<!-- Type name='void'>
+ <Description>
+The built-in type for events (with no arguments).
+ </Description>
+</Type -->
+<Unit name='filename' type='string'>
+ <Description>
+A string restricted to an alphanumeric sequence of characters which can also contain any valid characters for a filename.
+ </Description>
+<StringInfo restriction='filename'/>
+</Unit>
+<Unit name='token' type='string'>
+ <Description>
+A string restricted to an alphanumeric sequence of characters which can also contain the underscore character.
+ </Description>
+<StringInfo restriction='token'/>
+</Unit>
+<Unit name='vnname' type='string'>
+ <Description>
+A string restricted to a sequence of tokens separated by full stops, used for variable and node names.
+ </Description>
+<StringInfo restriction='vnname'/>
+</Unit>
+<Message name='Spike' displayName='Spike'>
+ <Description>
+This variable/message type allows recipients to
+receive spikes.
+ </Description>
+</Message>
+<Message name='CreateLink'>
+ <Description>
+The built-in type for messages which create links.
+ </Description>
+ <Segment name='cid' displayName='CID of source' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of source' unit='integer' segmentInContents='false'/>
+ <Segment name='targetCID' displayName='CID of target' unit='token' segmentInContents='false'/>
+ <Segment name='targetVNID' displayName='VNID of target' unit='integer' segmentInContents='false'/>
+ <Segment name='temporary' displayName='A temporary connection?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='CreateNode'>
+ <Description>
+The built-in type for messages which create nodes.
+ </Description>
+ <Segment name='vnType' displayName='node type to create' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of node' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='node name' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='DeleteLink'>
+ <Description>
+The built-in type for messages which delete nodes.
+ </Description>
+ <Segment name='cid' displayName='CID of source' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of source' unit='integer' segmentInContents='false'/>
+ <Segment name='targetCID' displayName='CID of target' unit='token' segmentInContents='false'/>
+ <Segment name='targetVNID' displayName='VNID of target' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='DeleteNode'>
+ <Description>
+The built-in type for messages which delete nodes.
+ </Description>
+ <Segment name='vnid' displayName='VNID of node' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='Error'>
+ <Description>
+The built-in type for error messages.
+ </Description>
+ <Segment name='priority' displayName='Priority of error message' unit='integer' segmentInContents='false'/>
+ <Segment name='errID' displayName='ID of error message' unit='integer' segmentInContents='false'/>
+ <Segment name='errString' displayName='Description of error' unit='string' segmentInContents='false'/>
+</Message>
+<Message name='MainLoop' displayName='System main loop'>
+ <Description>
+This variable/message type allows recipients to
+be added to the main loop of the source's program.
+ </Description>
+</Message>
+<Message name='MessageSender' displayName='System message sender'>
+ <Description>
+This variable/message type allows recipients to
+be told that their Node should send any outstanding messages.
+ </Description>
+</Message>
+<Message name='QueryCID'>
+ <Description>
+The built-in type for messages which query component IDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cid' displayName='suggested CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='QueryCSL'>
+ <Description>
+The built-in message for requests for CSL
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryCType'>
+ <Description>
+The built-in message for requests for CType
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryConnectedCIDs'>
+ <Description>
+The built-in type for messages which query a component to determine which components it is connected to.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cid' displayName='suggested CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='QueryLanguage'>
+ <Description>
+The built-in message for queries of languages capabilities
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryLog'>
+ <Description>
+The built-in message for requests for logs
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryMaxVNID'>
+ <Description>
+The built-in message for requests for an upper bound for current VNID values
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryNumLog'>
+ <Description>
+The built-in message for requests for numbers of logs
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryNumberType'>
+ <Description>
+The built-in message for queries of languages capabilities
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryRoute'>
+ <Description>
+The built-in message for queries of routes
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='forwardRoute' displayName='forward route' unit='route' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNID'>
+ <Description>
+The built-in message for queries of variable or node vnids from their names.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='VNName query' unit='vnname' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNName'>
+ <Description>
+The built-in message for queries of variable or node VNNames from their VNIDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID query' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNType'>
+ <Description>
+The built-in message for queries of variable or node VNTypes from their VNIDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID query' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyCID'>
+ <Description>
+The built-in type for messages which reply to requests for component IDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cid' displayName='CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='ReplyCSL'>
+ <Description>
+The built-in message type for replies to requests for CSLs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='Capabilities' displayName='CSL reply' unit='string' segmentInContents='true'/>
+</Message>
+<Message name='ReplyCType'>
+ <Description>
+The built-in message type for replies to requests for CTypes.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cType' displayName='CType reply' unit='token' segmentInContents='false'/>
+ <Segment name='cVersion' displayName='CVersion reply' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='ReplyLanguage'>
+ <Description>
+The built-in message type for replies to requests for language capabilities of a component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='speaksBMF' displayName='Speaks BMF?' unit='boolean' segmentInContents='false'/>
+ <Segment name='speaksPML' displayName='Speaks PML?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='ReplyLog'>
+ <Description>
+The built-in message type for replies to requests for logs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='logPort' displayName='Log port' unit='route' segmentInContents='false'/>
+ <Segment name='isPMLNotBMF' displayName='Language of log' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='ReplyMaxVNID'>
+ <Description>
+The built-in message type for replies to requests for an upper limit on VNIDs for this component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='MaxVNID reply' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyNumLog'>
+ <Description>
+The built-in message type for replies to requests for number of logs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='numLogs' displayName='Number of logs' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyNumberType'>
+ <Description>
+The built-in message type for replies to requests for language capabilities of a component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='maxBits' displayName='Max no. bits in integers' unit='integer' segmentInContents='false'/>
+ <Segment name='floatingPoint' displayName='Handles floating point?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='ReplyRoute'>
+ <Description>
+The built-in message type for replies to requests for Routes.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='forwardRoute' displayName='forward route' unit='route' segmentInContents='false'/>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='translationCount' displayName='translation count' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNID'>
+ <Description>
+The built-in message type for replies to requests for VNIDs of variables or nodes from their VNNames.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID reply' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNName'>
+ <Description>
+The built-in message type for replies to requests for VNNames of variables or nodes from their VNIDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='VNName reply' unit='vnname' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNType'>
+ <Description>
+The built-in message type for replies to requests for VNTypes of variables or nodes from their VNIDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnType' displayName='VNType reply' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='Reset'>
+ <Description>
+The built-in type for messages which reset the component.
+ </Description>
+</Message>
+<Message name='SetErrorRoute'>
+ <Description>
+The built-in type for setting error routes.
+ </Description>
+ <Segment name='priority' displayName='Min priority of error to transmit' unit='integer' segmentInContents='false'/>
+ <Segment name='cid' displayName='CID of target error component' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of target error variable' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='Updater' displayName='System updater'>
+ <Description>
+This variable/message type allows recipients to
+be told that their Node should update the state
+of all of its variables.
+ </Description>
+</Message>
+
+<!-- BEGIN COMPONENT-SPECIFIC DEFINITIONS HERE -->
+

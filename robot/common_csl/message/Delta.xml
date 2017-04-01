@@ -1,0 +1,8 @@
+
+<Message name='Delta' displayName='Delta Node'>
+	<Description>
+		This variable/message type is the initialiser for a delta node.
+	</Description>
+	<Segment name='num' displayName='Number' unit='integer' segmentInContents='false' />
+	<Segment name='del' displayName='Delta' unit='integer' segmentInContents='false' />
+</Message>

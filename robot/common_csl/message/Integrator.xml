@@ -1,0 +1,11 @@
+
+<Message name='Integrator' displayName='Integrator'>
+	<Description>
+		This variable/message type is the initialiser for an integrator of the form out = x*y + z.
+	</Description>
+	<Segment name='num' displayName='Integrator ID Number' unit='integer' segmentInContents='false' />
+	<Segment name='dps' displayName='No. Decimal Places' unit='integer' segmentInContents='false' />
+	<Segment name='x' displayName='X Variable' unit='integer' segmentInContents='false' />
+	<Segment name='y' displayName='Y Variable' unit='integer' segmentInContents='false' />
+	<Segment name='z' displayName='Z Variable' unit='integer' segmentInContents='false' />
+</Message>

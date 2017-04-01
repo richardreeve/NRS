@@ -1,0 +1,15 @@
+
+<Message name='Motor' displayName='Motor'>
+	<Description>
+		This variable/message type is the initialiser for an motor.
+	</Description>
+	<Segment name='num' displayName='Number' unit='integer' segmentInContents='false' />
+	<Segment name='mode' displayName='Control Mode' unit='integer' segmentInContents='false' />
+	<Segment name='speed' displayName='Speed' unit='integer' segmentInContents='false' />
+	<Segment name='pos' displayName='Position Increment' unit='integer' segmentInContents='false' />
+	<Segment name='mspeed' displayName='Max Speed' unit='integer' segmentInContents='false' />
+	<Segment name='macc' displayName='Max Acceleration' unit='integer' segmentInContents='false' />
+	<Segment name='kp' displayName='Proportional Gain' unit='integer' segmentInContents='false' />
+	<Segment name='ki' displayName='Integral Gain' unit='integer' segmentInContents='false' />
+	<Segment name='kd' displayName='Derivative Gain' unit='integer' segmentInContents='false' />
+</Message>

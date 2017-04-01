@@ -1,0 +1,28 @@
+
+<NodeDescription name='Optomotor' displayName='Optomotor' rootNode='false'>
+	<Description>
+	  Control node for optomotor behaviour
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' transmit='false'/>
+	<Attribute name='num' displayName='Optomotor number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+<!--	<Attribute name='commandoffset' displayName='Command Offset' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+	<Attribute name='commandgain' displayName='Command Gain' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+	<Attribute name='feedbackoffset' displayName='Feedback Offset' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>
+	<Attribute name='feedbackgain' displayName='Feedback Gain' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0' transmit='true'/>  -->
+	
+	<Variable name='command' displayName='Command' messageType='integer' selfUpdating='false'
+	stateHolding='true' variableMessageType='false'>
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+
+	<Variable name='feedback' displayName='Feedback' messageType='integer' selfUpdating='false'
+	stateHolding='true' variableMessageType='false'>
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+
+	<Variable name='output' displayName='Output' messageType='integer' selfUpdating='true'
+	stateHolding='true' variableMessageType='false'>
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+		
+</NodeDescription>

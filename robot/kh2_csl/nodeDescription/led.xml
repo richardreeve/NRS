@@ -1,0 +1,40 @@
+<NodeDescription name='LED' displayName='LED' rootNode='false'>
+	<Description>
+		LED on the microcontroller
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='num' displayName='LED number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='on' displayName='Default state' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+	<Attribute name='holdTime' displayName='hold time for blink' mustHave='true' unitName='integer' defaultValue='700' isConst='false' inNRSNamespace='false' liveChange='true' />
+	
+	<Variable name='num' displayName='LED number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='4'/>
+	</Variable>
+	
+	<Variable name='on' displayName='State' messageType='boolean'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='on' attributeReference='on' />
+	</Variable>
+	
+	<Variable name='holdTime' displayName='LED number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='holdTime' attributeReference='holdTime' />
+		<Constraint minVal='1' maxVal='unbounded' />
+	</Variable>
+	
+	<Variable name='blink' displayName='blink' messageType='void'
+	selfUpdating='false' occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+	</Variable>
+</NodeDescription>

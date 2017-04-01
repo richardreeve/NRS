@@ -1,0 +1,8 @@
+
+<Message name='Khepera2' displayName='Khepera 2'>
+	<Description>
+		This variable/message type is the initialiser for a Khepera II mobile robot.
+	</Description>
+	<Segment name='enable' displayName='enable node' unit='boolean' segmentInContents='false' />
+</Message>
+

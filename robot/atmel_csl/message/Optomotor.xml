@@ -1,0 +1,11 @@
+
+<Message name='Optomotor' displayName='Optomotor'>
+	<Description>
+	  Simple control node for optomotor behaviour
+	</Description>
+	<Segment name='num' displayName='Optomotor ID Number' unit='integer' segmentInContents='false' />
+<!--	<Segment name='commandoffset' displayName='Command Offset' unit='integer' segmentInContents='false' />
+	<Segment name='commandgain' displayName='Command Gain' unit='integer' segmentInContents='false' />
+	<Segment name='feedbackoffset' displayName='Feedback Offset' unit='integer' segmentInContents='false' />
+	<Segment name='feedbackgain' displayName='Feedback Gain' unit='integer' segmentInContents='false' />  -->
+</Message>

@@ -1,0 +1,69 @@
+
+<NodeDescription name='Bandpass' displayName='Bandpass' rootNode='false'>
+	<Description>
+		Bandpass filter
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='num' displayName='Bandpass number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='high' displayName='High Bound' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='low' displayName='Low Bound' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<!--<Attribute name='in' displayName='Input Value' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>-->
+	<Attribute name='binv' displayName='Bandpass Inversion' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+	<!--<Attribute name='bout' displayName='Out (Boolean)' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='false'/>-->
+	<!--<Attribute name='iout' displayName='Out (Integer)' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='false' defaultValue='0'/>-->
+
+		
+	<Variable name='num' displayName='Bandpass number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='2'/>
+	</Variable>
+		
+	<Variable name='high' displayName='High Bound' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='high' attributeReference='high' />
+	</Variable>
+
+	<Variable name='low' displayName='Low Bound' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='low' attributeReference='low' />
+	</Variable>
+	
+	<Variable name='in' displayName='Input Value' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='in' attributeReference='in' />
+	</Variable>
+	
+	<Variable name='binv' displayName='Inverted Bandpass' messageType='boolean'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='inv' attributeReference='inv' />
+	</Variable>
+
+	<Variable name='bout' displayName='Out (Boolean)' messageType='boolean'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='bout' attributeReference='bout' />
+	</Variable>
+
+	<Variable name='iout' displayName='Out (Integer)' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='iout' attributeReference='iout' />
+	</Variable>
+
+</NodeDescription>

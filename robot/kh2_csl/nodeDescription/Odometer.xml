@@ -1,0 +1,48 @@
+
+<NodeDescription name='Odometer' displayName='Odometer' rootNode='false'>
+	<Description>
+		Wheel position counter
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='num' displayName='Odometer Number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='setval' displayName='Set Value' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	
+	<Variable name='num' displayName='Odometer Number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='8'/>
+	</Variable>
+	
+	<Variable name='count' displayName='Count' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='false'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='count' attributeReference='count' />
+	</Variable>
+	
+	<Variable name='setval' displayName='Set Value' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='setval' attributeReference='setval' />
+	</Variable>
+
+	<Variable name='set' displayName='Set' messageType='void'
+	selfUpdating='false' occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='set' attributeReference='set' />
+	</Variable>
+	
+	<Variable name='reset' displayName='Reset' messageType='void'
+	selfUpdating='false' occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='reset' attributeReference='reset' />
+	</Variable>
+</NodeDescription>
+

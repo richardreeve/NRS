@@ -1,0 +1,8 @@
+
+<Message name='IR' displayName='Infrared Sensor'>
+	<Description>
+		This variable/message type is the initialiser for an infrared proximity sensor.
+	</Description>
+	<Segment name='num' displayName='Number' unit='integer' segmentInContents='false' />
+</Message>
+

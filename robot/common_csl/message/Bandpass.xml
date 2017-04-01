@@ -1,0 +1,10 @@
+
+<Message name='Bandpass' displayName='Bandpass Filter'>
+	<Description>
+		This variable/message type is the initialiser for a bandpass filter.
+	</Description>
+	<Segment name='num' displayName='Number' unit='integer' segmentInContents='false' />
+	<Segment name='high' displayName='Upper Bound' unit='integer' segmentInContents='false' />
+	<Segment name='low' displayName='Lower Bound' unit='integer' segmentInContents='false' />
+	<Segment name='binv' displayName='Invert' unit='boolean' segmentInContents='false' />
+</Message>

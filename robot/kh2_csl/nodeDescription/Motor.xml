@@ -1,0 +1,105 @@
+
+<NodeDescription name='Motor' displayName='Motor' rootNode='false'>
+	<Description>
+		Motor on the Khepera 2
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='num' displayName='Number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='mode' displayName='Control Mode (0 = spe, 1 = pos, 2 = inc)' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='speed' displayName='Speed' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='pos' displayName='Position' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	<Attribute name='mspeed' displayName='Max Speed' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='125'/>
+	<Attribute name='macc' displayName='Max Acceleration' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='1'/>
+	<Attribute name='kp' displayName='Proportional Gain' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='3500'/>
+	<Attribute name='ki' displayName='Integral Gain' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='800'/>
+	<Attribute name='kd' displayName='Derivative Gain' mustHave='false' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='100'/>
+	
+	<Variable name='num' displayName='Number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='2'/>
+	</Variable>
+
+	<Variable name='mode' displayName='Control Mode' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='mode' attributeReference='mode' />
+	</Variable>
+		
+	<Variable name='speed' displayName='Speed' messageType='integer'
+	selfUpdating='false' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='speed' attributeReference='speed' />
+		<Constraint minVal='-128' maxVal='128' />
+	</Variable>
+	
+	<Variable name='pos' displayName='Position'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='pos' attributeReference='pos' />
+	</Variable>	
+	
+	<Variable name='setpos' displayName='Increment Position' messageType='void'
+	selfUpdating='false' occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+	</Variable>
+	
+	<Variable name='mspeed' displayName='Max Speed'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='mspeed' attributeReference='mspeed' />
+	</Variable>	
+
+	<Variable name='macc' displayName='Max Accleration'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='macc' attributeReference='macc' />
+	</Variable>	
+
+	<Variable name='kp' displayName='Proportional Gain'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='kp' attributeReference='kp' />
+	</Variable>	
+	
+	<Variable name='ki' displayName='Integral Gain'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='ki' attributeReference='ki' />
+	</Variable>	
+	
+	<Variable name='kd' displayName='Derivative Gain'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='kd' attributeReference='kd' />
+	</Variable>
+
+	
+</NodeDescription>

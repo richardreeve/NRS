@@ -1,0 +1,33 @@
+
+<NodeDescription name='Khepera2' displayName='Khepera 2' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+	<Description>
+		K-Team Khepera II Silver Mobile Robot
+	</Description>
+	<Contains type='LED' minOccurs='0' maxOccurs='2' />
+	<Contains type='Motor' minOccurs='0' maxOccurs='2' />
+        <Contains type='IR' minOccurs='0' maxOccurs='8' />
+        <Contains type='Odometer' minOccurs='0' maxOccurs='2' />
+	<Contains type='Earsys' minOccurs='0' maxOccurs='1' />
+        <Contains type='Integrator' minOccurs='0' maxOccurs='12' />
+        <Contains type='Bandpass' minOccurs='0' maxOccurs='2' />
+	<Contains type='Delta' minOccurs='0' maxOccurs='4' />
+        
+	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='enable' displayName='enable node' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+	
+	<Variable name='enable' displayName='enable node'
+	messageType='boolean' selfUpdating='false'
+	occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='boolean' attributeReference='enable' />
+	</Variable>
+	<!--
+	<Variable name='reset' displayName='reset node'
+	messageType='void' selfUpdating='false'
+	occurrenceType='onEvent' stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+	</Variable>
+	-->
+</NodeDescription>

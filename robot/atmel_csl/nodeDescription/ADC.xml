@@ -1,0 +1,23 @@
+<NodeDescription name='ADC' displayName='ADC' rootNode='false'>
+	<Description>
+		Analog to Digital Convertor
+	</Description>
+ 	<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+	<Attribute name='num' displayName='ADC number' mustHave='true' unitName='integer' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='0'/>
+	
+	<Variable name='num' displayName='ADC number'
+	messageType='integer' selfUpdating='false'
+	occurrenceType='onChange'  stateHolding='true'
+	variableMessageType='false' numberType='integer' >
+		<Interface direction='in' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='num' attributeReference='num' />
+		<Constraint minVal='1' maxVal='8'/>
+	</Variable>
+	
+	<Variable name='reading' displayName='ADC Reading' messageType='integer'
+	selfUpdating='true' occurrenceType='onChange' stateHolding='true'
+	variableMessageType='false' numberType='integer' > 
+		<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+		<InitialValue segmentName='reading' attributeReference='reading' />
+	</Variable>
+</NodeDescription>
