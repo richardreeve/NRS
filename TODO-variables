@@ -1,0 +1,22 @@
+Variables which are not selfUpdating and which have exactly one input
+which has the same type and stateHolding characteristics as that input
+should be merged with that input. This will massively reduce the
+number of variables in the system, as (for instance) there will only
+be one MessageSender and Updater and Timestep and SimTime, which are
+currently spread throughout most nodes. Variables will then have multiple
+names and vnids.
+
+Issues:
+
+- Any query now has to be associated with a variable name or vnid, and
+  variables cannot have their names or vnids queried directly;
+
+- Inside variables, all connections have to be associated with a name or
+  vnid;
+
+- Methods have to exist to detect merger and demerger candidates when
+  connections are made and broken;
+
+- Methods have to be made to merge and demerge Variables and inform
+  observers, internal link targets and sources, and nodes of variable
+  changes.

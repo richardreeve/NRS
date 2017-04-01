@@ -1,0 +1,28 @@
+Every fifo/socket/file connection has 1 thread per direction
+
+nsim runs in own thread as will all other plugins
+
+real-time timer runs in own thread using sem_post.
+
+Timer blocks on timer thread completion via sem_wait.
+
+Inter-thread communication via linked lists of linked list of pages of
+ i/o data (1 linked list per message to allow for big messages)
+ - mutex to add/remove from list if necessary, but only to take head
+   off or put tail on, cond_wait needed when list is empty,
+   cond_broadcast to add when empty, but otherwise very quick.
+
+Remove static variables from all methods shared between threads to
+ make them reentrant
+
+Mutex to get information on ports, but cache it locally to avoid
+ delays
+ - set bools in ports' caches (via global mutex) when changes made
+   Close ports via bools in ports' data-structures, no need for mutex
+   since never reset (just close)
+
+Global repository for messages, allocated in advance, with mutex for
+access, to allow requests for new memory to be made, but no
+allocation. If this is too slow, thread local message repositories
+with global repository with mutex as backup when run out or full - all
+allocation still happens through global repository.

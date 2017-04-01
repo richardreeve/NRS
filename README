@@ -1,0 +1,118 @@
+This software is free software released on the GNU General Public
+License - see COPYING for license details. Whilst you are under no
+further obligations than those outlined in the license, we would
+greatly appreciate 3 things:
+
+- Let us know if you use the code
+
+- Let us know about any bugs, and return any bug-fixes and
+  improvements you may make to us (at some point we intend to put the
+  code on a public site to make this simpler)
+
+- If you undertake research using this code and write a paper, we
+  would appreciate being acknowledged - the NRS software developers in
+  the Cricket Lab at the Institute of Perception, Action and
+  Behaviour, University of Edinburgh
+
+INSTALLATION
+------------
+
+The first time you extract the code from CVS you need to run:
+
+aclocal
+libtoolize
+autoheader
+automake --add-missing
+autoreconf
+
+This only needs to be done after you first check out the CVS code. For
+other times when the makefiles need to be updated, just use autoreconf.
+If you are using a source snapshot not from CVS this first step should
+not be necessary.
+
+Then choose an installation directory and add <installdir>/bin to your
+PATH enviroment variable, e.g. in your .bashrc add:
+
+export PATH=$PATH:<installdir>/bin
+
+To build the code you must:
+
+-- create an object directory and enter it:
+
+mkdir <objdir>
+cd <objdir>
+
+... if you've changed the Makefile.am file anywhere:
+
+cd <srcdir>
+autoreconf
+
+... if you haven't run configure before:
+
+cd <objdir>
+<srcdir>/configure --prefix=<installdir> --disable-static
+
+-- anyway:
+
+cd <objdir>
+make install
+
+N.B. after building the documentation is available as:
+<installdir>/share/nrs-2.0-alpha/doc/NRS.pdf
+
+-- to run the code:
+
+NRS.gui
+NRS.component
+NRS.nsim to run the component with the nsim plugin loaded, or
+NRS.component nsim
+
+-- or to get csl output from a component:
+
+NRS.nsim --csl
+NRS.component --csl nsim
+NRS.component --csl libnsim.so
+
+Compiling the Camera Tracking
+=============================
+
+By default the camera tracker component is not built when NRS is
+built. To enable it, use the option --enable-camera when executing the
+configure command.
+
+Currently the camera tracker requires two external libraries be present
+in order to compile successfully. These are ccvt and OpenCV. Versions
+which have successfully worked previously are:
+
+ * ccvt-0.3.tar.gz 
+ * OpenCV-0.9.5.tar.gz
+
+These should be available on the Internet somewhere, but also from the
+site from which NRS was obtained.
+
+To successfully build NRS with the camera tracking component, you will
+need to do:
+
+1. Obtain and install the above source code packages for ccvt and OpenCV
+
+2. Compile these two libraries, and install locally
+
+3. Update your OPENCV_LIBDIR, OPENCV_INCDIR, CCVT_LIBDIR and
+   CCVT_INCDIR environment variables to reflect the installation paths
+   you chose for each library if they are non-standard and configure
+   the NRS sources, as indicated above, but including the
+   --enable-camera option.
+
+   Example (which works on Edinburgh DICE computers):
+
+  > OPENCV_INCDIR=/disk/cricketlab/include
+  > OPENCV_LIBDIR=/disk/cricketlab/lib
+  > CCVT_INCDIR=/disk/cricketlab/include 
+  > CCVT_LIBDIR=/disk/cricketlab/lib
+
+  > configure --prefix=/home/richardr/install --enable-camera
+
+Note that on the robotlab DICE machines all these files are installed
+in /disk/cricketlab
+
+4. Continue building NRS as normal, i.e., make, make install, etc.
