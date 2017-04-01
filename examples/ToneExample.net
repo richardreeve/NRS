@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name=""/>
+<Description></Description>
+<Nodes>
+<Component cType="sound" cVersion="1.0">
+<SoundNode Enabled="false" Repeating="false" _x="0" _y="0" name="Sound">
+<SpeakerNode Balance="0.0" _x="147" _y="15" name="Speaker">
+<ToneNode Amplitude="0.7" OffFirst="false" SignalFreq="1000.0" WaveFormType="sine" _x="155" _y="41" name="Tone" secsOff="1" secsOn="1"/>
+</SpeakerNode>
+</SoundNode>
+</Component>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="15" _y="105" name="Control">
+<ButtonNode _x="10" _y="91" label="Go" name="Go"/>
+<CheckBoxNode _x="16" _y="178" label="Enabled" name="Enabled" on="false"/>
+<FloatButtonNode _x="26" _y="11" label="Balance" name="Balance" value="0.0"/>
+<StringButtonNode _x="193" _y="17" label="WaveForm" name="WaveForm" value=""/>
+<FloatButtonNode _x="205" _y="96" label="SignalFreq" name="SignalFreq" value="1000.0"/>
+<FloatButtonNode _x="213" _y="175" label="Ampltude" name="Amplitude" value="0.7"/>
+<IntegerButtonNode _x="17" _y="273" label="SecsOn" name="SecsOn" value="1"/>
+<IntegerButtonNode _x="204" _y="263" label="SecsOff" name="SecsOff" value="1"/>
+<CheckBoxNode _x="25" _y="351" label="OffFirst" name="OffFirst" on="false"/>
+<CheckBoxNode _x="238" _y="341" label="Repeating" name="Repeating" on="false"/>
+</ControlNode>
+</Component>
+</Nodes>
+<Links>
+<Link source="Control.Go.Output" target="Sound.Go"/>
+<Link source="Control.Enabled.Output" target="Sound.Enabled"/>
+<Link source="Control.Repeating.Output" target="Sound.Repeating"/>
+<Link source="Control.Balance.Output" target="Sound.Speaker.Balance"/>
+<Link source="Control.OffFirst.Output" target="Sound.Speaker.Tone.OffFirst"/>
+<Link source="Control.SignalFreq.Output" target="Sound.Speaker.Tone.SignalFreq"/>
+<Link source="Control.Amplitude.Output" target="Sound.Speaker.Tone.Amplitude"/>
+<Link source="Control.SecsOn.Output" target="Sound.Speaker.Tone.secsOn"/>
+<Link source="Control.SecsOff.Output" target="Sound.Speaker.Tone.secsOff"/>
+<Link source="Control.WaveForm.Output" target="Sound.Speaker.Tone.WaveFormType"/>
+</Links>
+</Network>

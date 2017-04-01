@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name=""/>
+<Description></Description>
+<Nodes>
+<Component cType="datalogger" cVersion="1.0">
+<DataLoggerNode _x="61" _y="39" dir="/tmp/test" name="dataLogger" time="0.0" timestep="1.0">
+<VoidNode _x="144" _y="162" append="false" filename="Voids" name="void"/>
+</DataLoggerNode>
+</Component>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="211" _y="31" name="control">
+<ButtonNode _x="39" _y="56" label="Voids" name="bt"/>
+<CheckBoxNode _x="0" _y="0" label="Start nsim" name="ckBt1" on="false"/>
+</ControlNode>
+</Component>
+<Component cType="nsim" cVersion="2.0-alpha">
+<NSim _x="120" _y="138" name="nsim">
+<FullSpeedTimer _x="167" _y="50" initTime="0.0" name="timer" timestep="100.0">
+<TimeCheck _x="177" _y="149" endTime="10000.0" name="timeCheck"/>
+</FullSpeedTimer>
+</NSim>
+</Component>
+</Nodes>
+<Links>
+<Link source="dataLogger.DirName" target="dataLogger.void.DirName"/>
+<Link source="dataLogger.Time" target="dataLogger.void.Time"/>
+<Link source="nsim.timer.SimTime" target="dataLogger.Time"/>
+<Link source="dataLogger.Reset" target="dataLogger.void.Reset"/>
+<Link source="control.bt.Output" target="dataLogger.void.Value"/>
+<Link source="control.ckBt1.Output" target="nsim.Activate"/>
+<Link source="nsim.MainLoop" target="nsim.timer.MainLoop"/>
+<Link source="nsim.timer.MessageSender" target="nsim.MessageSender"/>
+<Link source="nsim.timer.SimTime" target="nsim.SimTime"/>
+<Link source="nsim.timer.Timestep" target="nsim.Timestep"/>
+<Link source="nsim.timer.Updater" target="nsim.Updater"/>
+<Link source="nsim.timer.MessageSender" target="nsim.timer.timeCheck.MessageSender"/>
+<Link source="nsim.timer.SimTime" target="nsim.timer.timeCheck.SimTime"/>
+<Link source="nsim.timer.Updater" target="nsim.timer.timeCheck.Updater"/>
+</Links>
+</Network>

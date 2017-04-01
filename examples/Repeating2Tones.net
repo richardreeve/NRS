@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name=""/>
+<Description></Description>
+<Nodes>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="0" _y="0" name="Control">
+<ButtonNode _x="195" _y="31" label="Go" name="Go"/>
+<CheckBoxNode _x="21" _y="32" label="Enable" name="Enable" on="false"/>
+<CheckBoxNode _x="34" _y="101" label="Repeating" name="Repeating" on="false"/>
+</ControlNode>
+</Component>
+<Component cType="sound" cVersion="1.0">
+<SoundNode Enabled="false" Repeating="false" _x="24" _y="114" name="Sound">
+<SpeakerNode Balance="-1.0" _x="149" _y="20" name="LeftSpeaker">
+<ToneNode Amplitude="0.7" OffFirst="false" SignalFreq="1000.0" WaveFormType="sine" _x="188" _y="46" name="Tone1" secsOff="1" secsOn="1"/>
+<ToneNode Amplitude="0.7" OffFirst="false" SignalFreq="600.0" WaveFormType="sine" _x="193" _y="146" name="Tone2" secsOff="1" secsOn="1"/>
+</SpeakerNode>
+<SpeakerNode Balance="1.0" _x="161" _y="135" name="RightSpeaker">
+<ToneNode Amplitude="0.7" OffFirst="true" SignalFreq="600.0" WaveFormType="sine" _x="180" _y="34" name="Tone1A" secsOff="1" secsOn="1"/>
+<ToneNode Amplitude="0.7" OffFirst="true" SignalFreq="1000.0" WaveFormType="sine" _x="181" _y="148" name="Tone2A" secsOff="1" secsOn="1"/>
+</SpeakerNode>
+</SoundNode>
+</Component>
+</Nodes>
+<Links>
+<Link source="Control.Go.Output" target="Sound.Go"/>
+<Link source="Control.Enable.Output" target="Sound.Enabled"/>
+<Link source="Control.Repeating.Output" target="Sound.Repeating"/>
+</Links>
+</Network>

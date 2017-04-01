@@ -1,0 +1,355 @@
+%% $Header: /disk/cvs/cricketlab/software/new/doc/NRScplusplus.tex,v 1.2 2005/10/25 15:51:38 richardr Exp $
+%% Early on we need a \documentclass or a \documentclass
+%% If we want to use the new features of LaTeX2e, the document
+%% should begin with a \documentclass rather than \documentclass
+%%
+%%\documentclass[a4paper,11pt,draft]{article}
+\documentclass[pdftex,a4paper]{article}
+
+%%
+%% Determine is we are running pdflatex or just latex
+%%
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+    \pdffalse           % we are not running PDFLaTeX
+\else
+    \pdfoutput=1        % we are running PDFLaTeX
+    \pdftrue
+\fi
+
+%% Uncomment out these lines for Latex to check syntax only (faster)
+%% \usepackage{syntonly}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{times}   % better for displaying on a screen
+\usepackage[pdftex,colorlinks,hyperfigures,pagebackref,hyperindex,linkcolor=black,anchorcolor=black,citecolor=black,pagecolor=black]{hyperref}
+
+\newcommand{\ie}{{\em i.e.\ }}
+\newcommand{\eg}{{\em e.g.\ }}
+\newcommand{\egg}{{\em e.g.}}
+\newcommand{\etc}{{\it etc.}}
+\newcommand{\et}{{\it etc}}
+\newcommand{\via}{{\it via }}
+\newcommand{\vs}{{\it vs. }}
+\newcommand{\viz}{{\it viz. }}
+\newcommand{\adhoc}{{\it ad hoc}}
+\newcommand{\etal}{{\it et al.\ }}
+\newcommand{\ibid}{({\it ibid.})}
+
+\newcommand{\NRS}{{\it NRS}}
+\newcommand{\NRSgui}{{\it NRS.gui}}
+\newcommand{\NRSnsim}{{\it NRS.nsim}}
+
+\DeclareRobustCommand{\trademark}{\ensuremath{^{\mathrm{TM}}}}
+
+\newcommand{\XML}[2][]{{\tt \small $<$#2#1/$>$}}
+\newcommand{\XMLfont}[1]{{\tt \small #1}}
+\newcommand{\code}[1]{{\tt \small #1}}
+
+\newcommand{\XMLtext}[1]{
+  \begin{tt}
+    \begin{small}
+      \begin{list}{}{
+          \setlength{\topsep}{0pt}
+          \setlength{\partopsep}{0pt}
+          \setlength{\itemsep}{0pt}
+          \setlength{\parsep}{0pt}
+          \setlength{\leftmargin}{2em}
+          \setlength{\rightmargin}{2em}
+          \setlength{\labelsep}{0pt}
+        }
+      \item #1
+      \end{list}
+    \end{small}
+  \end{tt}
+}
+
+\newcommand{\XMLfull}[3][]{\XMLtext{$<$#2#1$>$
+    #3
+  \item $<$/#2$>$}}
+
+\newcommand{\XMLsimple}[2][]{\XMLtext{$<$#2#1/$>$}}
+
+%% \syntaxonly
+
+%% Define the title
+\author{$Revision: 1.2 $}
+
+\title{NRS 2.0 C++ Design Document}
+
+\hypersetup{pdfauthor = {Richard Reeve},
+  pdftitle = {NRS 2.0 C++ Design Document},
+  pdfkeywords = {C++, NRS}
+}
+
+% Change paragraph spacing to word-like documents
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
+
+%%\includeonly{model}
+
+%% ---------------------------------------------------------
+%% -------------------- END OF PREAMBLE --------------------
+%% ---------------------------------------------------------
+
+\begin{document}
+
+\date{}
+%% generates the title
+\maketitle
+
+%% insert the table of contents
+\tableofcontents
+
+\pagebreak
+
+\section{Introduction}
+
+This document summarises how to add a new component to the NRS C++
+framework.
+
+Each component is compiled in C++ as a shared library which is then
+loaded at runtime to add its capabilities to the core C++
+NRS.component program. This means that a C++ component can
+theoretically be maintained and compiled completely separately from
+the main code. In practice this is not done as the shared libraries
+will of necessity reference the core headers.
+
+Building a shared library inside the main NRS tree to act as an NRS
+component happens in four stages:
+
+\begin{enumerate}
+
+\item Setting up a new directory and configuring the Makefile.am file
+  inside the directory and the configure.ac in the root directory so
+  that it will be built.
+
+\item Creating a simple base library file in the directory which
+  reports on the insertion and removal of the plugin. {\em At this
+  stage the component can be built and inserted and removed (though it
+  will do nothing).}
+
+\item Creating the root node for the component, and any new variable
+  types. This node is the only compulsory node for a component, and in
+  the simplest case can often be copied directly from another
+  component. In other cases, where the component is merely a wrapper
+  for another (non-NRS) program, this may be the only node in the
+  component, but will need to be created itself. {\em At this stage
+  loading the component will register with the GUI, and the root node
+  can be created and destroyed.}
+
+\item Creating the other nodes and variables for the component. This
+  is the main job for most components, and can involve the design and
+  creation multiple node and variable types. It also requires that, in
+  a hierarchical system, the parent nodes are set so that they can
+  contain their children types. {\em Once all the necessary node and
+  variable types have been created, the component is finished.}
+
+\end{enumerate}
+
+\section{Directory Creation}
+
+This is a relatively easy task, and much can be copied from a sample
+component directory.
+
+First create a directory in the name of the component, and copy the
+{\tt Makefile.am} and the {\tt .cvsignore} files from the {\tt
+sample/} directory, and edit the file to replace all references to
+{\em sample} with the name of the component. Then add these files to
+the cvs repository using {\tt cvs add {\em sample}} and then {\tt cvs
+add {\em sample}/Makefile.am} and {\tt cvs add {\em
+sample}/.cvsignore}; this is then completed by committing the files to
+the cvs repository using {\tt cvs commit {\em sample}}.
+
+Next an alias must be set up for the new component. In the {\tt
+component/Makefile.am} file, the string ``INSERT:'' can be found,
+along with exactly what to add in there.
+
+Finally the root level {\tt configure.ac} file must be edited to
+include the new component directory in the build. In two places in the
+file, again the string ``INSERT:'' can be found, along with
+instructions about what exactly to add in there.
+
+\section{Base Library Creation}
+
+Again, a very simple task. This is required to allow the main
+NRS.component executable to recognise the library as an acceptable
+plugin. Simple copy the {\tt sample/SampleLibrary.cc} file into the
+new directory with an appropriate name (as used in the {\tt
+Makefile.am}), and edit the file to replace references to {\em sample}
+with the component name. At this point a namespace also has to be
+chosen for the component. The file can now be added to cvs.
+
+At this point, it should be possible to build the software to test
+that everything has been done correctly so far. First run {\tt
+autoreconf} in the root of the source directory, and then run {\tt
+configure} in the object directory as detailed in the build
+instructions and build the software. A stub plugin will be created and
+the newly aliased executable will now run, though obviously it will do
+nothing except report its loading and unloading.
+
+\section{Root Node Creation}
+
+In most cases, one of the default root nodes can just be copied, which
+is another simple task. This is possible unless the root node is
+required to serve some specific function, such as to start up a
+external program, where considerable customisation may need to be
+done. This section of the documentation covers the simple case;
+creating a customised root node can be seen as just using advice in
+the next section for creating other nodes to customise one of the
+existing sample root nodes.
+
+There are a few different component types, which require solutions of
+different complexities. However, all of them share several files in
+common. First copy {\tt Sample.cc}, {\tt Sample.hh} and {\tt
+SampleManager.cc} across to the new directory from the {\tt sample/}
+directory, rename them appropriately, and rename the uses of {\em
+sample} inside the files. Note that the class names should match the
+filenames, and the namespace should be the same as that used in the
+library file above. These filenames can now be added to the
+Makefile.am at the ...\_SOURCES line, and then the files can be added
+to cvs.
+
+Then a sample factory file has to be chosen.
+
+\begin{itemize}
+
+\item In the simplest and probably rarest case the component will
+contain elements (nodes) which do not need to connect to each other,
+and so timing message sending and updating is unimportant, and it does
+not matter what order they happen in. If in doubt do not use this,
+however it may be used as a starting point when an external program is
+being incorporated into NRS. The file in this case is {\tt
+SampleFactory0.cc} and should be copied into the target directory with
+an appropriate name ({\tt xxxFactory.cc}). Child nodes of root nodes
+of this type (if there are any) must have a MainLoop variable which
+triggers all actions in the node including updating of variable state
+and the sending of any outbound messages.
+
+\item The next simplest case is for systems where the component
+contains real NRS nodes, which are potentially connected to each
+other, and so we need to make sure that all nodes update their state
+at the same time and then send out messages together, otherwise the
+system may act differently depending on which order the nodes are
+activated in. In this case use {\tt SampleFactory1.cc} as above. Child
+nodes of root nodes of this type must have Updater and MessageSender
+variables, which must trigger an update of the internal state of the
+variables in the node and intra-node communication of that state in
+the first case, and external communication (to other nodes inside the
+component, and other components) in the second.
+
+\item The final case is for systems which need to explicitly model
+time, such as simulators. Such nodes always (in our experience) need
+to correctly synchronise message passing, though your experience may
+potentially be different. In any event, this root node knows
+explicitly about time, so that it can pass on the information to all
+of its child nodes, but it requires that a sub-node exists to actually
+count the time down. This is done so that the same component can be
+made to run locked to real time, or as fast as possible, or whatever,
+by just changing the Timer sub-node being used. In this case use the
+{\tt SampleFactory2.cc} file as above. All child nodes except the
+Timer node must have Updater and MessageSender variables as in the
+second case, and may in addition have Timestep and SimTime variables
+if they want to keep track of the time of the simulation. The Timer
+node must have a MainLoop variable which triggers the timer
+incrementing, and the Updater and MessageSender variables then being
+activated.
+
+\end{itemize}
+
+\section{General Node Creation}
+
+It would be impossible to give details on how to create an arbitrary
+node to carry out some unknown function. There are a few tips that can
+be given however. First of all, you have to think in terms of
+variables and messages --- any piece of information or any event that
+needs to be transferred from one place to another or which needs to be
+recorded at some point must be stored in a variable, and transmitted
+in a message.  It will usually be sent to another variable of the same
+type; the only time this rule can be broken is for messages being
+passed inside a node, where sometimes the target can be a variable of
+a different type.
+
+For instance, the piece of information may be the current timestep of
+a simulation, stored in a variable called Timestep. Many other
+variables may need to know about this, for instance the membrane
+potential of a neuron (another variable) will need to know about it to
+know how far into the future to integrate to calculate its new
+state. This is not the same variable type as a timestep, so there must
+be a local copy of the timestep inside the neuron, so that a local
+connection can be made. This means straight away that every element of
+a simulation must have a Timestep variable.
+
+Another example in a different vein is the Updater and MessageSender
+variables. These transmit the message to variables inside all nodes
+that they should update their internal state and send out
+messages. Again, because the variables that are carrying out these
+actions are not of type Updater and MessageSender (they can't be both
+anyway), a local copy of these variables must exist inside each node.
+
+Variables of these types which carry information from one part of the
+program to another, or which just hold some fixed value such as the
+capacitance of a neural membrane have to be declared in the Factory
+for a node (as you can see in the root node factory's setVariables
+method, and we will talk about more below), but creating them is
+handled by the main program, and the only other detail you may have to
+think about is whether you want to be able to set any default value
+for them in the GUI; apart from that everything is handled
+automatically. These variables are also immune to the normal
+Updater/MessageSender cycle which we have mentioned before, as they
+only update their state when triggered externally. Several of them
+will also automatically connect to the same variable on their parent
+node, so that when the Updater variable in a parent is triggered, the
+child will also be triggered. This is carried out by the GUI, and
+simplifies life slightly, but is not compulsory.
+
+The variables which have to be written by hand are those which update
+their own internal state, such as the angle of a joint, or the
+membrane potential of a neuron. They have to be explicitly connected
+in the factory to all the variables inside a node which they depend
+on, particularly the Updater and MessageSender variables, but also any
+others whose state they need to know.
+
+In the case of the membrane potential of a neuron for instance, this
+is a great number, including the timestep of the simulation, the
+membrane capacitance, the base membrane potential, the base
+conductance of the membrane and inputs from the synapses.
+
+Connections like this, from one variable to another of a potentially
+different type, are done through MessageFunctionObjects --- this is
+the only way of connecting variables of different types together, and
+can only be done by the factory. This is why variables of different
+types can only be connected together if they are inside the same
+node. These connections are also permanent and unbreakable. All other
+connections can be made or broken through the GUI with the sole
+exception of the MainLoop variable of the root node which is
+automatically connected to the main component framework as soon as the
+node is constructed, and cannot be disconnected without destroying the
+node.
+
+Again, some of this can be handled by the factory's default code, so
+that if you want a variable to be told to update when an Updater
+variable is triggered, then you can connect them together using a
+UpdaterMFO, and likewise you can use a MessageSenderMFO to trigger
+messages to be sent, and MainLoopMFO to do both sequentially for nodes
+which just have a MainLoop input such as the root node in
+SampleFactory1.cc. However, anything else has to be handled by custom
+code written by the user. Some examples of this are to be found in
+existing component plugin directories such as NSim.
+
+In essence, the system has been written so that as much as possible
+is done in the core code, but anything different --- \ie what makes
+your component or node actually do something interesting ---
+inevitably has to be written by hand.
+
+The best way of seeing how to do something is probably to look for an
+example in existing code. Examples particularly include the NSim
+Timer, PoissonNeuron, TimeCheck, Evaluator amongst others and the
+completed parts of the SpikingNeuron code, though this is emphatically
+not complete at the time of writing. You can check in the {\tt
+Makefile.am} to see which files are finished, and in the {\tt
+xxxFactory.cc} files to see which nodes use which variables.
+
+\end{document}

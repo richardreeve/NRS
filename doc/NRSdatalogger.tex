@@ -1,0 +1,106 @@
+\documentclass[10pt, notitlepage, a4paper]{article}
+
+\usepackage[pdftex]{graphicx, color}
+\usepackage[pdftex,colorlinks,hyperfigures,pagebackref,hyperindex,linkcolor=black,anchorcolor=black,citecolor=black,pagecolor=black]{hyperref}
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{NRS DataLogger Documentation}
+\author{$Revision: 1.1 $}
+\maketitle
+
+\section{DataLogger}
+The NRS {\it Datalogger} is a Java-based NRS component for real-time logging of
+data from NRS components. By linking data sources to the logger, it is possible
+capture and write out data of various NRS basic types. This is accomplished by
+components sending data messages to specific nodes, which write the data out to
+a file. 
+
+Note that this component has no front-end user interface. Control of the
+component setup is done via the NRS.gui using nodes and variables.
+
+The {\it DataLogger} component has a simple structure, with one root node and five types of value nodes. The root node, called {\it DataLoggerNode}, acts as a
+container for the typed-nodes. The root node is also used to setup initial
+parameters, as node attributes, that apply to all value nodes, i.e. directory to
+store log files in, initial time and the timestep (more on these later). These
+initial values are propagated down to any child nodes (typed-nodes), and can be
+changed using the variables: {\it Directory Name}, {\it Time} and {\it
+  TimeStep}. More detail on these variables in table \ref{root_nodes_vars}.
+
+\begin{table}[!ht]
+\begin{center}
+\label{root_node_vars}
+\caption{DataLoggerNode variable}
+\begin{tabular}{|c|l|l|l|}
+\hline Variable & Type & Interfaces & Comments\\ \hline
+\hline Directory Name & Filename & input/output & must be absolute path\\
+\hline Time & float & input/output & current time\\
+\hline TimeStep & float & input/output & timestep (e.g. 1 ms)\\
+\hline Counter & void & input & increment time by timestep\\
+\hline Reset & void & output & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+To log data, an appropriately typed value node is required. The currently
+available typed-nodes are shown in table \ref{logger_nodes}. For example, to
+log integers, an {\it IntegerNode} would be required. In fact, the interface
+to all typed-nodes is identical, i.e. same attributes and variables. All that is
+required is to specify a filename as an attribute to the node. It is also
+possible to set an attribute to specify whether, if a file already exists, the
+log data should be appended to file or just overwrite it (default). It is 
+possible to change these values using the same named variables: {\it Filename}
+and {\it AppendToFile}. To send logging data it is necessary to link the source
+variable (i.e. the one producing the data) to the {\it Value} variable of an
+appropriate typed-node. It is possible to connect various sources to one node,
+but this is not very useful, as there is no distinction between the sources of
+data. 
+
+\begin{table}[!ht]
+\begin{center}
+\label{logger_nodes}
+\caption{DataLogger typed-nodes}
+\begin{tabular}{|c|l|l|}
+\hline Node & Type\\ \hline
+\hline BooleanNode & boolean\\
+\hline IntegerNode & integer\\
+\hline FloatNode & float\\
+\hline StringNode & string\\
+\hline VoidNode & void\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+When a node receives a data value, it simply writes this value and the current
+time to a file. The structure of the file is two columns, one with time and one
+with the data value. The exception to this rule is for {\it VoidNode}s, where
+there is only one column: time, as there is no logging data.
+
+\subsection{What time is it?}
+The {\it DataLogger} component offers two mechanisms for maintaining time. One
+involves an external time source and the second involves using relative time,
+triggered by an external source. In more detail, for the first system it is
+possible to connect up the time source of another NRS component, e.g. the NSim
+(see below for comments on this), to the {\it Time} variable of the {\it
+  DataLoggerNode} directly. This means that as the {\it NSim} runs and updates
+its time, the {\it DataLogger} will keep the same time. The second mechanism
+allows for the maintenance of relative time. This is triggered by the receipt of
+void messages at the {\it Counter} variable. On receipt of these messages, the
+node updates its internal value of time to be the current time value plus one
+timestep value. This simulates time, and is useful for components which don't
+maintain real-time information, e.g. a robot.
+
+\subsection{Recommendations for use}
+There are issues with using the {\it NSim}'s {\it SimulationTime} variable for
+maintaining time on the {\it DataLogger}. When the granularity is set very fine,
+e.g. 1 ms, the volume of messages sent from the NSim is so large that it is not
+possible for the {\it DataLogger} to cope. It thus falls behind and messages get
+clogged up in a queue. This is not reliable. The recommendation is to use a
+smaller granularity, or even better would be to create a variable which is
+attached to a components {\it MainLoop} variable, that sends void updates to the
+{\it Counter} variable of the {\it DataLoggerNode}. 
+
+\end{document}

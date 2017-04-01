@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name=""/>
+<Description></Description>
+<Nodes>
+<Component cType="ga" cVersion="1.0">
+<GANode IntegerType="false" _x="68" _y="28" epochs="40" name="ga">
+<UniformRNGNode _x="146" _y="26" name="rng"/>
+<GenerationalPopNode _x="149" _y="126" elitism="0" name="pop" popSize="10">
+<OnePointCrossoverNode _x="134" _y="25" name="crossover" rate="0"/>
+<GaussianMutationNode _x="145" _y="101" name="mutation" rate="40" std="1"/>
+<RouletteWheelSelectionNode _x="142" _y="194" name="selection"/>
+<GenomeNode _x="144" _y="269" name="genome">
+<FloatGeneNode _x="146" _y="45" initial="false" max="10" min="0" name="g1" type="" value="0"/>
+<FunctionCalcNode _x="151" _y="144" name="calc">
+<EvaluationNode _x="115" _y="62" name="eval1">
+<DummyValueNode _x="126" _y="105" name="val1"/>
+</EvaluationNode>
+</FunctionCalcNode>
+</GenomeNode>
+</GenerationalPopNode>
+</GANode>
+</Component>
+<Component cType="calculation" cVersion="1.0">
+<CalculationNode _x="212" _y="29" name="calc">
+<FloatDelayNode Input="0.0" _x="193" _y="87" msDelay="400" name="delay"/>
+</CalculationNode>
+</Component>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="49" _y="173" name="control">
+<CheckBoxNode _x="16" _y="81" label="StartGA" name="ckBt1" on="false"/>
+<CheckBoxNode _x="28" _y="18" label="StartEx" name="ckBt2" on="false"/>
+<FloatDisplayNode _x="192" _y="21" label="display" name="display"/>
+</ControlNode>
+</Component>
+<Component cType="datalogger" cVersion="1.0">
+<DataLoggerNode _x="218" _y="173" dir="/tmp/test/gene" name="DataLogger" time="0.0" timestep="1.0">
+<FloatNode _x="164" _y="78" append="false" filename="GeneValues" name="GeneValues"/>
+</DataLoggerNode>
+</Component>
+</Nodes>
+<Links>
+<Link source="control.ckBt1.Output" target="ga.StartGA"/>
+<Link source="ga.StartRun" target="ga.pop.StartRun"/>
+<Link source="ga.pop.FinishedRun" target="ga.FinishedRun"/>
+<Link source="ga.pop.genome.Evaluated" target="ga.pop.Evaluated"/>
+<Link source="ga.pop.StartEx" target="ga.pop.genome.StartEx"/>
+<Link source="ga.pop.genome.StartEx" target="ga.pop.genome.calc.eval1.StartEx"/>
+<Link source="ga.pop.genome.StartEx" target="DataLogger.Counter"/>
+<Link source="ga.pop.genome.Go" target="control.ckBt2.Output"/>
+<Link source="ga.pop.genome.calc.Go" target="ga.pop.genome.Go"/>
+<Link source="ga.pop.genome.calc.Evaluated" target="ga.pop.genome.Evaluated"/>
+<Link source="ga.pop.genome.g1.Value" target="control.display.Input"/>
+<Link source="ga.pop.genome.g1.Value" target="calc.delay.Input"/>
+<Link source="ga.pop.genome.g1.Value" target="DataLogger.GeneValues.Value"/>
+<Link source="ga.pop.genome.calc.eval1.Evaluation" target="ga.pop.genome.calc.Evaluation"/>
+<Link source="ga.pop.genome.calc.eval1.Go" target="ga.pop.genome.calc.Go"/>
+<Link source="calc.delay.Output" target="ga.pop.genome.calc.eval1.Evaluation"/>
+<Link source="ga.pop.genome.calc.eval1.Trigger" target="ga.pop.genome.calc.eval1.val1.Trigger"/>
+<Link source="ga.pop.genome.calc.eval1.val1.Consistent" target="ga.pop.genome.calc.eval1.Consistent"/>
+<Link source="DataLogger.DirName" target="DataLogger.GeneValues.DirName"/>
+<Link source="DataLogger.Time" target="DataLogger.GeneValues.Time"/>
+<Link source="DataLogger.Reset" target="DataLogger.GeneValues.Reset"/>
+</Links>
+</Network>

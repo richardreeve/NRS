@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name="net"/>
+<Description></Description>
+<Nodes>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="265" _y="95" name="control">
+<CheckBoxNode _x="37" _y="58" label="Go!" name="go" on="false"/>
+<FloatDisplayNode _x="52" _y="174" label="Evaluation:" name="val"/>
+<FloatButtonNode _x="47" _y="288" label="Mean spike interval" name="misi" value="20.0"/>
+</ControlNode>
+</Component>
+<Component cType="nsim" cVersion="2.0-alpha">
+<NSim _x="89" _y="78" name="ns">
+<PoissonNeuron _x="184" _y="152" name="poisson" t_sg="5"/>
+<Counter _x="170" _y="285" name="count"/>
+<Evaluator _x="178" _y="399" name="eval"/>
+<Timer _x="172" _y="36" initTime="0.0" name="timer" timestep="1.0">
+<TimeCheck _x="126" _y="128" endTime="10000.0" name="tc"/>
+</Timer>
+</NSim>
+</Component>
+</Nodes>
+<Links>
+<Link source="control.go.Output" target="ns.Activate"/>
+<Link source="ns.timer.tc.SimOff" target="control.go.Output"/>
+<Link source="ns.eval.Evaluation" target="control.val.Input"/>
+<Link source="control.misi.Output" target="ns.poisson.MeanSG"/>
+<Link source="ns.timer.tc.SimOff" target="ns.Activate"/>
+<Link source="ns.Activate" target="ns.eval.Activate"/>
+<Link source="ns.MainLoop" target="ns.timer.MainLoop"/>
+<Link source="ns.timer.MessageSender" target="ns.MessageSender"/>
+<Link source="ns.MessageSender" target="ns.poisson.MessageSender"/>
+<Link source="ns.timer.SimTime" target="ns.SimTime"/>
+<Link source="ns.timer.Timestep" target="ns.Timestep"/>
+<Link source="ns.Timestep" target="ns.poisson.Timestep"/>
+<Link source="ns.timer.Updater" target="ns.Updater"/>
+<Link source="ns.Updater" target="ns.poisson.Updater"/>
+<Link source="ns.poisson.Spike" target="ns.count.Spike"/>
+<Link source="ns.count.Sum" target="ns.eval.Evaluation"/>
+<Link source="ns.timer.tc.SimOff" target="ns.eval.Activate"/>
+<Link source="ns.timer.SimTime" target="ns.timer.tc.SimTime"/>
+</Links>
+</Network>

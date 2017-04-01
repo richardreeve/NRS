@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name="T. French"/>
+<Name name="New NN for Cricket phonotaxis"/>
+<Description></Description>
+<Nodes>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="226" _y="29" name="control">
+<CheckBoxNode _x="45" _y="62" label="StartGA!" name="check" on="false"/>
+</ControlNode>
+</Component>
+<Component cType="nsim" cVersion="2.0-alpha">
+<NSim _x="67" _y="44" name="nsim">
+<FullSpeedTimer _x="178" _y="117" initTime="0.0" name="timer" timestep="1.0">
+<TimeCheck _x="158" _y="89" endTime="10000.0" name="tc"/>
+</FullSpeedTimer>
+<PoissonNeuron _x="467" _y="548" name="PL" t_sg="5.0"/>
+<PoissonNeuron _x="634" _y="550" name="PR" t_sg="5.0"/>
+<SpikingNeuron _x="295" _y="377" c_memb="10.0" g_memb="5.0" name="ON1L" t_refractory="1.0" v_actual="-80.0" v_recovery="-60.0" v_rest="-80.0" v_threshold="-40.0"/>
+<SpikingNeuron _x="799" _y="382" c_memb="10.0" g_memb="5.0" name="ON1R" t_refractory="1.0" v_actual="-80.0" v_recovery="-60.0" v_rest="-80.0" v_threshold="-40.0"/>
+<SpikingNeuron _x="434" _y="178" c_memb="10.0" g_memb="5.0" name="AN1L" t_refractory="1.0" v_actual="-80.0" v_recovery="-60.0" v_rest="-80.0" v_threshold="-40.0"/>
+<SpikingNeuron _x="666" _y="179" c_memb="10.0" g_memb="5.0" name="AN1R" t_refractory="1.0" v_actual="-80.0" v_recovery="-60.0" v_rest="-80.0" v_threshold="-40.0"/>
+<ConductanceBasedSynapse _x="306" _y="468" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="0.0" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsL"/>
+<ConductanceBasedSynapse _x="239" _y="263" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="0.0" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsL2"/>
+<ConductanceBasedSynapse _x="790" _y="472" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="0.0" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsR"/>
+<ConductanceBasedSynapse _x="826" _y="289" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="0.0" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsR2"/>
+<ConductanceBasedSynapse _x="634" _y="286" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="-100" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsAN1L"/>
+<ConductanceBasedSynapse _x="476" _y="379" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="-100" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsON1L"/>
+<ConductanceBasedSynapse _x="429" _y="280" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="-100" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsAN1R"/>
+<ConductanceBasedSynapse _x="637" _y="379" decay_half_life="5.0" dep_frac="1.0" dep_half_life="3.0" e_syn="-100" fac_half_life="3.0" g_fac="0.0" g_syni="1.0" name="cbsON1R"/>
+<Counter _x="185" _y="24" name="counterLeft"/>
+<Evaluator _x="365" _y="26" name="evalLeft"/>
+<Counter _x="537" _y="29" name="counterRight"/>
+<Evaluator _x="720" _y="35" name="evalRight"/>
+</NSim>
+</Component>
+<Component cType="ga" cVersion="1.0">
+<GANode IntegerType='false' _x="103" _y="152" epochs="100" name="ga">
+<GenerationalPopNode _x="141" _y="52" elitism="1" name="pop" popSize="50">
+<UniformCrossoverNode _x="131" _y="28" name="crossover" rate="40"/>
+<GaussianMutationNode _x="139" _y="107" name="mutation" rate="4" std="1"/>
+<TournamentSelectionNode _x="145" _y="188" name="selection" rate="75"/>
+<GenomeNode _x="143" _y="262" name="genome">
+<FloatGeneNode _x="116" _y="19" initial="false" max="50" min="1" name="g1" type="g_syni" value="0"/>
+<FloatGeneNode _x="118" _y="85" initial="false" max="50" min="1" name="g2" type="g_syni" value="0"/>
+<FloatGeneNode _x="117" _y="153" initial="false" max="50" min="1" name="g3" type="g_syni" value="0"/>
+<FloatGeneNode _x="117" _y="219" initial="false" max="50" min="1" name="g4" type="g_syni" value="0"/>
+<FloatGeneNode _x="117" _y="286" initial="false" max="20" min="1" name="g5" type="c_memb" value="0"/>
+<FloatGeneNode _x="119" _y="359" initial="false" max="10" min="1" name="g6" type="g_memb" value="0"/>
+<FloatGeneNode _x="120" _y="429" initial="false" max="20" min="1" name="g7" type="c_memb" value="0"/>
+<FloatGeneNode _x="117" _y="508" initial="false" max="10" min="1" name="g8" type="g_memb" value="0"/>
+</GenomeNode>
+</GenerationalPopNode>
+<UniformRNGNode _x="137" _y="147" name="rng"/>
+</GANode>
+</Component>
+</Nodes>
+<Links>
+<Link source="control.check.Output" target="ga.StartGA"/>
+<Link source="ga.StartGA" target="control.check.Output"/>
+<Link source="ga.pop.genome.Go" target="nsim.Activate"/>
+<Link source="nsim.timer.tc.SimOff" target="nsim.Activate"/>
+<Link source="nsim.Activate" target="nsim.evalLeft.Activate"/>
+<Link source="nsim.Activate" target="nsim.evalRight.Activate"/>
+<Link source="nsim.MainLoop" target="nsim.timer.MainLoop"/>
+<Link source="nsim.MessageSender" target="nsim.ON1L.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.PL.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.PR.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.ON1R.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.AN1L.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.AN1R.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsL.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsL2.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsR.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsR2.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsAN1L.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsON1L.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsAN1R.MessageSender"/>
+<Link source="nsim.MessageSender" target="nsim.cbsON1R.MessageSender"/>
+<Link source="nsim.timer.MessageSender" target="nsim.MessageSender"/>
+<Link source="nsim.timer.SimTime" target="nsim.SimTime"/>
+<Link source="nsim.Timestep" target="nsim.ON1L.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.PL.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.PR.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.ON1R.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.AN1L.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.AN1R.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsL.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsL2.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsR.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsR2.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsAN1L.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsON1L.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsAN1R.Timestep"/>
+<Link source="nsim.Timestep" target="nsim.cbsON1R.Timestep"/>
+<Link source="nsim.timer.Timestep" target="nsim.Timestep"/>
+<Link source="nsim.Updater" target="nsim.ON1L.Updater"/>
+<Link source="nsim.Updater" target="nsim.PL.Updater"/>
+<Link source="nsim.Updater" target="nsim.PR.Updater"/>
+<Link source="nsim.Updater" target="nsim.ON1R.Updater"/>
+<Link source="nsim.Updater" target="nsim.AN1L.Updater"/>
+<Link source="nsim.Updater" target="nsim.AN1R.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsL.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsL2.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsR.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsR2.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsAN1L.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsON1L.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsAN1R.Updater"/>
+<Link source="nsim.Updater" target="nsim.cbsON1R.Updater"/>
+<Link source="nsim.timer.Updater" target="nsim.Updater"/>
+<Link source="nsim.timer.SimTime" target="nsim.timer.tc.SimTime"/>
+<Link source="nsim.timer.tc.SimOff" target="nsim.evalLeft.Activate"/>
+<Link source="nsim.timer.tc.SimOff" target="nsim.evalRight.Activate"/>
+<Link source="ga.pop.genome.Output" target="nsim.PL.MeanSG"/>
+<Link source="nsim.PL.Spike" target="nsim.cbsL.InputSpike"/>
+<Link source="nsim.PL.Spike" target="nsim.cbsL2.InputSpike"/>
+<Link source="ga.pop.genome.Output2" target="nsim.PR.MeanSG"/>
+<Link source="nsim.PR.Spike" target="nsim.cbsR.InputSpike"/>
+<Link source="nsim.PR.Spike" target="nsim.cbsR2.InputSpike"/>
+<Link source="ga.pop.genome.g5.Value" target="nsim.ON1L.CMemb"/>
+<Link source="ga.pop.genome.g6.Value" target="nsim.ON1L.GMemb"/>
+<Link source="nsim.ON1L.Spike" target="nsim.cbsAN1R.InputSpike"/>
+<Link source="nsim.ON1L.Spike" target="nsim.cbsON1R.InputSpike"/>
+<Link source="nsim.cbsL.SynapticOutput" target="nsim.ON1L.SynapticInput"/>
+<Link source="nsim.cbsON1L.SynapticOutput" target="nsim.ON1L.SynapticInput"/>
+<Link source="ga.pop.genome.g5.Value" target="nsim.ON1R.CMemb"/>
+<Link source="ga.pop.genome.g6.Value" target="nsim.ON1R.GMemb"/>
+<Link source="nsim.ON1R.Spike" target="nsim.cbsAN1L.InputSpike"/>
+<Link source="nsim.ON1R.Spike" target="nsim.cbsON1L.InputSpike"/>
+<Link source="nsim.cbsR.SynapticOutput" target="nsim.ON1R.SynapticInput"/>
+<Link source="nsim.cbsON1R.SynapticOutput" target="nsim.ON1R.SynapticInput"/>
+<Link source="ga.pop.genome.g7.Value" target="nsim.AN1L.CMemb"/>
+<Link source="ga.pop.genome.g8.Value" target="nsim.AN1L.GMemb"/>
+<Link source="nsim.AN1L.Spike" target="nsim.counterLeft.Spike"/>
+<Link source="nsim.cbsL2.SynapticOutput" target="nsim.AN1L.SynapticInput"/>
+<Link source="nsim.cbsAN1L.SynapticOutput" target="nsim.AN1L.SynapticInput"/>
+<Link source="ga.pop.genome.g7.Value" target="nsim.AN1R.CMemb"/>
+<Link source="ga.pop.genome.g8.Value" target="nsim.AN1R.GMemb"/>
+<Link source="nsim.AN1R.Spike" target="nsim.counterRight.Spike"/>
+<Link source="nsim.cbsR2.SynapticOutput" target="nsim.AN1R.SynapticInput"/>
+<Link source="nsim.cbsAN1R.SynapticOutput" target="nsim.AN1R.SynapticInput"/>
+<Link source="ga.pop.genome.g1.Value" target="nsim.cbsL.GSynI"/>
+<Link source="ga.pop.genome.g2.Value" target="nsim.cbsL2.GSynI"/>
+<Link source="ga.pop.genome.g1.Value" target="nsim.cbsR.GSynI"/>
+<Link source="ga.pop.genome.g2.Value" target="nsim.cbsR2.GSynI"/>
+<Link source="ga.pop.genome.g4.Value" target="nsim.cbsAN1L.GSynI"/>
+<Link source="ga.pop.genome.g3.Value" target="nsim.cbsON1L.GSynI"/>
+<Link source="ga.pop.genome.g4.Value" target="nsim.cbsAN1R.GSynI"/>
+<Link source="ga.pop.genome.g3.Value" target="nsim.cbsON1R.GSynI"/>
+<Link source="nsim.counterLeft.Sum" target="nsim.evalLeft.Evaluation"/>
+<Link source="nsim.evalLeft.Evaluation" target="ga.pop.genome.Evaluation"/>
+<Link source="nsim.counterRight.Sum" target="nsim.evalRight.Evaluation"/>
+<Link source="nsim.evalRight.Evaluation" target="ga.pop.genome.Evaluation2"/>
+<Link source="ga.StartRun" target="ga.pop.StartRun"/>
+<Link source="ga.pop.FinishedRun" target="ga.FinishedRun"/>
+<Link source="ga.pop.genome.Evaluated" target="ga.pop.Evaluated"/>
+<Link source="ga.pop.StartEx" target="ga.pop.genome.StartEx"/>
+</Links>
+</Network>

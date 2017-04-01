@@ -1,0 +1,4732 @@
+%% $Header: /disk/cvs/cricketlab/software/new/doc/NRS.tex,v 1.137 2005/09/16 15:27:34 s0125563 Exp $
+%% Early on we need a \documentclass or a \documentclass
+%% If we want to use the new features of LaTeX2e, the document
+%% should begin with a \documentclass rather than \documentclass
+%%
+%%\documentclass[a4paper,11pt,draft]{article}
+\documentclass[pdftex,a4paper]{article}
+
+%%
+%% Determine is we are running pdflatex or just latex
+%%
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+    \pdffalse           % we are not running PDFLaTeX
+\else
+    \pdfoutput=1        % we are running PDFLaTeX
+    \pdftrue
+\fi
+
+%% Uncomment out these lines for Latex to check syntax only (faster)
+%% \usepackage{syntonly}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{times}   % better for displaying on a screen
+\usepackage[pdftex,colorlinks,hyperfigures,pagebackref,hyperindex,linkcolor=black,anchorcolor=black,citecolor=black,pagecolor=black]{hyperref}
+
+\newcommand{\ie}{{\em i.e.\ }}
+\newcommand{\eg}{{\em e.g.\ }}
+\newcommand{\egg}{{\em e.g.}}
+\newcommand{\etc}{{\it etc.}}
+\newcommand{\et}{{\it etc}}
+\newcommand{\via}{{\it via }}
+\newcommand{\vs}{{\it vs. }}
+\newcommand{\viz}{{\it viz. }}
+\newcommand{\adhoc}{{\it ad hoc}}
+\newcommand{\etal}{{\it et al.\ }}
+\newcommand{\ibid}{({\it ibid.})}
+
+\newcommand{\NRS}{{\it NRS}}
+\newcommand{\NRSgui}{{\it NRS.gui}}
+\newcommand{\NRSnsim}{{\it NRS.nsim}}
+
+\DeclareRobustCommand{\trademark}{\ensuremath{^{\mathrm{TM}}}}
+
+\newcommand{\XML}[2][]{{\tt \small $<$#2#1/$>$}}
+\newcommand{\XMLfont}[1]{{\tt \small #1}}
+\newcommand{\code}[1]{{\tt \small #1}}
+
+\newcommand{\XMLtext}[1]{
+  \begin{tt}
+    \begin{small}
+      \begin{list}{}{
+          \setlength{\topsep}{0pt}
+          \setlength{\partopsep}{0pt}
+          \setlength{\itemsep}{0pt}
+          \setlength{\parsep}{0pt}
+          \setlength{\leftmargin}{2em}
+          \setlength{\rightmargin}{2em}
+          \setlength{\labelsep}{0pt}
+        }
+      \item #1
+      \end{list}
+    \end{small}
+  \end{tt}
+}
+
+\newcommand{\XMLfull}[3][]{\XMLtext{$<$#2#1$>$
+    #3
+  \item $<$/#2$>$}}
+
+\newcommand{\XMLsimple}[2][]{\XMLtext{$<$#2#1/$>$}}
+
+%% \syntaxonly
+
+%% Hyphenations
+%\hyphenation{mush-room anat-omy cal-modulin embryo-genesis proto-cerebrum}
+%\hyphenation{droso-phila}
+
+%% Define the title
+\author{$Revision: 1.137 $}
+
+%%
+%% No! Don't this title: it is refered to from the Java javadoc comments!
+%%
+\title{NRS 2.0 Design Document}
+
+
+\hypersetup{pdfauthor = {Richard Reeve, Darren Smith and Matthew Szenher},
+  pdftitle = {NRS 2.0 design document},
+  pdfkeywords = {C++, NRS, GUI, neuron, synapse, neural network,
+  synaptic model}
+}
+
+% Change paragraph spacing to word-like documents
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
+
+%%\includeonly{model}
+
+
+%% ---------------------------------------------------------
+%% -------------------- END OF PREAMBLE --------------------
+%% ---------------------------------------------------------
+
+\begin{document}
+
+\date{}
+%% generates the title
+\maketitle
+
+%% insert the table of contents
+\tableofcontents
+
+\pagebreak
+
+\section{Introduction}
+
+This document keeps track of basic ideas and designs for the new
+version of NRS, its components and communication.
+
+\subsection{History}
+
+The need for this program arose in the 1990's --- Barbara Webb, Tom
+Scutt and others wrote software to carry out neural simulations for
+modelling cricket phonotaxis. The code was completely rewritten
+between 2000 and 2002 by Richard Reeve to be a more general purpose
+tool for neural simulation, designed to connect to robots and sensors
+for realtime control. It also acquired a scripting language to allow
+runtime modification of networks to maximise ease of use. This was the
+first Neural Robotic System (NRS).
+
+The final iteration of this code was v1.2 which included what is
+described below as NRS.nsim, NRS.tui, NRS.realtime, NRS.robot and
+NRS.tracker. Initial versions of NRS.grapher and NRS.router were
+developed at this time also, though they were not fully integrated
+into the system. This system remains fully functioning, but various
+problems were identified which would be difficult to resolve with the
+current codebase, not least the idiosyncratic communication mechanisms
+which combined with the lack of a design document to cause
+difficulties for others to add extra functionalities to the codebase.
+
+In 2003 it was decided to redesign the system, taking the best
+elements of the old, but putting in a new properly structured
+framework to allow components to be added with relative ease by other
+programmers; this was partly because more programmers were available
+to work on the code, and partly because desirable features were
+discovered which it would have been difficult to add to the old system.
+
+The communication mechanisms for the system evolved from discussions
+over many years at the Telluride Neuromorphic Engineering workshop on
+Address Event Representation and how to extend it. The current report,
+which includes the representation used here, is available on request .
+
+\section{System Overview}
+
+\subsection{Components}
+
+The entire NRS system consists of the following components. The labels
+below are used throughout this document to refer to each
+component.
+
+\begin{description}
+
+\item[NRS.component] The base C++ component into which plugins are
+loaded to perform such tasks as the neural simulation.
+
+\item[NRS.nsim] The C++ process which performs the simulation of the
+  neurons and synapses in a network model. Also called ``the
+  simulator''. This is being rewritten for the new system;
+
+\item[NRS.gui] The Java graphical user interface (GUI) which is used
+  to create network specifications to be used by the simulator. Also
+  called ``the gui''. This is new in the new system. It is not
+  anticipated that this will be the only interface to the system,
+  indeed there are tentative plans to create a GA interface to evolve
+  networks in the system. However, this will be the only interface
+  created in this phase of development;
+
+\item[NRS.tui] {\em (obsolescent)} The old text based interface
+which allows a user to interact with the old NRS.nsim using n-files;
+
+\item[NRS.XSLT] A set of scripts designed to be run by an external
+  XSLT (eXtensible Sylesheet Language: Transformations) engine to
+  convert between the different XML (eXtensible Markup Language)
+  applications used for communication. These are designed to simplify
+  interactions between the different components;
+
+\item[NRS.atmel] The C program which runs a router and sensorimotor
+  interface on an atmel ATmega128 microcontroller. This is new in the
+  new system;
+
+\item[NRS.robot] The C program which runs sensors and actuators on the
+  robot. Also called ``the robot''. This will be updated in the new
+  system;
+
+\item[NRS.realtime] {\em (obsolescent)} The C kernel module which
+  keeps realtime control of the robot-computer interface in the old
+  system;
+
+\item[NRS.router] The C code on a microcontroller (or potentially an
+  FPGA) which routes messages around between chips and the robot and
+  the computer. This is new in the new system;
+
+\item[NRS.tracker] The C/C++ process which tracks the robot as it
+  moves around and communicates positional information to
+  NRS.nsim. This will be updated in the new system;
+
+\item[NRS.grapher] The Java application which displays plots of
+  neuronal behaviour output by NRS.nsim. This currently runs on the
+  output of a completed experiment, but will run live on data as it is
+  generated, and so will be updated and possibly moved to C++ for
+  speed in the new system;
+
+\item[NRS.server] A C/C++ daemon (initially a command-line program)
+  which runs on any machine which will be running NRS software to
+  start programs on demand. This is new in the new system;
+
+\item[NRS.control] A Java GUI which is built by NRS.gui to control
+  the system. This is new in the new system;
+
+\item[NRS.ga] A Java Genetic Algorithm which will be used to tune
+  parameters. This is new in the new system;
+
+\item[NRS.audiogen] A C++ sound generator program. This will be
+  updated in the new system.
+
+\end{description}
+
+The generic name used to describe any piece of software is a {\em
+component}, though this usually refers specifically to the components
+which can be added to a network as top-level elements, which are
+NRS.nsim, NRS.atmel, NRS.robot, NRS.ga, NRS.router, NRS.tracker,
+NRS.grapher, NRS.control, NRS.audiogen and NRS.gui.
+
+\subsection{Interactions}
+
+Four formats of data are used by the system to communicate and store
+information. There is a large degree of overlap between some of these
+formats, and translation procedures will allow some to be converted
+into others, however the different formats are necessary depending,
+for instance, on the desirability of being able to use standard tools
+(such as XML parsers) to read them and human readability issues on the
+one hand, and bandwidth constraints and speed of parsing on the
+other. The formats are detailed below:
+
+\begin{description}
+
+\item[Capability Specification Language] All programs (\eg NRS.nsim,
+  NRS.tracker, \etc) provide an XML specification which lists the
+  various kinds of elements (``nodes'') that it provides to the user
+  (its capability). NRS.server will request these specifications from
+  all of the programs which will run on this processor, and will
+  combine them and pass them to NRS.gui on request. NRS.server will
+  handle the initial communication with NRS.gui and will start
+  components (such as NRS.nsim or NRS.tracker) as required by the gui
+  when it requests them (by creating ``Simulator'' and ``Tracker''
+  nodes). The user uses the gui to create networks of these nodes. The
+  schema for this application must be flexible enough so that any
+  future elements supported by NRS.nsim and other components of the
+  system (\eg the robot) can be described in this language and so
+  handled by NRS.gui; the language must also describe the other XML
+  applications used for communication between nodes. NRS.XSLT may be
+  able to map this language to schema documents for the other XML
+  applications mentioned below if this is considered useful;
+
+\item[Declarative Network Language] This XML application is a
+  declarative language which is designed to be the language of file
+  storage and is human readable. It is generated and read by
+  NRS.gui. Its nested structure mirrors the nesting of neurons within
+  networks, and sensors within robots, \et. It cannot represent
+  messages being passed between nodes, only the nodes
+  themselves. NRS.XSLT will map this language into the procedural
+  language described below;
+
+\item[Procedural Message Language] This XML application consists
+  entirely of atomic control signals and events (collectively
+  messages), and is used primarily to instruct NRS.nsim and other
+  components such as NRS.control to create, destroy and modify nodes
+  in the system, and to make connections between them. It can also
+  carry events such as spikes between elements of the system, though
+  it is not usually used for this for speed and bandwidth reasons. It
+  is a language understood by all the programs running on sufficiently
+  powerful processors in the system for all control signals they may
+  encounter (this is contrasted with the events which are passed
+  during simulations, which are generally not text based for speed and
+  bandwidth reasons). An XSLT engine (using an NRS.XSLT script) may
+  allow translation from the Declarative Network Language above to
+  this Procedural Message Language. NRS.gui can, however, speak this
+  language directly to alter settings ``on the fly'' while a
+  simulation is running. This language is functionally equivalent to
+  the Binary Message Format described below, but is easier, though
+  slower, to parse. Consequently it is used in non-realtime
+  situations, when clarity is more important than speed;
+
+\item[Binary Message Format] A binary format exists to pass messages
+  as quickly as possible between all the programs, \eg between
+  NRS.router and the low level programs, between NRS.nsim and the
+  higher level ones, or between NRS.router and NRS.nsim. This format is
+  equivalent to the Procedural Message Language described above, but
+  is faster to communicate and to parse than XML.  Consequently it is
+  used in realtime situations and on processors which do not have XML
+  parsers easily available such as microcontrollers. This format is
+  also the language of logging and data storage, though it may be
+  desirable to compress this on the fly to generate smaller files.
+
+\end{description}
+
+These four (really three different) languages are described in more
+detail below with examples, though more will be added in appendices as
+they become available.
+
+\section{Capabilities Specifications Language}
+\label{sec:csl}
+
+This is the XML application provided by NRS.nsim and all the other
+programs for use by NRS.gui or any other potential client serves several
+needs. The essential functionality of the gui is to allow a user to
+graphically connect up neural networks or other program structures that
+can later (or synchronously) be passed to NRS.nsim for simulation, and to
+control that simulation/program when it runs. Consequently, the language
+has to fulfil the following criteria:
+
+\begin{enumerate}
+
+\item It must inform NRS.gui of the range of elements (\eg various
+  kinds of neurons, synapses, robots, and tracking devices) that
+  NRS.nsim and the other programs offer;
+
+\item It must further specify how the gui should construct XML DNL
+  (Declarative Network Language) and PML (Procedural Message Language)
+  scripts to specify the networks the user wishes to simulate. For
+  instance, in order for the gui to successfully instruct the simulator
+  to create a SpikingNeuron, it will have to provide values for the
+  various attributes of SpikingNeuron, and these values need to be of a
+  particular type, and in some cases restricted to particular
+  values. The \XML{NodeDescription} entry for the SpikingNeuron node, in
+  the CSL, will contain the information describing these rules, so that
+  when the gui does attempt to declare a SpikingNeuron element, it does
+  so in accordance with what the simulator expects;
+
+\item It should also provide information which allows the gui to
+  facilitate user design of networks, including information on what
+  kind of connections each node can make, textual or XHTML
+  descriptions, and groupings under which the node types fall.
+
+\end{enumerate}
+
+The language described here fulfils these criteria by providing the
+root node and set of top-level elements listed in table
+\ref{tab:desc_node}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{Top-level XML elements in CSL}
+    \label{tab:desc_node}
+    \begin{tabular}{|l|p{2.5in}|}
+      \hline
+
+      \textbf{XML Element} & \textbf{Notes}\\
+
+      \hline
+
+      Capabilities & Root node which can contain any of the other
+      nodes in the list as well as itself.\\
+
+      \hline
+
+      Unit & Basic units used in simulation (such as voltage), used by
+      gui to ground subsequent higher level concepts.\\
+
+      \hline
+
+      Message & Type of message which can be passed between nodes in
+      simulation (such as a current), which are composed of a single
+      or multiple values measured in some specified units (see
+      above).\\
+
+
+      \hline
+
+      NodeDescription & Type of node that can exist in the simulation,
+      including a textual description and a logical description. The
+      latter description describes, in a formal manner, the capabailties
+      of the node, such as the \XML{Message} types it can transmit and
+      receive.\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Between these elements we can completely describe the capabilities of
+the system. The \XML{NodeDescription} element is the most important one
+for the purpose of designing networks, but the other elements are
+required primarily to make it possible to enforce correct connections
+between nodes (such as between a neuron and a synapse). Multiple CSL
+files (one for each component in the system generally) are received by
+the gui to determine the total capabilities of the whole system. The gui
+itself may have capabilities of its own (for instance you may be able to
+create buttons which connect to various parts of the system to switch
+them on and off), and these will just be added to the general list.
+
+Note that since all communication between components is carried out in
+Procedural Message Language or Binary Message Format, any
+communication of capabilities in CSL will in practice be placed in a
+PML or BMF wrapper: this is discussed further in section
+\ref{sec:pmlbmf}.
+
+\subsection{Capabilities: root node}
+
+Any component offering capabilities will produce a valid CSL document,
+with a \XML{Capabilities} root node, which it will pass to anyone
+querying it; in general this will be the local server which will
+concatenate all the CSL documents together and wrap them in another
+\XML{Capabilities} root node, giving two layers of such nodes: however
+many of these nodes exist, they can be ignored for the purposes of
+determining the overall capabilities of the system, though they are
+necessary to determine precisely who has a specific capability. The
+attributes of the root node are given in table \ref{tab:cap_attrib}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{Capabilities} element}
+    \label{tab:cap_attrib}
+    \begin{tabular}{|l|p{2in}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      xmlns & {\em (for root node only)} namespace URI for Capability
+      Specification Language; fixed. &
+      ``http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0''\\
+
+      \hline
+
+      cType & name of the type of component which provides the
+      capabilities described within; can be matched against ReplyCType
+      answers & ``nsim''\\
+
+      \hline
+
+      cVersion & version of program named in program attribute; can be
+      matched against ReplyCType answers. & ``1.2''\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{Types, units and messages}
+
+The basic types are the universal underlying currency of the system,
+and are listed in table \ref{tab:types}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{Basic system types}
+    \label{tab:types}
+    \begin{tabular}{|l|p{2.5in}|l|}
+      \hline
+
+      \textbf{Type} & \textbf{Description} & \textbf{Example}\\
+
+      \hline
+
+      float & double or float & ``3.7''\\
+
+      \hline
+
+      integer & integer (variable length) usually used for IDs or in
+      systems which cannot handle floating point & ``7''\\
+
+      \hline
+
+      string & an ascii string & ``not mine''\\
+
+      \hline
+
+      boolean & a truth statement (true or false) & ``true''\\
+
+      \hline
+
+      route & a route from one component to another & ``GGAFA001''\\
+
+      \hline
+
+      vector & an array of binary data, usually used in a Message
+      along with a chunksize to know how to break it up &
+      ``0x1ea74a39546ddc''\\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Types are implicitly understood by all components in the system. Units
+and messages which are derived from the basic types are defined
+individually by components. It is therefore possible that multiple
+components will define the same units or messages (indeed this will be
+necessary for communication between them). This is permissible so long
+as the definitions are identical (most easily achieved by common source
+code between the components) --- any deviation between different
+definitions in the same capabilities specification is a fatal error, and
+any software components which detect such deviation (\eg NRS.gui) should
+abort, even though in practice small variations (in descriptive text
+about the node for instance) might not cause such serious problems.
+
+Note that currently the Java framework does not implement the full specification
+of the route type. No validaty checking is carried out. Also, neither the C++ or
+Java frameworks implement the vector basic type.
+
+\subsubsection{Unit: defining units}
+
+\label{sec:units}
+
+Units are probably the most important types of the system. Underlying
+them are integers, floats, booleans, strings, \etc which are the basic
+types (table \ref{tab:types}), but these are rarely used directly, and
+indeed when they are they are considered to be \emph{implicit units},
+rather than a more fundamental type. Units themselves are never used
+on their own, but they are used to build up messages which are the
+packets of information that are passed between nodes of the
+simulation.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{Unit} element}
+    \label{tab:units_attrib}
+    \begin{tabular}{|l|p{2.5in}|p{0.5in}|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & Name of the unit. This value allows one unit type to be
+      distinguished from another, and so must be unique. & ``Voltage''
+      \\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional &  \\
+
+      \hline
+
+      type & One of the basic types described in table \ref{tab:types}. Allows
+      the gui to verify user input. & ``float'' \\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+The attributes for units are described in table
+\ref{tab:units_attrib}. Each unit is described in a \XML{Unit} element,
+although these are supplemented by the implicit unit types which
+correspond directly to the basic types specified in table
+\ref{tab:types} with \XMLfont{name} and \XMLfont{type} attributes set to
+the basic type (\ie as if elements like \XML{Unit name="float"
+type="float"} had been explicitly defined).
+
+Units can be further described by the inclusion of an optional
+\XML{FloatInfo}, \XML{IntegerInfo}, \XML{StringInfo} or
+\XML{VectorInfo} element. They can be used with a \XML{Unit} of
+\XMLfont{type} ``float'', ``integer'', ``string'' and ``vector''
+respectively.  Each \XML{Unit} can also contain a \XML{Description}
+sub-element which provides a human readable description of what the
+unit represents in plain text or XHTML.
+
+The attributes of a \XML{FloatInfo} element are described in table
+\ref{tab:floatinfo-unit}, and \XML{IntegerInfo} in table
+\ref{tab:integerinfo-unit}. As well as providing scaling and
+abbreviation information \XML{FloatInfo} can also describe a
+constraint upon values taken by a float unit through the use of the
+\XMLfont{minVal} and \XMLfont{maxVal} attributes. The default value
+for these attributes is ``unbounded''. \XML{IntegerInfo} just provides
+these last two attributes.
+
+The \XML{StringInfo} element is used to restrict the value that a string
+unit can take. The restriction is specified by the \XMLfont{restriction}
+attribute and the possbile restrictions are listed in table
+\ref{tab:stringinfo-unit}. They have the following meanings:
+
+\begin{description}
+\item{``list''} -- restrict the value of the string \XML{Unit} to one of
+  several possible choices. These choices are described in a series of
+  \XML{ListMember} sub-elements (with each element describing a single
+  permitted value). The \XML{ListMember} element has a single attribute
+  called ``value'' whose value is a list choice (\eg \XML[ value="left"
+  ]{ListMember}) (see table \ref{tab:listmember-unit}). An example use
+  would be a string unit for storing which side of a robot a motor is
+  located, for which the possible choices would be ``left'' and
+  ``right''.
+
+\item{``token''} -- restrict values to an alphanumeric string starting
+      with a letter which can also contain the underscore character.
+
+\item{``filename''} -- restrict the string to valid Unix filename.
+
+\item{``vnname''} -- restrict the string to a sequence of one or more
+      tokens with full-stop characters in between to indicate nesting of
+      the rhs within the lhs for describing a node within NRS.
+\end{description}
+
+The \XML{VectorInfo} element can constrain whether the chunks of the
+vector respresent floating point numbers or just arbitrary binary
+data, how large each chunk is (this can only be 32 or 64 bits if the
+data represents floating point numbers), and how many elements there
+are in the vector. See table \ref{tab:vectorinfo-unit} for more details.
+
+Since neither framework currently supports the vector basic type, the vector
+restriction is also not implemented.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{FloatInfo} element}
+    \label{tab:floatinfo-unit}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      scale & The default scaling to apply for values of this ``float''
+      unit. Values take the prefix ``m'', ``n'', ``u'' (for $\mu$),
+      \et. Optional & ``m'' \\
+
+      \hline
+
+      abbreviation & The abbreviation to show in the GUI. This field
+      is optional, since some will likely have no units (\eg learning
+      rates) & ``V'' \\
+
+      \hline
+
+      minVal & Minimum value of unit. Can be a number or the string
+      ``unbounded''. Optional, default ``unbounded'' & 0\\
+
+      \hline
+
+      maxVal & Maximum value of unit. Can be a number or the string
+      ``unbounded''. Optional, default ``unbounded'' & ``unbounded'' \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{IntegerInfo} element}
+    \label{tab:integerinfo-unit}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      minVal & Minimum value of unit. Can be a number or the string
+      ``unbounded''. Optional, default ``unbounded'' & 0\\
+
+      \hline
+
+      maxVal & Maximum value of unit. Can be a number or the string
+      ``unbounded''. Optional, default ``unbounded'' & ``unbounded'' \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{StringInfo} element}
+    \label{tab:stringinfo-unit}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      restriction & One of several reserved values which is used to
+      indicate a restriction placed on the string \XML{Unit}. Valid
+      values are ``list'', ``token'', ``vnname'' and
+      ``filename'' & ``filename'' \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{ListMember} element}
+    \label{tab:listmember-unit}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      value & A value that a unit of type ``string'' with restriction
+      ``list'' may take. & ``left''\\
+
+      \hline
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for the \XML{VectorInfo} element}
+    \label{tab:vectorinfo-unit}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      floatingPoint & boolean indicating whether the data contained is
+      floating point or general binary data. Optional, default
+      ``false'' & ``false''\\
+
+      \hline
+
+      dataBits & number of bits per chunk of data in
+      vector. Restricted to 32 or 64 bits for floating point data,
+      otherwise a positive integer. BMF data is compressed into 7 bit
+      bytes, PML data into 4 bit nibbles, which may affect the choice
+      of size if speed of decompression is important. In the absence
+      of this attribute, data will be assumed to be byte-sized (8
+      bits) for non-floating point and 32 bit for floating point &
+      ``7'' \\
+
+      \hline
+
+      numElements & number of chunks of data in a vector; this can be
+      any positive integer or ``unbounded'' for an indeterminate
+      length which is calculated from the length of the data stream &
+      ``40'' \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+An example float unit is:
+
+\XMLfull[ name="Voltage" type="float" ]{Unit}{
+
+ \XMLsimple[ scale="m" abbreviation="V" minVal="-1000"
+   maxVal="1000" ]{FloatInfo}
+
+  \XMLfull{Description}{
+    \XMLtext{Voltage measures potential difference in Volts.}
+  }
+}
+
+\subsubsection{Message: defining message types}
+
+Message types are the various kinds of structures used to represent data
+being passed around NRS.nsim and other software components. Variables,
+for instance (see section \ref{sec:variables}), have a message type,
+which is simply the type of message that variable is capable of storing
+and producing.  Message types are used in the gui to enforce type
+compatibility of connections, and to aid the user in setting up such
+connections.
+
+\XML{Message} elements contain the XML sub-elements described in table
+\ref{tab:msg_subelt}; a \XML{Description} sub-element describes the
+message; and a set of \XML{Segment} sub-elements describe the message
+structure.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML sub-elements for \XML{Message} element}
+    \label{tab:msg_subelt}
+    \begin{tabular}{|l|p{6cm}|}
+      \hline
+
+      \textbf{XML Element} & \textbf{Notes}\\
+
+      \hline
+
+      Description & Textual (or XHTML) description of the message\\
+
+      \hline
+
+      Segment & Zero or more elements that describe the specific
+      contents of the message. This can contain a description as
+      well\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+A simple example message is:
+
+\XMLfull[ name="baseV" ]{Message}{
+  \XMLfull{Description}{
+    \XMLtext{baseV is the base membrane potential of neuron, the potential
+    difference of the inside of the cell with respect to the
+    extracellular medium to which the neuron will decay in the absence
+    of external input. This message type sets the baseV parameter on a
+    neuron.}
+  }
+  \XMLfull[ name="voltage" unit="Voltage" ]{Segment}{
+    \XMLfull{Description}{
+      \XMLtext{This is the base membrane potential of neuron.}
+    }
+  }
+}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for \XML{Message} element}
+    \label{tab:message}
+    \begin{tabular}{|l|p{6cm}|p{3cm}|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & The name of the message &``baseV''\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+A \XML{Message} element has a single mandatory \XMLfont{name}
+attribute, which gives the name by which the message is identified,
+and optionally \XMLfont{displayName} for GUI display purposes only
+(see table \ref{tab:message}). The \XML{Segment} element's attributes
+are detailed in table \ref{tab:segment}: the \XMLfont{name} attribute
+gives the name of the segment inside the message and the
+\XMLfont{unit} attribute gives the \XMLfont{name} of the
+\XMLfont{Unit} element which describes the type of the segment.
+
+An optional \XML{FloatInfo} or \XML{StringInfo} (see section
+\ref{sec:units}) sub-element can be provided within \XML{Segment} to
+further specialise or constrain the underlying unit type. A typical use
+would be to use \XML{FloatInfo} to override the default scaling of the
+underlying unit or to constrain numeric values to particular range.
+
+As described in table \ref{tab:msg_subelt} a \XML{Message} can
+contain zero \XML{Segment} elements. This allows a \XML{Message} to
+convey no explicit information, other than the fact of the occurrence of
+the message itself. An important example of such a message is the
+idealised neuron spike, which provides no information other than that a
+spike occurred. A spike is described by the following message:
+
+
+\XMLfull[ name="spike" displayName="Spike"]{Message}{
+  \XMLfull{Description}{
+    \XMLtext{An idealised representation of a neuron action potential.}
+  }
+}
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for \XML{Segment} element}
+    \label{tab:segment}
+    \begin{tabular}{|l|p{6cm}|p{3cm}|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & The name of the segment &``baseV''\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & \\
+
+      \hline
+
+      unit & Name of \XML{Unit} element describing type of segment &
+      ``Voltage''\\
+
+      \hline
+
+      segmentInContents & This segment will appear as a sub-element of
+      the base Message element in PML with an appropriate element name
+      instead of attribute name. This has no effect in BMF (optional,
+      default false) & \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+These simple messages are supplemented by ``basic'' simple messages
+which correspond directly to the units specified above with
+\XMLfont{name} and \XMLfont{unit} attributes set to the name of the unit
+(\ie as if elements like the example below had been explicitly defined).
+
+\XMLfull[ name="Voltage" ]{Message}{
+  \XMLsimple[ name="Voltage" unit="Voltage" ]{Segment}
+}
+
+More complex messages simply have more \XML{Segment} elements. A
+typical example of their use would be to describe synaptic conductance
+messages, which are a combination of conductance and reversal
+potential. This message would appear as:
+
+\XMLfull[ name="ReversibleConductanceMessage" ]{Message}{
+  \XMLfull{Description}{
+    \XMLtext{This message passes from a synapse to a neuron to tell
+    the neuron the current state of one of its synapses.}
+  }
+  \XMLfull[ name="reversalPotential" unit="Voltage" ]{Segment}{
+    \XMLfull{Description}{
+      \XMLtext{The reversal potential of the synapse. This value is
+      often fixed.}
+    }
+  }
+  \XMLfull[ name="synapticConductance" unit="Conductance" ]{Segment}{
+    \XMLfull{Description}{
+      \XMLtext{The current conductance of the synapse. This value is
+        highly time varying.}
+    }
+    \XMLsimple[ minVal="0" maxVal="unbounded" ]{FloatInfo}
+  }
+}
+
+Note that the order of \XML{Segment} elements inside a \XML{Message}
+is important. The order described here {\em must} be the order in
+which they are produced and expected by the nodes which use this
+message type, since the Binary Message Format requires that the
+segments of the message are ordered according to this list.
+
+Currently, the Java framework does not support segments in contents, as
+indicated by the segmentInContents XML attribute. This also applies to routing,
+where messages with segment in contents are routed through a Java
+components. The result of this will be loss of the data.
+
+\subsubsection{Inheritance for messages, units and types}
+
+To allow \XMLfont{Constant} nodes to be linked to neuron parameters
+such as the rest potential of the membrane, a structure is required
+which indicates the compatibility of differing types. So the type,
+Unit, message hierarchy is used for inheritance. Consequently a node
+which can output a message of explicit type ``threshV'' can connect to
+a node which can input a message of implicit type ``Voltage'', and
+likewise between explicit type ``threshV'', and basic implicit type
+``float'', and ``Voltage'' and ``float'', and so on. This only works
+in one direction, however: a ``float'' cannot connect to a
+``theshV''. This only applies to simple messages with only one segment
+--- more complex messages have no inheritance. The gui should use this
+information to intelligently link nodes together, or to intelligently
+offer potential connections to the user.
+
+\subsection{Describing nodes}
+
+This section describes how NRS.nsim and other programs specify which
+nodes can be simulated. \XML{NodeDescription} elements allow the
+simulator and other programs to provide several kinds of information. As
+described in section \ref{sec:csl}, this includes describing the range
+of elements available, how to describe them correctly in DNL and PML,
+and how to guide user design.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML sub-elements for \XML{NodeDescription} element}
+    \label{tab:sub-nd}
+    \begin{tabular}{|l|p{6cm}|}
+      \hline
+
+      \textbf{XML Element} & \textbf{Notes}\\
+
+      \hline
+
+      Description & Textual (or XHTML) description of the node. \eg
+      ``Spiking neuron model ...'' \\
+
+      \hline
+
+      InGroup & Identifies a node as a member of a more generic group
+      (a kind of alias), so that, for instance, all neuron types can
+      be gathered together.\\
+
+      \hline
+
+      Attribute & Lists what XML attributes are required when
+      declaring a node in the Declarative Network Language. The gui
+      can use them as hint as to what items would appear in a
+      node-construction dialog box.\\
+
+      \hline
+
+      Contains & Lists what sub-elements a node may or must contain,
+      and any restrictions (in the form of settings for attributes)
+      such nodes may have.\\
+
+      \hline
+
+      Variables & Lists the values associated with a node that can be
+      written to or read from, or which are internal and can be
+      logged. For a Spiking neuron, some of the variables would be
+      ``threshV'', ``membC'' as inputs, ``membV'' as an internal
+      variable, and ``spikes'' as an output.\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+  This information is contained in sub-elements which are described in
+table \ref{tab:sub-nd}, and these are realised in the CSL description of
+a node as XML elements belonging to a parent \XML{NodeDescription}
+element for a node. In addition, each \XML{NodeDescription} element has
+the XML attributes shown in table \ref{tab:nd}. The \XMLfont{rootNode}
+attribute determines whether the node an be created at the top level of
+a network --- \ie whether it is a process on the computer or piece of
+hardware, like the simulator, NRS.robot, the gui, \etc; if it is a
+\XMLfont{rootNode} then it will be required to have certain interfaces
+(see section \ref{sec:rootNode} for more on these interfaces).
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for \XML{NodeDescription} element}
+    \label{tab:nd}
+    \begin{tabular}{|l|p{6cm}|p{3cm}|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & The type of the node & ``SpikingNeuron'''\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & ``Spiking Neuron'' \\
+
+      \hline
+
+      rootNode & Whether the node can go at the top level of the tree
+      structure. Optional, default is false &\\
+
+      \hline
+
+      rootMinOccurs & If the node can go at the top level, how many
+      instances of the object must there be at least. Optional,
+      default is 0 &\\
+
+      \hline
+
+      rootMaxOccurs & If the node can go at the top level, how many
+      instances of the object can there be at most. Optional, default
+      is 1 &\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{Description: human-readable descriptions of nodes}
+
+The \XML{Description} element contains a simple text or XHTML
+description to inform the user what this node is for. So for a Spiking
+neuron, the description might describe the mathematics underlying the
+model. For a ``NumericalVariable'' node it would describe a variable
+which consists of a single float Variable.
+
+An example description is:
+
+\XMLfull{Description}{
+  \XMLtext{A NumericalVariable is a store for a float. It has a
+  default value for that number which can be set externally, but this
+  is overridden if an input connection exists (which would provide a
+  float message). It provides its current value to anything connected
+  as an output.}
+}
+
+\subsubsection{InGroup: nodes in larger groups}
+
+The \XML{InGroup} element identifies a node as a member of a more
+generic group (a kind of alias), so that, for instance, all neuron
+types can be gathered together. It has a single XML attribute,
+described in table \ref{tab:ingroup}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attribute for \XML{InGroup} element}
+    \label{tab:ingroup}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & The name of the group & ``neuron'' or ``synapse''\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & ``Neuron'' \\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+What function do \XML{InGroup} elements serve? In a later section the
+\XML{Contains} elements are described. These elements specify which
+node types may be {\em contained} within the node being described. For
+instance, using \XML{Contains} elements, a node describing a robot
+could be specified as containing two sub-nodes, each a motor neuron,
+perhaps even providing each with a name. In the case of describing a
+more general network node, it instead would specify that it can
+contain any number of various {\em groups} of elements (\eg neurons
+and synapses), rather than listing every kind of neuron and synapse
+which it could contain, a list which will always grow as newer nodes
+are supported by the simulator. Hence, by specifying that a general
+network node contains ``neuron'' and ``synapse'' groups, all node
+types that belong to either group can be contained.
+
+An example grouping element is:
+
+\XMLsimple[ name="neuron" ]{InGroup}
+
+The \XML{InGroup} element is also used in a different context in
+section \ref{sec:variables} to group interfaces together.
+
+\subsubsection{Attribute: information required to create a node}
+
+\XML{Attribute} sub-elements instruct NRS.gui what XML attributes are
+required in an XML element of this type. The GUI can also use them as
+hint as to what items would appear in a node-construction dialog box.
+
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{Attribute} element}
+    \label{attributes}
+    \begin{tabular}{|l|p{6cm}|r|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & Name of the Attribute & ``name''\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & ``Name'' \\
+
+      \hline
+
+      unitName & The type of unit of the value & ``vnname''  \\
+
+      \hline
+
+      isConst & boolean indicating whether this value is actually
+      fixed by the component & ``false'' \\
+
+      \hline
+
+      inNRSNamespace & boolean indicating whether this attribute is a
+      reserved attribute of the NRS system, such as ``name'', and as
+      such is in the namespace
+      `http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/attributes/1.0', or
+      not & ``false'' \\
+
+      \hline
+
+      liveChange & boolean indicating whether this value can be
+      changed at run time -- used for attributes such as name, which
+      cannot be changed after creation of the Node & ``true''\\
+
+      \hline
+
+      noSend & boolean indicating whether this value should
+      actually be sent -- normally used for the name attribute &
+      ``false''\\
+
+      \hline
+
+      defaultValue & Default value for attribute (optional) & \\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+Each \XML{Attribute} has a number of XML attributes, described in
+table \ref{attributes}. The default value can be taken if the user
+does not provide a value --- if no default is provided the user must
+provide a value. For Attributes which are constant (\ie isConst =
+``true''), the default value must always be used. Each element may
+also have a \XML{Description} sub-element which describes the
+attribute. Some attributes, noticeably ``name'', are keywords which
+must be the same everywhere, and as such are in the standard PML
+namespace. The rest are found in a reserved attribute namespace; the
+boolean inNRSNamespace denotes this.
+
+An example attribute is:
+
+\XMLfull[ name="baseVdefault" unitName="Voltage"
+  isConst="false" inNRSNamespace="true" defaultValue="-80"]{Attribute}{
+  \XMLfull{Description}{
+    \XMLtext{This is the default value of the baseV parameter for the
+      neuron. It sets the base membrane potential of neuron, the
+      potential difference of the inside of the cell with respect to
+      the extracellular medium to which the neuron will decay in the
+      absence of external input.}
+  }
+}
+
+In the current state of system, the noSend attribute is not used by either
+framework. Furthermore, the GUI does not check the value of the attribute before
+sending out configuration messages. 
+
+Although the defaultValue attribute is optional, the GUI currently requires a
+default value for types such as integer, float and boolean.
+
+\subsubsection{Contains: can or should the node contain other nodes?}
+
+A set of \XML{Contains} elements describe what sub-nodes or groups a
+node can or must contain.  The XML attributes for the \XML{Contains}
+element are described in table \ref{contains}. Each element also
+contains zero or more \XML{Attribute} elements which are a restriction
+of the \XML{Attribute} elements described in the specified node's own
+\XML{NodeDescription}. For instance a default name may be specified and
+that name may be fixed (with the isConst attribute).
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for \XML{Contains} element}
+    \label{contains}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      type & The type of node that a container rule is being specified
+      for, or the name of a group of node types (see InGroup above),
+      from which you must choose the node & neuron\\
+
+      \hline
+
+      minOccurs & The minimum number of these node which must occur & 0\\
+
+      \hline
+
+      maxOccurs & The maximum number of these nodes which are
+      permitted. Can be a number or the string ``unbounded'' &
+      unbounded\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+If a \XML{NodeDescription} element has no \XML{Contains} sub-elements
+then the node-type being described is not permitted any
+sub-elements. An example set of \XML{Contains} elements is:
+
+\XMLsimple[ type="neuron" minOccurs="0" maxOccurs="unbounded" ]{Contains}
+\XMLsimple[ type="synapse" minOccurs="0" maxOccurs="unbounded" ]{Contains}
+\XMLfull[ type="KheperaRobot" minOccurs="1" maxOccurs="1" ]{Contains}{
+  \XMLfull[ name="name" isConst="true" ]{Attribute}{
+    \XMLsimple[ value="my\_khepera" ]{Default}
+  }
+}
+
+\subsubsection{Variable: what variables does the node have?}
+\label{sec:variables}
+
+\XML{Variable} elements are used to specify the various inputs,
+parameters, internal variables and outputs (these terms are used in a
+general sense) associated with a node. For example, the variables
+associated with a spiking neuron would include parameters such as
+threshold voltage, capacitance, leak conductance, refractory period
+\etc, an input variable describing synaptic currents, a variable for the
+time-varying membrane potential and an output variable which indicates
+when the threshold has been exceeded and thus a spike generated. Each
+\XML{Variable} element describes how an individual quantity internal to
+a node interfaces with other nodes, and with a logger.
+
+The XML attributes for a \XML{Variable} element are described in table
+\ref{tab:variables}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{Variable} element}
+    \label{tab:variables}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      name & Name of the Variable & membranePotential\\
+
+      \hline
+
+      displayName & A prettified version of \XMLfont{name} for use by
+      the NRS.gui for display purposes only. Optional & ``Membrane
+      Potential'' \\
+
+      \hline
+
+      selfUpdating & A boolean value indicating whether a quantity might
+      undergo change due to processes internal to the node & true \\
+
+      \hline
+
+      stateHolding & A boolean indicating whether the variable holds
+      its state between messages & true \\
+
+      \hline
+
+      messageType & The type associated with a quantity & Voltage\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+Each \XML{Variable} element can contain \XML{Interface},
+\XML{InitialValue} and \XML{Constraint} sub-elements. The former
+describe the direction and number of links to other nodes which can be
+made for the Variable. Generally variables considered as parameters
+(such as threshold voltage for a spiking neuron) will possess input
+interfaces, allowing other nodes to occasionally modify model
+parameters. Other variables which serve an obvious input role (such as
+synaptic currents for a spiking neuron) will also possess an input
+interface.
+
+Interfaces can be part of a larger group of interfaces, which must all
+be connected together to the same target. For instance the input
+interface which sets the stepT internal variable may need to be
+connected to the same node which makes the simulation update call, so
+that the frequencies can be guaranteed to match; in this case the
+\XML{Interface} element must contain an \XML{InGroup} sub-element whose
+attribute is described in table \ref{tab:ingroup}. All interfaces in the
+same group should be connected to the same node or not at all by the
+gui. XML attributes for the \XML{Interface} element are described in
+table \ref{tab:interfaces}.
+
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{Interface} element}
+    \label{tab:interfaces}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      direction & In which direction this interface applies. Possible
+      values are ``in'', ``out'', or the special case ``log'' & in \\
+
+      \hline
+
+      minOccurs & The minimum number of connections which must be made
+      & 0 \\
+
+      \hline
+
+      maxOccurs & The maximum number of connections which can be
+      made. Can be a number or the string ``unbounded'' & 0 \\
+
+      \hline
+
+      autoConnect & whether a connection should be made automatically
+      to its parent (if ``in'') or any children (if ``out'') if they
+      have an identical variable which is also autoConnect & false \\
+
+      \hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\XML{InitialValue} elements give the reference to the \XMLfont{name}
+of the \XML{Attribute} element which will store the initial value of
+one of the segments of the variable. There may be several segments
+to a message, so the \XMLfont{segmentName} attribute is set to the
+\XMLfont{name} of the \XML{Segment} sub-element to disambiguate
+them. The XML attributes are described in table \ref{tab:init}.
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{InitialValue} element}
+    \label{tab:init}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      segmentName & \XMLfont{name} of \XML{Segment} sub-element of which
+      this is the initial value & Voltage\\
+
+      \hline
+
+      attributeReference & \XMLfont{name} of \XML{Attribute} element
+      which will store the initial value & initMembV\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\XML{Constraint} elements describe constraints on numerical (or any
+ordered) variables (to specify, for instance, that an initial value must
+be non-negative). Their XML attributes are described in table
+\ref{tab:constraints}, which is very much as the constraints for units
+and messages, but with an additional \XMLfont{segmentName}
+attribute. Any missing constraints are assumed to be unbounded.
+
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{XML attributes for each \XML{Constraint} element}
+    \label{tab:constraints}
+    \begin{tabular}{|l|p{6cm}|l|}
+      \hline
+
+      \textbf{XML Attribute} & \textbf{Notes} & \textbf{Example}\\
+
+      \hline
+
+      segmentName & \XMLfont{name} of \XML{Segment} sub-element of which
+      these are the constraints & Voltage\\
+
+      \hline
+
+      minVal & minimum value of \XML{Segment} sub-element initial
+      value & 0\\
+
+      \hline
+
+      maxVal & maximum value of \XML{Segment} sub-element initial
+      value & unbounded\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+Note that it may be desirable to create interfaces which do not
+directly relate to any real internal variable, or indeed to multiple
+ones: for instance an interface to allow a timestep update event,
+which will probably affect all \XMLfont{selfUpdating} variables. In
+that case it may be desirable to create an appropriate message type
+for the event, and an appropriate dummy variable which then provides
+that interface.
+
+\subsection{Multiple NRS.servers}
+
+It is quite possible that some components may run on different
+machines --- in that event multiple NRS.server processes will need to
+be active, and each will provide the gui with a different CSL
+description of the nodes it can create. In this case, the gui should
+be able to hold the different capabilities separately in its memory,
+so that when a node is created, any ambiguity can be detected and
+removed immediately, and also so that the correct server is contacted
+to create particular nodes. For example, two simulators may run on
+different machines, in which case it should be possible to create two
+top-level simulator elements, and ensure that one runs on each
+processor to distribute load across the network.
+
+\section{Declarative Network Language}
+
+The declarative network language is explicitly described by the
+\XML{NodeDescription} elements of the Capability Specification
+Language. The names of the elements are in the \XMLfont{name}
+attribute of the \XML{NodeDescription} element, their attributes are
+described in the \XML{Attribute} sub-elements, their nesting
+structures are described in the \XML{Contains} sub-elements, and
+whether the element can be at the root level of the tree structure is
+in the \XMLfont{rootNode} attribute of the \XML{NodeDescription}
+element. One other node type also exists --- the \XML{Link} node
+describes connections between other nodes.
+
+In the current setup, it is only the GUI which utilises the DNL. In fact, it
+uses a hybrid language, storing additional information, coordinates, with the nodes. This
+information is used by the GUI when displaying nodes.
+
+\subsection{A small network}
+
+For instance a very simple simulated network might look like this:
+
+\XMLfull[ name='sim' server='mandible' ]{NSim}{
+  \XMLfull[ name='auditory' ]{Network}{
+    \XMLsimple[ name='ON1r' baseVinitial='-80' threshVinitial='-40'
+      ... ]{SpikingNeuron}
+    \XMLsimple[ name='ON1l' baseVinitial='-80' threshVinitial='-40'
+      ... ]{SpikingNeuron}
+    \XMLsimple[ name='ON1lsyn1' reversalVinitial='-100'
+  ... ]{ConductanceBasedSynapse}
+    \XMLsimple[ name='ON1rsyn1' reversalVinitial='-100'
+  ... ]{ConductanceBasedSynapse}
+    \XMLsimple[ vnName='ON1r.spike'
+    targetVNName='ON1lsyn1.in' ]{Link}
+    \XMLsimple[ vnName='ON1l.spike'
+    targetVNName='ON1rsyn1.in' ]{Link}
+    \XMLsimple[ vnName='ON1rsyn1.rcMsg'
+    targetVNName='ON1r.rcMsg' ]{Link}
+    \XMLsimple[ vnName='ON1lsyn1.rcmsg'
+  targetVNName='ON1l.rcMsg' ]{Link} } }
+
+This would consist of two neurons, each with one synapse, connected to
+each other recurrently, all in a network called auditory, in the sim
+Simulator component (presumably, from the attributes, we can deduce
+that the component is running on mandible, and the connections are
+inhibitory).
+
+\section{Procedural Message Language and Binary Message Format}
+\label{sec:pmlbmf}
+
+The procedural message language and the binary message format are two
+sides of the same coin. All events and control signals that can be
+passed around by the system can be expressed in either of these
+languages. The former is an XML application which is human readable
+and easy to create, but slow to send and parse; the latter is a binary
+format which is quick to read and transmit, but difficult to
+understand for humans -- in practice it would always need to be
+translated into PML for debugging. The difference lies in their ease
+of use in different contexts. Hardware devices with little
+computational power will not be able to parse an XML message, and so
+will always use BMF, and this will also be true of events being passed
+at runtime around the system to avoid delays. However PML will be easy
+to generate automatically from DNL (using NRS.XSLT), and so will be
+used for non-realtime tasks, particularly for communication to and
+from the gui.
+
+Two relatively distinct types of message exist in the system:
+
+\begin{itemize}
+
+\item Control signals, which consist of commands passed to the
+  components telling them to carry out some action: to delete or
+  create nodes, to give a CSL description of a component's
+  capabilities or to reply to such a request, to request a route to a
+  node (or to give such a route), \etc; and their replies if
+  appropriate;
+
+\item Events passed to the nodes containing some packet of data.
+
+\end{itemize}
+
+Of course in practice these can be represented in the same way, not
+least because the components are also nodes, and so the control
+signals become messages to the top level nodes of the
+component. However the \XML{CreateNode} and \XML{DeleteNode} commands
+are not defined explicitly. In this case it is because the
+\XML{CreateNode} element has a variable structure as it contains a
+different set of attributes depending on the type of node it is
+creating. All components have to offer a CreateNode and DeleteNode
+input interface however as well as all the others detailed below, so
+they must define a dummy variable of each type which has an
+appropriate interface.
+
+All the other messages are events, and their formats are directly
+determined by the structure of the appropriate \XML{Message} element
+in the CSL file.
+
+\subsection{Procedural Message Language}
+
+Procedural Message Language has an reserved attribute namespace
+usually using the nrsa prefix which is
+http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/attributes/1.0 --- these
+attributes are all of those attributes which are not common to all PML
+messages.
+
+Both the C++ and Java frameworks can communicate in PML.
+
+\subsubsection{Boolean Encoding}
+
+Booleans are encoded as the ascii string ``true'' and ``false''.
+
+\subsubsection{Integer and Float Encoding}
+
+Integers and Floats are encoded as the numbers they represent in ascii
+form.
+
+\subsubsection{String Encoding}
+
+Strings are encoded as 7-bit ascii, though only printable characters
+which are not quotation marks can be used. If XML elements are to be
+encoded it is better to not use an attribute, but rather to put the
+segment as XML content of the message. Then the usual rules of XML
+content apply.
+
+\subsubsection{Route Encoding}
+
+Routes are raw binary data or arbitrary length. They are encoded with
+either 1 or 4 bits per byte. If only 1 bit is to be encoded, the
+characters ``0'' and ``1'' are used; if 4 bits are to be encoded, then
+the characters ``A'' through to ``P'' are used for $0x0$ to $0xf$
+respectively. More detail of the meaning of the route encoding is in
+section \ref{sec:bmf_route}.
+
+\subsubsection{Vector Encoding}
+
+Vectors use the same encoding as routes to represent arbitrary length
+binary data. The data can be somewhat compressed, so that a vector of
+four seven bit integers uses only seven bytes, though other encodings
+are possible (up to 28 bytes!). Vectors have to declare in advance how
+many bits per element they are, and whether the elements represent
+Integers or Floats (in which case the element length must be 32 or
+64). The number of elements can be specified, but is not mandatory, as
+it can be calculated from the total length of the vector. It is not
+anticipated that vectors will be used much in PML, and so little
+effort has been made to optimise their space usage. In BMF the 7
+bit/byte encoding is much more efficient.
+
+\subsection{Binary Message Format}
+
+Our binary format contains the same information as the Procedural
+Message Language, but without any text. Consequently we get in binary
+{\em [$<$start$>$] route-val $<$start$>$ target-val $<$start$>$ val1
+[$<$start$>$ timestamp] $<$stop$>$} for a simple message, where {\em
+$<$start$>$} and {\em $<$stop$>$} are some form of start and stop
+bits, and {\em target-val} is the (locally unique) id of the variable
+being being addressed: this number is local to the component, and
+forms part of the address of the message. {\em route-val} is a binary
+encoded version of the route to the target component --- the exact
+format of the address allows for wormhole routing, and is up to the
+individual component; the only requirement is that the component has
+to be able to work out the bits that belong to it with no further
+information. Two methods have emerged for doing this. The first is to
+have a fixed number of bits, say 2, and thus to allow exactly 4 ports
+to send the message out of. The second allows for a variable number of
+ports, and encode the route in nibbles with the high bit of the
+nibble saying whether the route continues into another nibble, and the
+remaining 3 bits being data; thus 2 nibbles can encode 6 bits which is
+64 ports, and so on. Likewise the timestamp is a binary encoded date
+of transmission of the message which is used for calculating delays in
+the system (particularly how long is left after message arrival in an
+axonal delay) the format for this (optional) segment is still under
+discussion.
+
+For a more complex message we get {\em [$<$start$>$] to-val
+$<$start$>$ target-val $<$start$>$ val1 $<$start$>$ val2 [$<$start$>$
+timestamp] $<$stop$>$}; here, most elements are as before, but {\em
+val1} and {\em val2} are the values of the first and second simple
+messages inside the message --- the order of \XML{Segment}
+sub-elements therefore matters inside a \XML{Message} element.
+
+At the moment only the C++ framework and the robot are able to communicate in
+BMF. The Java framework does not speak BMF. However, the Neural Simulator is
+able to do live translation between PML and BMF, and vice versa.
+
+\subsubsection{Low level details of message format}
+
+There were several possibilities for the format itself: one is the
+bit-serial Extended AER protocol detailed in the Telluride
+Neuromorphic Engineering Workshop reports of 2002 and 2004, or the
+variant thereof used in the 2003 workshop to allow more sophisticated
+start and stop bit usage by making the protocol level sensitive; one
+is a variant of the word-serial AER protocol described in the same
+report and in various places by Kwabena Boahen, with similar
+modifications as above; a third takes a different point of view:
+
+If we wish to be maximally interoperable with PCs, microcontrollers
+and other existing hardware, we want to be able to pass messages using
+stardard protocols, such as RS232, SPI, USB, IEEE1394, \etc, then we
+need to be communicating in bytes, and those bytes need to encode not
+just the message itself, but also any associated start and stop
+bits.
+
+The first of the above two schemes is capable of being used like this
+(and was in the 2003 Telluride Workshop), but with a high overhead of
+a minimum of one wasted bit per bit of information carried in its
+simplest form, and although better encodings are possible, they fail
+the `simplicity' test which any protocol which is going to be used by
+a microcontroller needs to pass; similarly the second scheme encodes
+the data in 8 bits packets, but the start and stop bits are not
+encoded there --- they are all in the separate request lines --- and
+so they will force some additional cost and complexity on the message
+structure in order to be included in the message. One possible
+solution is to fix the lengths of the message elements, but that is
+very restrictive, and will often result in unnecessarily lengthening
+otherwise short messages, as well as adding unwanted complexity to the
+components which have to remember every message type; another is to
+have segment lengths written directly into the message to allow
+variable length messages, but this will lengthen the messages
+unnecessarily and, most likely, introduce arbitrary limits on message
+lengths unless carefully handled.
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=0.9\textwidth]{bmf_message.pdf}
+    \caption{Illustration of the BMF message structure. Each message
+    consists of a leader bit (indicating whether the message is
+    `intelligent') followed by a number of variable length segments,
+    where each segment is a sequence of bytes. A BMF message is
+    terminated by an EOM byte, which has all bits set to zero. }
+    \label{pic:bmf_message}
+  \end{center}
+\end{figure}
+\fi
+
+An alternative is to give up on trying to encode 8 bits per byte: we
+can straightforwardly encode 7 bits with $2^7$ tokens, 6 with $2^6$, 5
+with $2^5$, and so on down to zero bits with $2^0$, which sum to a
+total of 255 different tokens required to encode $n$ bits, where $0
+\le n \le 7$, including the information about how many bits have been
+encoded. We then say that if we have encoded 7 bits, then the segment
+continues, and if we encoded fewer, then a new segment starts. We then
+have a method for encoding messages of arbitrary length with
+inter-segment stop bits; all that is now required is an end of message
+token, and we have one remaining token in our byte for that (the
+number 0). The encoding looks like table \ref{tab:enc}, and the
+message structure is illustrated in figure \ref{pic:bmf_message}. It
+is particularly easy to parse, as the high bit of the byte is
+effectively the stop bit when a 0 (with the rest of the byte being in
+the next segment) and any read of a zero byte is an end of message,
+but it is still relatively efficient. It also allows for error
+recovery and wormhole routing since the zero termination for all
+messages allows messages to be transmitted without being parsed
+(except for the header encoding the next step of the route of course).
+
+\begin{table}[!h]
+  \begin{center}
+    \caption{A simple encoding for BMF}
+    \label{tab:enc}
+    \begin{tabular}{|l|p{6cm}|}
+      \hline
+
+      \textbf{Encoding} & \textbf{Meaning}\\
+
+      \hline
+
+      1xxxxxxx & 7 bits of data\\
+
+      \hline
+
+      01xxxxxx & 6 bits of data, start of segment\\
+
+      \hline
+
+      001xxxxx & 5 bits of data, start of segment\\
+
+      \hline
+
+      00000001 & no data, start of segment\\
+
+      \hline
+
+      00000000 & end of message\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+We are using this format, and have called it BMF (Binary Message
+Format). The first byte of a message has a privileged first bit which
+indicates whether the message is an ``intelligent message'' or not,
+\ie one which requires processing by the recipient whether or not it
+is the target of the message. If that bit ($y$ in the diagram) is 1,
+it is an intelligent message and must be processed, otherwise not. The
+rest of the byte is identical to the encoding in table \ref{tab:enc},
+and is detailed in table \ref{tab:enc2}.
+\begin{table}[!h]
+  \begin{center}
+    \caption{The first byte of a BMF message}
+    \label{tab:enc2}
+    \begin{tabular}{|l|p{6cm}|}
+      \hline
+
+      \textbf{Encoding} & \textbf{Meaning}\\
+
+      \hline
+
+      $y$1xxxxxx & 6 bits of data, start of segment\\
+
+      \hline
+
+      $y$01xxxxx & 5 bits of data, start of segment\\
+
+      \hline
+
+      $y$0000001 & no data, start of segment\\
+
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\subsubsection{Boolean encoding}
+
+$<00000010>$ is false, $<00000011>$ is true.
+
+\subsubsection{Integer encoding}
+
+We encode numbers by packing them into the 7-bit bytes as best we
+can. 6 bits can be fitted into 1 byte ($<01xxxxxx>$), 13 into 2
+$<01xxxxxx> <1xxxxxxx>$, and so on. We enforce using 6, 13, 20, 27 and
+34, \etc bits so as to simplify encoding/decoding even though in
+principle $<00000110>$ are used to encode the 2 bit number $2$. The
+numbers -32 to 31 can be encoded in 1 byte, -4096 to 4095 in 2 bytes,
+and so on. 0 can also be encoded as the single empty byte
+$<00000001>$. Note that these are often used for IDs, in which case
+the lowest ID is always 1, and 0 represents the absence of an ID.
+
+\subsubsection{Float encoding}
+
+We encode floats by packing them into the 7-bit bytes as best we
+can. IEEE floats are exactly 32 bits ($<0001xxxx> <1xxxxxxx>
+<1xxxxxxx> <1xxxxxxx> <1xxxxxxx>$ or 5 bytes), and doubles exactly 64
+($<0000001x> <1xxxxxxx> ... <1xxxxxxx>$ or 10 bytes).
+
+\subsubsection{String encoding}
+
+Using this format we encode strings using 7 bit ascii. This allows us
+to use the byte encoding by starting the segment with the empty byte
+$<00000001>$ and then setting bit 7 on each ascii byte to indicate the
+the segment continues. So ``bad'' would be translated as $<00000001>
+<11100010> <11100001> <11100100>$, an empty string as just $<00000001>$.
+
+\subsubsection{Route encoding}
+\label{sec:bmf_route}
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{route_striping.pdf}
+    \caption{Illustration of route stripping as a message is sent from
+    one component to another (in this example from the GUI to the
+    robot). In general a message may travel through any number of
+    intermediate components before it reaches its destination (as
+    determined by the route a message must take). Each component
+    receives the message and determines whether it should be further
+    routed or consumed. It makes this decision by examining the
+    message's route bit string. If the route is not empty then its
+    leading bits are used to identify an outbound port, and the message
+    is sent through that port after removing the relevant leading bits
+    from the route string : hence at each ``hop'' the route string is
+    altered.  If a component receives a message containing an empty
+    route string then it is consumed : it is dispatched for internal
+    processing as appropriate to the type and content of the message.}
+    \label{pic:route_striping}
+  \end{center}
+\end{figure}
+\fi
+
+The route is encoded as an arbitrary length bit string. The next part
+of the route is always the first bits in the first byte. Length
+matters, so there is no extension to make a 6 bit first byte like with
+integers, but otherwise the encoding is similar: $<0001xxxx>$ is the 4
+bit route ``$xxxx$'', and so on. All components should be able to
+strip the head off a route and use it to determine the destination of
+a message (as illustrated in figure \ref{pic:route_striping}). No
+further information is available (such as how many bits the component
+needs to take), so this must be known (or calculated from just the
+route) by the component itself. Two typical route encoding exist,
+which are described above.
+
+\subsubsection{Vector encoding}
+
+Arrays are encoded using the vector encoding, which is essentially the
+same as the route encoding, as is the case for PML. They can be of
+arbitrary length and are simply encoded as raw binary data, 7 bits per
+byte, filling up as many bytes as necessary with the high bit of 2nd
+and subsequent bytes set to 1. Vectors have to declare in advance how
+many bits per element they are, and whether the elements represent
+Integers or Floats (in which case the element length must be 32 or
+64). The number of elements can be specified, but is not mandatory, as
+it can be calculated from the total length of the vector. By default
+these vectors are assumed to be arrays of booleans, and must be of
+fixed length once set up, so that daat structures do not have to be
+reallocated. A 10-bit vector might look as follows: $<00001011>
+<10101001>$. Vectors are often used in Units such as Int14Vector or
+DoubleVector, where the array is understood to be broken down into
+different sized chunks, forming an array of 2-byte ints or of 10-byte
+doubles, \et.
+
+\subsection{Messages Fields}
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{route_building.pdf}
+    \caption{Illustration of forward and return route building inside an
+    intelligent message. A message is show as it is sent from the
+    NRS.gui to the robot (\ie left to right). As the message travels
+    along its route -- which includes through a FIFO and serial
+    connection -- the two intelligent fields
+    \XMLfont{nrsa:iForwardRoute} and \XMLfont{nrsa:iReturnRoute} have
+    their content progressively built up. Whenever a message leaves a
+    component through a particular port, the port number is
+    \emph{appended} to the \XMLfont{nrsa:iForwardRoute}, whereas
+    whenever a message enters a component through a particular part, the
+    port number is \emph{prepended} to the \XMLfont{nrsa:iReturnRoute}.}
+    \label{pic:route_building}
+  \end{center}
+\end{figure}
+\fi
+
+Two types of messages exist : intelligent messages (as detailed above),
+which require processing by a recipient component irrespective of
+whether it is the target of the message; and normal messages, which
+requires almost no processing by a recipient if it is not the
+target. They are distinguished in PML by the \XMLfont{nrsa:intelligent}
+attribute, which is a boolean whose default is false, and so does not
+need to be included for non-intelligent messages. In BMF the first bit
+of the message (the high bit of the first byte) fulfils the same
+function, with 0 indicating a normal message and 1 an intelligent one.
+
+Essentially intelligent messages are messages which contain at least one
+intelligent field. Available intelligent fields, and their description,
+are listed below. In PML these intelligent fields occur as as additional
+XML attributes which should be looked for and then processed if
+found. In BMF they are one or a pair of additional segments starting at
+the initial segment (segment 0), the first saying what the next segment
+represents, the next needing to be processed appropriately. Some
+intelligent segments do not have an argument, so do not need this second
+segment, which is then missing. A final intelligent segment then says
+that the ``intelligent'' part of the message is over, \ie there are no
+more intelligent fields for this message, so everything after that is a
+normal message and should be passed on as normal.
+
+\subsubsection{Intelligent Fields}
+
+\begin{description}
+
+\item[Forward Route] a forward route should be built up for this message
+  (see fig. \ref{pic:route_building}), usually as part of a QueryRoute
+  message (see below). In PML this is denoted by a
+  \XMLfont{nrsa:iForwardRoute} attribute, in BMF by the next segment
+  being the 1 bit binary 0, and the second containing the route so far;
+
+\item[Return Route] a return route should be built up for this message,
+  as part of a message requiring a reply whose route is not known (see
+  fig. \ref{pic:route_building}). In PML this is denoted by a
+  \XMLfont{nrsa:iReturnRoute} attribute, in BMF by the next segment
+  being the 1 bit binary 1, and the second containing the route so
+  far. This segment will override any \XMLfont{nrsa:returnRoute} segment
+  in the message itself, which will ordinarily be empty in this case;
+
+\item[Is Broadcast?] this message is a broadcast, and should be sent
+  out of all of the ports the recipient has except the one it was
+  received through unless the message can be determined to have
+  arrived. This is a boolean in PML, with a \XMLfont{nrsa:iIsBroadcast}
+  attribute name; in BMF the next segment will be the 2 bit binary 00,
+  followed by the boolean true. This will override the route segment
+  of the normal message, and must be accompanied by some means of
+  determining when it has arrived (normally a target component CID),
+  and a hop count to stop the message being passed on for ever;
+
+\item[Hop Count] this indicates the maximum number of components the
+  message should pass through before it should be discarded, and is
+  intended to stop messages going on for ever round in loops in the
+  system. Each component receiving the message should discard the
+  message if the counter is 0 and it is not aimed at the component,
+  otherwise it should decrement the counter before passing it on. In
+  PML the \XMLfont{nrsa:iHopCount} attribute is used, in BMF the first
+  segment has the 2 bit binary 01, with the second containing the
+  current count.
+
+\item[Target Component CID] this indicates who the desired target is
+  of the message is; any component receiving this should check whether
+  it is the intended recipient, and process the message if so ---
+  consequently this message partially overrides the normal route
+  segment. This is generally found with ``Is Broadcast?'', ``Hop
+  Count'' below and probably ``Return Route'' also set. In PML this
+  is denoted by the \XMLfont{nrsa:iTargetCID} attribute, and in BMF by
+  the next segment being the 2 bit binary 10, with the second
+  containing the CID;
+
+\item[Target VNName] this indicates who the desired target is of the
+  message is; this overrides the normal nrsa:toVNID segment, and is used
+  when only the vnname, and not the VNID is known. In PML this is
+  denoted by the \XMLfont{nrsa:iTargetVNName} attribute, and in BMF by
+  the next segment being the 3 bit binary 111, with the second
+  containing the vnname;
+
+\item[Source Component CID] this indicates who the sender of the
+  message is; any component wishing to send a message back can use
+  this to broadcast a return message if there is no other option
+  available, such as a ``Return Route'' segment. In PML this is
+  denoted by the \XMLfont{nrsa:iSourceCID} attribute, and in BMF by
+  the next segment being 110, with the second containing the CID;
+
+\item[Translation Count] this is a count of the number of times a
+  message is translated between BMF and PML en route; this overrides
+  the translation count segment in a ReplyRoute which would otherwise
+  be zero. It is not generated spontaneously by a translation though
+  --- it is only used if the original sender requests it. In PML this
+  is denoted by the \XMLfont{nrsa:iTranslationCount} attribute, and in
+  BMF by the next segment being 101, with the second containing the
+  CID;
+
+\item[Acknowledge Message] this message requires an Acknowledge
+  Message reply even (particularly) if it does not normally expect any
+  kind of reply. The return message will contain a boolean indicating
+  whether the message succeeded or failed on arrival. This is a
+  boolean in PML, with a \XMLfont{nrsa:iAckMsg} attribute name; in BMF the
+  segment has the 2 bit binary 11, followed by the boolean true. It is
+  usually accompanied by ``Acknowledge Target'' and ``Message ID''
+  segments to identify the response;
+
+\item[Acknowledge Target] this is simply the Variable ID for the
+  AcknowledgeMessage variable on the sender, and should be used if an
+  ``Acknowledge Message'' is requested and the message arrived. In
+  PML, the attribute name is \XMLfont{nrsa:iAckVNID}, and in BMF the first
+  segment is 000, and the second is the numerical ID. It is not
+  compulsory since a string can be used to target the variable;
+
+\item[Failed Route Message] this message requires a route failed reply
+  if the message doesn't arrive. The return message will contain the
+  CID of the rejecting component. This is a boolean in PML, with a
+  \XMLfont{nrsa:iFailedRouteMsg} attribute name; in BMF the segment has the
+  3 bit binary 001, followed by the boolean true. It is usually
+  accompanied by ``Failed Route Target'', ``Message ID'' and ``Return
+  Route'' segments as otherwise it won't be clear how to send the
+  message back;
+
+\item[Failed Route Target] this is simply the Variable ID for the
+  RouteFailed variable on the sender, and should be used if a ``Failed
+  Route Message'' is requested and the message did not arrive. In PML,
+  the attribute name is \XMLfont{nrsa:iFailedRouteVNID}, and in BMF the
+  first segment is 010, and the second is the numerical ID. It is not
+  compulsory as a string can be used to target the variable;
+
+\item[Message ID] this is the message ID for any returning message
+  requested so it can be identified by the source. In PML, the
+  \XMLfont{nrsa:iMsgID} attribute contains the ID, and in BMF the first
+  segment is 011, and the next is the numerical id;
+
+\item[End of Intelligent Message] this doesn't exist in PML, but in
+  BMF it indicates that the normal message is about to begin. It is
+  indicated by an empty segment --- all subsequent segments are part
+  of the main message after this;
+
+\end{description}
+
+Most of this functionality is provided for debugging purposes: in
+practice, it would use up too much bandwidth to acknowledge every
+message for instance. However some is necessary in practice: for
+instance, it would be difficult (though not impossible) to calculate
+forward and return routes by any other method.
+
+\subsubsection{Standard Fields}
+
+These are the fields used by more than one built-in variable. Others
+also exist, and are described locally:
+
+\begin{description}
+
+\item[nrsa:route] the route a message should take to arrive at its
+  intended target component;
+
+\item[nrsa:toVNID] positive numerical ID of the targeted variable;
+
+\item[returnRoute] the route a message reply should take to
+  arrive at the sender of a message query;
+
+\item[returnToVNID] the numerical ID of the variable at which
+  a message reply should be targeted;
+
+\item[msgID] a message reference contained in a query which
+  should be copied into any reply sent back to the sender. The sender
+  can use this field to match incoming replies to previously sent
+  queries. It can also be left 0 if no reference is required;
+
+\item[replyMsgID] a reference integer contained in a reply
+  which identifies a message query;
+
+\item[vnName] string name of variable which is the subject of
+  a particular query;
+
+\item[vnType] a type of variable or node;
+
+\item[forwardRoute] forward route to use for sending back
+      replies;
+
+\item[cid] the CID of a component;
+
+\end{description}
+
+\subsection{Messages}
+
+The basic commands are to create or delete a specific node and to
+create or delete a link. The structure of a delete command is simple:
+
+\XMLsimple[ nrsa:intelligent='true' nrsa:iTargetVNName='DeleteNode'
+  nrsa:route='' nrsa:toVNID='0' vnid='22' %vnName='sim.net.ON1r'
+  ]{DeleteNode}
+
+%or:
+
+%\XMLsimple[ nrsa:intelligent='true' nrsa:iTargetVNName='DeleteNode'
+%  nrsa:route='' nrsa:toVNID='0' vnid='37' %vnName=''
+%  ]{DeleteNode}
+
+\subsubsection{Creating Nodes}
+
+Creating a functional node on an NRS component is typically a two step
+message process: an initial message is sent to instantiate the node;
+then a second message is sent to configure the newly created node.
+
+Prior to these steps it is assumed the user has specified the type of
+node to create, and provided valid values for its set of attributes,
+most likely using the \NRSgui.
+
+An example \XML{CreateNode} is provided below, which represents a
+request to create a conductance-based-synapse node on \NRSnsim:
+
+\XMLsimple[\\
+nrsa:iHopCount='10'\\
+nrsa:iIsBroadcast='true'\\
+nrsa:iTargetCID='A'\\
+nrsa:iTargetVNName='CreateNode'\\
+nrsa:intelligent='true'\\
+nrsa:route=''\\
+nrsa:toVNID='0'\\
+sourceNotTarget='true'\\
+vnName='nsim0.cbs0'\\
+vnType='ConductanceBasedSynapse'\\
+vnid='0'\\
+xmlns:nrsa='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/attributes/1.0'\\
+xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/pml/1.0'
+]{CreateNode}
+
+This message is immediately followed by a configuration message. The
+fields that store node-specific configuration values are shown in bold:
+
+\XMLsimple[\\
+\textbf{decay\_half\_life='1.0'}\\
+\textbf{e\_syn='-60.0'}\\
+\textbf{g\_syni='-80.0'}\\
+name='cbs0'\\
+nrsa:iHopCount='10'\\
+nrsa:iIsBroadcast='true'\\
+nrsa:iTargetCID='A'\\
+nrsa:iTargetVNName='nsim0.cbs0'\\
+nrsa:intelligent='true'\\
+nrsa:route=''\\
+nrsa:toVNID='0'\\
+xmlns:nrsa='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/attributes/1.0'\\
+xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/pml/1.0'
+]{ConductanceBasedSynapse}
+
+Here we see the message type of the configuration message takes the name
+of the node just created (\ie ``ConductanceBasedSynapse'' in this
+example).
+
+\subsubsection{Creating and Deleting Links}
+
+Creating and deleting links is relatively simple:
+
+\XMLsimple[ nrsa:intelligent='true' nrsa:iTargetVNName='CreateLink'
+  nrsa:route='' nrsa:toVNID='0' cid='F.11'
+  vnid='37' %vnName='sim.net.ON1r.spike' 
+  targetCID='F.10' targetVNID='22' %targetVNName='sim.net.ON1lsyn1.spike'
+  temporary='false' sourceNotTarget='true']{CreateLink}
+
+\XMLsimple[ nrsa:intelligent='true' nrsa:iTargetVNName='DeleteLink'
+  cid='F.11' vnid='37' %vnName='' targetCID='F.10'
+  targetVNID='22' %targetVNName='sim.net.ON1lsyn1.spike'
+  sourceNotTarget='true']{DeleteLink}
+
+Although multiple links may exist between the same sources and
+targets, there is no need to disambiguate them as links are by their
+nature identical, so it doesn't matter which one you delete.
+
+It is the job of NRS.XSLT or NRS.gui to translate the nested DNL
+description of the network into a series of atomic PML elements ---
+this is relatively simple, as it will consist entirely as a sequence
+of \XML{CreateNode} and \XML{CreateLink} commands directed at the
+appropriate component.
+
+Links belong to both of the variables which are connected by them. The
+initial create and delete link messages can be sent to either end of
+the link, which can be told whether to inform the other end. The
+deletion of either the source or the target variable will result in a
+message being passed to the other to delete the link as a whole. Note
+also that the creation of a link between two variables in separate
+components must attach the variable at each end to an appropriate
+ExternalInterface (creating it if necessary), so that off-process
+communication can go invisibly to the variables (see section
+\ref{sec:nrssim} for more details).
+
+All control signals are constructed similarly; a list of these is as
+follows, with their PML attribute names and BMF segment positions:
+
+\subsubsection{Current status of Messages}
+Most of the following message types have been implemented by both the C++ and
+Java frameworks. However, some functionality, like logging, was never implemented, and
+therefore, the logging messages were never implemented. These include
+CreateLogLink, DeleteLogLink, QueryLog, ReplyLog. Also, error messaging
+functionality was never implemented, so that SetErrorRoute and
+Error messages are not currently handled, along with AcknowledgeMessage and
+FailedRoute messages too. Also, the C++ framework is not able to handle
+QueryLinks and QueryMaxLinks.
+
+Note: the fact that NRS works in a request/reply fashion means that
+components are not likely to require functionality to handle replies unless they
+send out queries. For example, the GUI sends out a lot of queries (these are listed
+below) and it therefore requires specific functionality to handle
+replies. Therefore, the Java framework, which is more generic, does not itself
+provide functionality to handle replies, except for ReplyRoute.
+
+In order to use the GUI, components are required to handle and reply to the
+following messages: QueryCID, QueryVNID, QueryVNName, QueryMaxPort, QueryPort,
+QueryCType, QueryCSL, QueryRoute, CreateNode, CreateLink, DeleteNode,
+DeleteLink.
+
+\clearpage
+\subsubsection{CreateNode}
+
+{\em command to create a node}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:CreateNode}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{vnType} & 2 & token & type of node to be created
+      \\\hline
+
+      \XMLfont{vnid} & 3 & integer & vnid of node to be created
+      -- usually 0 to indicate unspecified, but can be
+      non-zero if vnid is specified in attributes\\\hline
+
+      \XMLfont{vnName} & 4 & vnname & name of node to be created
+      \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{DeleteNode}
+
+{\em command to delete a node}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:DeleteNode}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{vnid} & 2 & integer & vnid of node to be deleted
+      \\\hline
+
+%      \XMLfont{vnName} & 3 & token & name of node to be deleted
+%      -- can be empty if previous is full \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+\subsubsection{CreateLink}
+
+{\em command to create a link between two variables}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:CreateLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{sourceNotTarget} & 2 & boolean & whether the message is
+      for the source (true) or the target (false) of the connection
+      \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of source component
+      \\\hline
+
+      \XMLfont{vnid} & 4 & integer & vnid of variable which is source
+      of connection \\\hline
+
+      %\XMLfont{vnName} & 5 & token & name of variable which is
+      %source of connection -- can be empty if previous is full
+      %\\\hline
+
+      \XMLfont{targetCID} & 5 & token & CID of target component
+      \\\hline
+
+      \XMLfont{targetVNID} & 6 & integer & vnid of variable which is
+      target of connection \\\hline
+
+      %\XMLfont{targetVNName} & 8 & token & name of variable which
+      %is target of connection -- can be empty if previous is full, or
+      %if a logging message \\\hline
+
+      %\XMLfont{logPort} & 7 & route & if the connection is a log
+      %connection (targetVNID and targetVNName are empty), then this
+      %should contain the output port for the message from the
+      %targetCID \\\hline
+
+      \XMLfont{temporary} & 7 & boolean & whether the connection
+      is a temporary connection with just one message \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+CreateLink messages establish communication links between
+components. They are always transmitted in pairs: one for the source
+component (with \XMLfont{sourceNotTarget} set to true); and one for
+the target (false);
+
+%For the logging role the CreateLink message will have
+%\XMLfont{targetVNID} set to 0, but the \XMLfont{logPort} set to the
+%route for the log. Outbound messages sent by source of the link to the
+%log will have a vnid set to the source's own vnid, and the route set
+%such that that the message which leaves the logging port will just
+%contain the return route from the logging component to the source. A
+%set of preamble messages will have to be sent to the log to identify
+%the data being output with a source;
+
+\clearpage
+
+\subsubsection{DeleteLink}
+
+{\em command to delete a link}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:DeleteLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{sourceNotTarget} & 2 & boolean & whether the message is
+      for the source (true) or the target (false) of the connection
+      \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of source component
+      \\\hline
+
+      \XMLfont{vnid} & 4 & integer & vnid of variable which is
+      source of connection \\\hline
+
+%      \XMLfont{vnName} & 4 & token & name of variable which is
+%      source of connection -- can be empty if previous is full
+%      \\\hline
+
+      \XMLfont{targetCID} & 5 & token & CID of target component
+      \\\hline
+
+      \XMLfont{targetVNID} & 6 & integer & vnid of variable
+      which is target of connection \\\hline
+
+%      \XMLfont{targetVNName} & 7 & token & name of variable which
+%      is target of connection -- can be empty if previous is full, or
+%      if a logging message \\\hline
+
+%      \XMLfont{logPort} & 7 & route & if the connection is a log
+%      connection (targetVNID is 0), then this should contain the
+%      output port for the message from the targetCID \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+%Deleting logging messages will require some calculation to work out
+%which one is referred to.
+
+\clearpage
+
+\subsubsection{CreateLogLink}
+
+{\em command to create a link between a variable and a log}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:CreateLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{sourceNotTarget} & 2 & boolean & whether the message is
+      for the source (true) or the target (false) of the connection
+      \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of source component
+      \\\hline
+
+      \XMLfont{vnid} & 4 & integer & vnid of variable which is source
+      of connection \\\hline
+
+      \XMLfont{targetCID} & 5 & token & CID of target component
+      \\\hline
+
+      \XMLfont{logPort} & 6 & route & this should contain the output
+      port for the message from the targetCID \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+CreateLogLink messages establish communication links between a
+variable and a log. The CreateLogLink message will have the
+\XMLfont{logPort} set to the route for the log. Outbound messages sent
+by source of the link to the log will have a vnid set to the source's
+own vnid, and the route set such that that the message which leaves
+the logging port will just contain the return route from the logging
+component to the source. A set of preamble messages will have to be
+sent to the log to identify the data being output with a source;
+
+\clearpage
+
+\subsubsection{DeleteLogLink}
+
+{\em command to delete a log link}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:DeleteLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{sourceNotTarget} & 2 & boolean & whether the message is
+      for the source (true) or the target (false) of the connection
+      \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of source component
+      \\\hline
+
+      \XMLfont{vnid} & 4 & integer & vnid of variable which is
+      source of connection \\\hline
+
+      \XMLfont{targetCID} & 5 & token & CID of target component
+      \\\hline
+
+      \XMLfont{logPort} & 6 & route & this should contain the output
+      port for the message from the targetCID \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+Deleting logging messages will require some calculation to work out
+which one is referred to.
+
+\clearpage
+
+\subsubsection{QueryMaxLink}
+
+{\em query a number guaranteed to be at least as big as the highest link
+  number in the target variable}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryMaxLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{vnid} & 5 & integer & VNID of the variable or
+      node being queried \\\hline
+
+      \XMLfont{sourceNotTarget} & 6 & boolean & whether the query
+      refers to how many times the vnid is source or target of a
+      connection (note for log messages, the variable is a
+      source)\\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+Not currently implemented by the C++ framework.
+
+\subsubsection{ReplyMaxLink}
+
+{\em reply to a QueryMaxLink}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyMaxLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{link} & 3 & integer & a number at least as great
+      as the highest numbered link in the variable \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryLink}
+
+{\em query the details of a specific link belonging to the target
+variable}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{vnid} & 5 & integer & VNID of the variable or
+      node being queried \\\hline
+
+      \XMLfont{sourceNotTarget} & 6 & boolean & whether the query
+      refers to how many times the vnid is source or target of a
+      connection (note for log messages, the variable is a
+      source)\\\hline
+
+      \XMLfont{link} & 3 & integer & number of link in the
+      variable to be queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+Not currently implemented by the C++ framework.
+
+\subsubsection{ReplyLink}
+
+{\em reply to a QueryLink}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyLink}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of component at other end
+      of connection \\\hline
+
+      \XMLfont{vnid} & 4 & integer & vnid of variable at other
+      end of connection -- can be 0 if a logging
+      message or if non-existent\\\hline
+
+      \XMLfont{logPort} & 5 & route & if the connection is a log
+      connection, then this should contain the output port for the
+      message from the targetCID, otherwise empty \\\hline
+
+      \XMLfont{resolved} & 6 & boolean & whether the link is
+      fully resolved or not, \ie whether there may be outstanding
+      issues with it \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\clearpage
+
+\subsubsection{QueryVNID}
+
+{\em query to ask for the VNID of a variable or node from its VNName}
+
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryVNID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{vnName} & 5 & token & name of the variable or node
+      being queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+The typical purpose of the query is to optimise future communication
+
+\subsubsection{ReplyVNID}
+
+{\em reply to a QueryVNID: can reply rejecting VNName}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyVNID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{vnid} & 3 & integer & VNID of the variable or node
+      being queried, or 0 if no such name exists \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryVNName}
+
+{\em query to ask for the VNName of a variable or node from its VNID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryVNName}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{vnid} & 5 & integer & VNID of the variable or node
+      being queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyVNName}
+
+{\em reply to a QueryVNName: can reply rejecting VNID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyVNName}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{vnName} & 3 & vnname & VNName of the variable or
+      node being queried, or empty if no such vnid exists \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryVNType}
+
+{\em query to ask for the VNType of a variable or node from its VNID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryVNType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{vnid} & 5 & integer & VNID of the variable or node
+      being queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyVNType}
+{\em reply to a QueryVNType: can reply rejecting VNID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyVNType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{vnType} & 3 & token & VNType of the variable or
+      node being queried, or empty if no such vnid exists \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryMaxVNID}
+
+{\em query to ask for a number guaranteed to be at
+  least as big as the highest VNID of any variable or node in the
+  target component}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryMaxVNID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\subsubsection{ReplyMaxVNID}
+{\em reply to a QueryMaxVNID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyMaxVNID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{vnid} & 3 & integer & a number at least as great as the
+      highest VNID of any variable or node in the component \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryNumberType}
+
+{\em query to ask for what kinds of numbers the component can handle}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryNumberType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+This is now redundant and should be removed, but has been left for posterity's
+sake. Note that these have not been implemented by the Java framework.
+
+\subsubsection{ReplyNumberType}
+{\em reply to a QueryNumberType, describing the maximum number of bits
+  in an integer, and whether there is floating point support}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyNumberType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{maxBits} & 3 & integer & the maximum number of bits in
+      an integer which the component can handle. \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+This is now redundant and should be removed, but has been left for posterity's
+sake. Note that these have not been implemented by the Java framework.
+
+
+\clearpage
+
+\subsubsection{QueryLanguage}
+{\em query to ask a target what languages it speaks}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryCID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+This is now redundant and should be removed, but has been left for posterity's
+sake. Note that these have not been implemented by the Java framework.
+
+\subsubsection{ReplyLanguage}
+{\em reply to QueryLanguage, describing language capabilities}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyCID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{speaksBMF} & 3 & boolean & whether the component
+      can speak BMF \\\hline
+
+      \XMLfont{speaksPML} & 4 & boolean & whether the component
+      can speak PML \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+This is now redundant and should be removed, but has been left for posterity's
+sake. Note that these have not been implemented by the Java framework.
+
+\clearpage
+
+\subsubsection{QueryCID}
+{\em query to ask a target for its Component ID, with a suggestion for
+  what it should be if it doesn't have one}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryCID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+%      \XMLfont{port} & 5 & route & optional partial route
+%      information to be returned in reply \\\hline
+
+      \XMLfont{cid} & 5 & token & suggested CID if one has not
+      already been set \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyCID}
+{\em reply to QueryCID}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyCID}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+%      \XMLfont{port} & 3 & route & optional partial route
+%      information to be returned in reply \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of component \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryMaxPort}
+{\em query to discover the number of ports used by a target component}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryMaxPort}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+
+\subsubsection{ReplyMaxPort}
+{\em reply to a QueryMaxPort}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyMaxPort}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{port} & 3 & integer & a number at least as
+      great as the highest numbered port in the component, starting from 1
+      \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+The value contained in \XMLfont{port} indicates the range of values that
+can be used for the \XMLfont{port} index in QueryPort messages. Valid
+index values run from 1 to \XMLfont{port} inclusive.
+
+Receiving a ReplyMaxPort message allows an NRS component (typically one
+that operates as a server) to discover which components are directly
+connected to the sending-component.
+
+This discovery is achieved by the receiver sending a series of
+\XMLfont{QueryPort} requests targeted to the sending-component. Each
+\XMLfont{QueryPort} message sent will be replied to with a
+\XMLfont{ReplyPort} containing the final hop needed by the server to
+construct a full route to the discovered components.
+
+
+\clearpage
+
+\subsubsection{QueryCType}
+{\em query to ask a target for its component type, a unique identifier
+  for this type of component which will allow CSL lookup for components
+  which do not speak CSL themselves}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryCType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyCType}
+{\em reply to QueryCType: this may be able to be looked up in a record
+  to find its capabilities}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyCType}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{cType} & 3 & token & CType of the component being
+      queried \\\hline
+
+      \XMLfont{cVersion} & 4 & string & version information for
+      the component being queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryCSL}
+{\em request CSL description of target component's capabilities}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryCSL}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyCSL}
+{\em reply to a QueryCSL}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyCSL}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      {\em contents} & 3 & string & CSL of the component being queried
+      -- in BMF this is just a string, but in PML the whole CSL XML
+      stream is contained inside the Message element \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+The reply will contain the CSL description of the targeted component.
+
+\clearpage
+
+\subsubsection{QueryRoute}
+
+{\em query to request a route to a target, which can also be used to
+  check a known route}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryRoute}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{forwardRoute} & 5 & route & ignored if an
+      intelligent {\em Forward Route} is provided \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyRoute}
+
+{\em reply to a QueryRoute, detailing the forward and return routes
+  between two components}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyRoute}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query
+      {\em msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{forwardRoute} & 3 & route & taken from query {\em
+      forwardRoute} or intelligent {\em Forward Route} attribute
+      \\\hline
+
+      \XMLfont{returnRoute} & 4 & route & taken from query {\em
+      returnRoute} or intelligent {\em Return Route} attribute
+      but can be overriden by an intelligent {\em Forward Route} if
+      present. If an intelligent {\em Source CID} is in query but no
+      intelligent {\em Return Route}, then there is no valid
+      returnRoute, so the intelligent {\em Forward Route} will be
+      inserted into the reply.
+      \\\hline
+
+      \XMLfont{translationCount} & 5 & integer & the number of
+      translations that were done between the source and the
+      destination. The information can only be got from the
+      intelligent {\em Translation Count}, otherwise it is
+      set to 0 \\\hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryMaxLog}
+
+{\em query to ask for a number guaranteed to be at least as big as the
+  highest log number in the target component;}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryMaxLog}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyMaxLog}
+
+{\em reply to a QueryMaxLog}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyMaxLog}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{log} & 3 & integer & a number at least as great
+      as the highest numbered log in the component \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{QueryPort}
+
+{\em query the route provided by specified port index}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryPort}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{port} & 5 & integer & the index of the port being
+      queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+Valid values for \XMLfont{port} are discovered by receiving a
+ReplyMaxPort message. Its minimum value is 1.
+
+\subsubsection{ReplyPort}
+{\em reply to QueryPort}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyPort}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{portRoute} & 3 & route & the route associated with this port
+      (empty if no such port) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+\clearpage
+
+\subsubsection{QueryLog}
+{\em query to ask a target whether it has any logs attached, and if so
+which ports are used for logging}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:QueryLog}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{returnRoute} & 2 & route & ignored if an
+      intelligent {\em Return Route} or {\em Source CID} is provided
+      \\\hline
+
+      \XMLfont{returnToVNID} & 3 & integer & \\\hline
+
+      \XMLfont{msgID} & 4 & integer & can be 0 if no message ID
+      required ({\em replyMsgID} in reply will also be 0) \\\hline
+
+      \XMLfont{log} & 5 & integer & the number of the log being
+      queried \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{ReplyLog}
+
+{\em reply to QueryLog detailing the log that the component has}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:ReplyLog}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\ \hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent {\em
+      Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from query {\em
+      msgID} -- 0 if none supplied \\\hline
+
+      \XMLfont{logRoute} & 3 & route & the port that the log is
+      connected to (empty if no such log) \\\hline
+
+      \XMLfont{isPMLNotBMF} & 4 & boolean & whether the log is
+      PML (true) or BMF (false) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{FailedRoute}
+{\em reply to indicate that a query involving a fixed route could be
+  determined to have failed to reach its target. Only occurs as a result
+  of an intelligent message requesting it.}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:FailedRoute}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from the
+      intelligent {\em Message ID} field if available -- 0 if none
+      supplied \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of component which rejected
+      the message \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{AcknowledgeMessage}
+
+{\em generic reply to acknowledge receipt of a message not in this list
+  but which has requested a reply via an intelligent message}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:AcknowledgeMessage}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+      \XMLfont{replyMsgID} & 2 & integer & repeated from the
+      intelligent {\em Message ID} field if available -- 0 if none
+      supplied \\\hline
+
+      \XMLfont{success} & 3 & boolean & whether the message
+      succeeded in its task \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{SetErrorRoute}
+{\em command to set which error messages should be transmitted, and the
+route for error messages to be sent along}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:SetErrorRoute}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+      \XMLfont{priority} & 2 & integer & priority of error
+      message to be transmitted (lower priorities are dropped)
+      \\\hline
+
+      \XMLfont{cid} & 3 & token & CID of component to send error
+      messages to \\\hline
+
+      \XMLfont{targetVNID} & 4 & integer & if this VNID is 0
+      then the messages are stored and printed to a convenient console
+      if available\\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+
+If there is no route, then the component should attempt to store error
+messages as practical and should display them to a console if
+available.
+
+\subsubsection{Error}
+
+{\em an error message, with its priority, an id if it is a standard
+  error, or a string to describe the problem}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:Error}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+      \XMLfont{priority} & 2 & integer & priority of error
+      message
+      \\\hline
+
+      \XMLfont{errID} & 3 & integer & id of error message if a
+      standard message -- if not, then set to 0 \\\hline
+
+      \XMLfont{errString} & 4 & string & text string accompanying
+      error message (particularly for non standard messages) \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\clearpage
+
+\subsubsection{Reset}
+{\em command to reset a component to its initial state}
+
+\begin{table}[!h]
+  \begin{center}
+    \label{tab:Error}
+    \begin{tabular}{|l|p{13mm}|c|p{60mm}|}
+      \hline
+
+      \textbf{PML attribute} & \textbf{BMF segment} & \textbf{VNType}
+      & \textbf{Notes} \\\hline
+
+      \XMLfont{nrsa:route} & 0 & route & ignored if overridden by the
+      intelligent {\em Is Broadcast?} flag \\\hline
+
+      \XMLfont{nrsa:toVNID} & 1 & integer & ignored if an intelligent
+      {\em Target VNName} is provided \\\hline
+
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection*{Notes}
+Although both the C++ and Java frameworks implement this message, no component
+actually generates a Reset message. Also, the behaviour in response to its
+receipt is not well specified. However, generally it is accepted that a component will
+reset to its default state, that is, state-holding variables will reset to their
+default values. This has not been thoroughly tested.
+
+\clearpage
+
+For instance a QueryRoute message in PML might look like this:
+
+\XMLsimple[ nrsa:intelligent='true' nrsa:iIsBroadcast='true'
+  nrsa:iHopCount='10' nrsa:iReturnRoute='' nrsa:iForwardRoute='A'
+  nrsa:iTargetCID='ABBA' nrsa:iTargetVNName='QueryRoute' nrsa:route=''
+  nrsa:toVNID='0' returnToVNID='12' msgID='3'
+  forwardRoute='' returnRoute='' ]{QueryRoute}
+
+And in BMF it would go like this:
+
+\begin{verbatim}
+10000100 (intelligent message, is broadcast)
+01000001 (true)
+00000101 (hop count follows)
+01001010 (10 as integer)
+00000011 (return route follows)
+00000001 (no return route so far)
+00000010 (forward route follows)
+00010000 (forward route so far is 0000=A)
+00000110 (target CID follows)
+00000001 (first bit of target CID)
+11000001
+11000010
+11000010
+11000001 (end of target CID = ABBA)
+00001111 (name of target variable follows)
+QueryRoute (segment contains name of variable spelt out in BMF)
+00000001 (end of intelligent message)
+00000001 (no route in normal message)
+00000001 (no id for target variable)
+00000001 (no return route as this is being built up)
+01001100 (ReplyRoute VNID for source is 12)
+01000011 (message ID is 3)
+00000001 (forward route unknown)
+00000001 (return route unknown)
+00000000 (end of message)
+\end{verbatim}
+
+All other messages are simply constructed from the \XML{Message}
+description, so a \XML{Voltage} event being targetted at the baseV
+variable of the neuron ON1\_r would have the form:
+
+\XMLsimple[ nrsa:route='00101' nrsa:toVNID='27' voltage='5' ]{Voltage}
+
+A more complex \XML{ReversibleConductanceMessage} (with a named
+target) would have this form:
+
+\XMLsimple[ nrsa:route='00101' nrsa:toVNID='0' nrsa:intelligent='true'
+nrsa:iTargetVNName='auditory.ON1\_r.ReversibleConductance'
+reversalPotential='-40' synapticConductance='5'
+]{ReversibleConductanceMessage}
+
+So messages have an \XMLfont{nrsa:route}, an \XMLfont{nrsa:toVNID} (or
+an \XMLfont{nrsa:iTargetVNName}) and one attribute for each
+\XML{Segment} sub-element with the attribute name equal to the value
+of the \XMLfont{name} attribute in the segment. The sender will
+generally only add a return route for debugging purposes, and its name
+for logging or debugging --- if it were necessary to know who is
+sending it for a message to be complete, this mechanism should not be
+used, but rather the message should have a segment which contained the
+information.
+
+\subsection{Burst Mode}
+
+To shorten messages and speed up message passing, messages can be
+abbreviated in both PML and BMF. A group of messages going to the same
+component (though not necessarily the same variable) {\em which are
+not intelligent} can be put together into a single bigger message.
+
+In PML this is achieved by creating a \XML{Messages} element, which
+contains the namespace information and the route, and then putting all
+the elements in the burst inside this element without any routing of
+their own. This saves some considerable amount of text over including
+the namespace information in every message, as well as saving some
+space and processing through pooling the route information.
+
+In BMF, the technique is even simpler. When a message ends, if another
+(non-intelligent) message is going to the same component it can be
+appended to the end of the previous message, omitting the 0 byte at
+the end of one message, and the route at the beginning of the
+next. This allows a spike to be reduced ideally down to 1 byte, if the
+target vnid is sufficiently low, rather than the minimum of 3 bytes in
+a normal message.
+
+\section{Software comments}
+
+\subsection{The source code}
+
+\subsubsection{Installation}
+
+In order to install the software you need to carry out the following
+commands from a directory other than the source directory ({\em
+$<$srcdir$>$}):
+
+\begin{verbatim}
+mkdir obj
+cd obj
+<srcdir>/configure prefix=<installdir>
+make
+make install
+\end{verbatim}
+
+The software and documentation will then be installed in {\em
+$<$installdir$>$}. For robot related software you need to configure
+differently: {\tt configure --host=m68k-none-elf
+--with-[koala|khepera|khepera2]}, and for avr related software: {\tt
+configure --host=avr}.
+
+\subsubsection{Directory structure}
+
+There is a fairly flat directory structure except for the java code
+which is necessarily nested to represent the package structure of the
+code. The top level directories are as follows:
+
+\begin{description}
+
+\item[doc] The latex source directory, which contains this design
+  document and any other latex code to be translated into pdf files;
+
+\item[include] The include directory for C++ files;
+
+\item[Node] The C++ source directory for all Node and NodeFactory
+classes;
+
+\item[gui] The base directory for all java gui code.
+
+\end{description}
+
+\subsection{General comments on design}
+
+\subsubsection{Root nodes}
+\label{sec:rootNode}
+
+All programs should offer a node which corresponds to the main routine
+inside the process, and this should be flagged as a \XMLfont{rootNode}
+in the node description. This should also offer \XML{CreateNode} and
+\XML{DeleteNode} input interfaces via dummy \XML{Variable}
+elements. It is currently anticipated that the software
+\XMLfont{rootNodes} at least will probably also provide \XML{MainLoop}
+output interfaces to which the main loop inside the program will be
+connected (for instance an update timestep routine inside the
+simulator) to allow maximum flexibility inside the program as to how
+it runs (\eg do you want the updating to happen as fast as possible,
+to run in real time, or to be locked to data from the robot --- these
+could plausibly be different node types which could be connected to
+the main loop interface). Even hardware \XMLfont{rootNodes} are
+expected to need create and delete interfaces. There is more on these
+interfaces in section \ref{sec:pmlbmf}.
+
+\subsubsection{Runtime modification of parameters}
+
+All parameters in NRS (\eg ``membC'', ``threshV'', \etc) should be
+alterable at run time.  The mechanism used by the simulator for doing
+this will be the transmission of an event, targeted at that
+\XML{Variable} interface in a node which provides it with an updated
+value.  The event could either be sent by the user, or by a constant
+which acts as a setter. So for instance, several neurons in a network
+could have their resting potential under the control of a global
+variable. During a simulation, whenever that variable changes, the
+neurons have their (previously fixed) resting potential parameter
+altered. This is illustrated in figure \ref{pic:constant}.
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=8cm]{global_var.pdf}
+    \caption{Illustration of \emph{floating variables.} The
+      ``threshV'' quantities associated with a pair of neurons are
+      attached to a constant called ``threshV''. Values of the former
+      quantities will always be equal to the value of the latter,
+      which has the effect of a global constant. Using such
+      arrangements a common set of quantities across multiple
+      simulation nodes can quickly be assigned or altered.}
+    \label{pic:constant}
+  \end{center}
+\end{figure}
+\fi
+
+\subsection{NRS.nsim}
+\label{sec:nrssim}
+
+NRS.nsim is the prototype for other C++ processes such as NRS.tracker;
+indeed, most of the code is intended to be reused unchanged between
+them. The class hierarchy for it and other related programs is
+detailed in figure \ref{pic:nrs-sim}. It consists of a series of {\tt
+NodeFactory} classes which are all static and so created during the
+initialisation of the process, and which can each understand and
+create a specific class of object. A {\tt GeneralManager} class keeps
+std::maps associating these managers with their names; this allows
+easy creation and deletion of objects, and easy access for collecting
+descriptions of the types and nodes (using CSL) for the gui. The
+fundamental objects of the system are {\tt Variable}s, which are
+combined together to form {\tt Node}s; a {\tt Node} is simply a
+collection of {\tt Variables} which are linked by equations explicitly
+described in the {\tt Variable} classes. Every message which may be
+passed to a {\tt Node} goes to an associated {\tt Variable} class
+stored in that {\tt Node} which receives the message; this class may
+be unique to the Node type (in the case of all of the {\tt
+Updater} classes for instance), or may be very generic (the
+{\tt NRS::Variable::FloatType} class will probably be used for most
+parameters like baseV, for instance). Any translation from PML or BMF
+will be done by the Manager for the Variable type so that all variable
+interactions are done directly by method calls for speed reasons. {\tt
+ExternalInterface} objects are created to talk to external processes;
+the first will presumably be to NRS.gui, but then as communication to
+other processes becomes necessary (via TCP/IP, serial, USB, \etc),
+more {\tt ExternalInterface} objects will be made.
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{NRS-Sim.pdf}
+    \caption{Class hierarchy in NRS.nsim}
+    \label{pic:nrs-sim}
+  \end{center}
+\end{figure}
+\fi
+
+In the program's main loop, the {\tt GeneralManager} calls all of the
+external interfaces to ask them to carry out any necessary i/o, and
+then calls anything connected to its MainLoop interface, which will
+usually be some kind of timer in the case of NRS.nsim (to lock the
+process to realtime); this loop will continue indefinitely. {\tt
+ExternalInterface} objects will poll their external connections, and
+then read any incoming messages, doing sufficient parsing to identify
+the appropriate VariableManager to handle the message, and then will
+pass it on to them.
+
+\subsubsection{Interfaces}
+
+The main classes have interfaces which are described below:
+
+\begin{description}
+
+\item[NRS::Base::GeneralManager] This is the manager for a whole
+  component of the system. It contains maps to allow retrieval of
+  every type of object and manager in the system:
+
+\begin{itemize}
+
+\item get general manager --- static function to create first general
+  manager, and pass back pointer;
+
+\item Constructor;
+
+\item add new {\tt NodeFactory} to lists;
+
+\item get {\tt NodeFactory} from node manager name;
+
+\item remove {\tt NodeFactory} from lists;
+
+\item add new {\tt VariableManager} to lists;
+
+\item get {\tt VariableManager} from variable manager name;
+
+\item remove {\tt VariableManager} from lists;
+
+\item describe system (in CSL) by recursing through {\tt
+  VariableManager} and {\tt NodeFactory} lists;
+
+\item add new {\tt Variable} to lists, with manager and assign uid
+(unique id);
+
+\item get uid of {\tt Variable} from name;
+
+\item get manager ptr from {\tt Variable} uid;
+
+\item get ptr from {\tt Variable} uid;
+
+\item remove {\tt Variable} from lists;
+
+\item add new {\tt Node} to lists, with manager and assign uid;
+
+\item get manager ptr from {\tt Node} uid;
+
+\item get ptr from {\tt Node} uid;
+
+\item remove {\tt Node} from lists;
+
+\item add {\tt ExternalInterfaceHandler} to lists;
+
+\item get interface handler for target
+
+\item remove {\tt ExternalInterfaceHandler} from lists;
+
+\item add {\tt ExternalInterface} to lists;
+
+\item get interface for target (create new interface if necessary);
+
+\item remove {\tt ExternalInterface} from lists;
+
+\item add MainLoop (variable) connection;
+
+\item remove MainLoop connection;
+
+\item poll external interfaces for new data;
+
+\item call MainLoop connections;
+
+\item loop on external interfaces and MainLoop until own destruction
+  called (this method is called by {\tt main()} once the system has
+  been started);
+
+\item destructor;
+
+\end{itemize}
+
+\item[NodeFactory] This is the manager for a specific node type:
+
+\begin{itemize}
+
+\item Constructor (register self with {\tt GeneralManager});
+
+\item create new node instance (given PML);
+
+\item create new node instance (given BMF);
+
+\item describe self (in CSL);
+
+\item destructor (unregister self from {\tt GeneralManager}).
+
+\end{itemize}
+
+\item[VariableManager] This is the manager for all instances of a
+  variable type:
+
+\begin{itemize}
+
+\item Constructor (register self with {\tt GeneralManager});
+
+\item describe self (in CSL);
+
+\item turn PML message into method call on {\tt Variable};
+
+\item turn BMF message into method call on {\tt Variable};
+
+\item destructor (unregister self from {\tt GeneralManager}).
+
+\end{itemize}
+
+\item[NRS::Base::Node] This is the (only) instantiation of a node; it
+  is simply a container for {\tt Variable} objects:
+
+\begin{itemize}
+
+\item Constructor (register self with {\tt GeneralManager} and parent node);
+
+\item add variable to list of variables in self;
+
+\item add variable to list of outputting variables (messages which
+have targets);
+
+\item remove variable from list of outputting variables;
+
+\item return list of outputting variables;
+
+\item destructor (unregister self from {\tt GeneralManager}, destroy
+variables and warn parent of death).
+
+\item setter and getting methods for the node initialisation-required
+  flag (see section \ref{sec:node-evol-comms})
+
+\end{itemize}
+
+\item[Variable] This is the instantiation of a specific Variable type;
+there may be several classes which all instantiate the same variable
+for different node types:
+
+\begin{itemize}
+
+\item Constructor (register self with {\tt GeneralManager} and node);
+
+\item add target for self (if external find interface and register
+  with it if not already; add to Node list as an outputting variable
+  if not already);
+
+\item remove target for self (if external find interface and
+  unregister with it; remove from Node list as an outputting variable
+  if appropriate);
+
+\item add source which targets self (if external find interface and
+  register with it);
+
+\item remove source which targets self;
+
+\item receive message;
+
+\item send all outstanding messages;
+
+\item inlined accessors;
+
+\item destructor (unregister self from {\tt GeneralManager}, warn
+  dependents of death, and tell external interfaces they are no longer
+  needed).
+
+\end{itemize}
+
+\item[ExternalInterfaceHandler] This is the handler for all instances
+  of an Interface:
+
+\begin{itemize}
+
+\item Constructor (register self with {\tt GeneralManager});
+
+\item create interface of this type
+
+\item destructor (unregister self from {\tt GeneralManager}).
+
+\end{itemize}
+
+\item[ExternalInterface] This is an interface to another process,
+  either in PML or BMF, either by TCP/IP, serial, or some other
+  protocol; one instance is created for each distinct route messages
+  will travel down (for instance, one for each process by TCP/IP, but
+  one for all serial connections since they all use the same link to
+  communicate):
+
+\begin{itemize}
+
+\item Constructor (make connection, register self with {\tt
+GeneralManager});
+
+\item add new target (register target with {\tt GeneralManager});
+
+\item remove target (unregister target with {\tt GeneralManager});
+
+\item register {\tt Variable} as user of interface;
+
+\item remove {\tt Variable} as user of interface (destroy interface if
+appropriate);
+
+\item update by checking for new incoming messages (pass on to
+appropriate manager) and sending any outstanding messages;
+
+\item send new message (possibly buffered until update);
+
+\item destructor (unregister self from {\tt GeneralManager}: should
+  only happen when there are no users).
+
+\end{itemize}
+
+\end{description}
+
+\subsubsection{Node evolution and communication}
+\label{sec:node-evol-comms}
+
+This section provides an overview of the mechanisms used by NRS.nsim
+components to invoke node-specific calculations and to exchange
+information between nodes, \ie how the internal state of each node is
+evolved iteration by iteration, and how changes to the internal state of
+a node are communicated to other nodes (and their variables).
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{node-internals.pdf}
+    \caption{A node is essentially a collection of objects (called
+    variables). This figure presents an internal view of a node, to
+    illustrate those variables which play a significant role in the
+    exchange of data between node elements. Those variables attached
+    to bold arrows serve as interfaces to other nodes.}
+    \label{pic:node-internals}
+  \end{center}
+\end{figure}
+\fi
+
+
+Figure \ref{pic:node-internals} presents an overview of the objects
+(called variables) internal to a node which are involved in state
+evolution and inter-node communication. Variables are the various
+elements of internal state, such as time evolving quantities (\eg
+membrane potential for a neuron) and quantities specified and fixed at
+the beginning of the simulation (\eg membrane capacitance). The
+variables are described by the \XML{Variable} elements for each node
+type (see table \ref{tab:variables}). Some variables may directly
+receive input from other nodes (indicated by the bold inward
+arrows). Other variables may output their value to other nodes
+(indicated by an outward arrow). In both cases these variables are
+also interfaces (see table \ref{tab:interfaces}). Other variables
+might not act as interfaces, \ie they may have no communication to
+other nodes, and be used solely for internal purposes. There are a few
+special kinds of variables:
+
+\begin{itemize}
+
+\item The {\tt Updater} variable and interface is used to evolve the
+  state of the node; it is the trigger for the node to perform the
+  calculations necessary to evolve its current state at the present
+  simulation iteration to its future state for the next iteration.
+
+\item The result of evolving a node's state may need to be communicated
+  to other nodes (\eg perhaps a membrane potential has crossed a
+  threshold, so requiring spikes to be sent to outward connections). The
+  {\tt MessageSender} interface provides a trigger to initiate and
+  manage this inter-node communication.
+
+\end{itemize}
+
+
+A complete ``simulation run'' is essentially the repeated iteration of
+a single simulation cycle which, in turn, has three phases: handle any
+external (off process) communication, evolve the state of every node
+(the Updater phase), and then communicate state-related changes of
+every node to other nodes (the MessageSender phase). The latter two
+actions are broken down into the following steps:
+
+\begin{itemize}
+
+\item Node state evolution (Updater phase)
+
+\begin{enumerate}
+
+\item The Updater interface is triggered (\ie a method call occurs).
+
+\item The Updater interface first polls the initialisation-required
+  flag. Usually this will be false, requiring no action. But if set to
+  true, the Updater may recalculate internal constants, and will reset
+  the flag to false.
+
+\item Updater next proceeds to perform the calculations represented by
+  the node (\eg the simulation of a complex neuron model). It will
+  necessarily retrieve the value of each of its variables. For some
+  variables such retrieval is the trigger to finalise any
+  partial-calculations undertaken as a consequence of receiving input
+  during the previous MessageSender-phase. After completing its
+  calculations Updater will typically have assigned new values to some
+  of its variables. This is the modification, hence evolution, of the
+  node state. For variables, such an assignment is the trigger to copy
+  their new values into an output buffer (illustrated in figure
+  \ref{pic:node-internals}); these are required for some variables to
+  separate the state (\ie value) of a variable at one simulation
+  iteration from the modification of that variable during a simulation
+  cycle.
+
+\item Updater has completed its operation and returns.
+
+\end{enumerate}
+
+\item State-change communication to other nodes (MessageSender phase)
+
+  \begin{enumerate}
+
+    \item The MessageSender interface is triggered (\ie a method call
+    occurs).
+
+    \item The MessageSender iterates through its list of output
+    interfaces, which is the list of variables in that node which have
+    been configured as possessing an output interface and have
+    connected outputs. It calls a member function on each such
+    variable, causing it to send all outstanding messages to its
+    targets (although we refer loosely of data being communicated from
+    node to node, it is actually implemented as from node-variable to
+    node-variable.)
+
+    \item As each variable is instructed to send messages, any number
+    of variables (in other nodes) may, as a direct outcome, receive
+    data messages. Receiving variables accept these messages and
+    perform implementation specific storage or calculations. For
+    variables which represent pseudo-constants, receiving such data
+    messages may have important consequences for how Updater performs
+    its calculations. These variables alert the node of such cases by
+    setting the initialisation-required flag to true: for example, the
+    timestep parameter of neurons and synapses will behave in this
+    manner; usually this variable does not change, and can be treated
+    as a constant; it is therefore used by the node to calculate
+    various decay rates using the exponential function; however, if
+    timesteps do change via a message sent to that variable, all the
+    related decay constants will need recalculation, which Updater
+    performs on the next phase.
+
+    \item The MessageSender interface has completed and returns.
+
+  \end{enumerate}
+
+\end{itemize}
+
+The separation of Updater and MessageSender phases and the output
+buffer in variables which have both input and output interfaces is
+necessary because during the simulation cycle a variable may receive
+data messages; as messages arrive the instantaneous state of the
+variable will alter if the variable incorporates the new data (\eg
+successive spikes arriving at a conductance variable might directly
+increment the conductance value); such a state represents an
+incomplete transition from the current state (its value at the end of
+the previous timestep) to the next state (its value at the end of the
+next timestep); unless a data import buffer is used there is no way
+to distuinguish messages that arrived after the update in the previous
+timestep from those which arrived before the update in the current
+timestep, which means that the order of calling of the update
+interfaces (which is not under user control) will alter the behaviour
+of the simulator; however, if there are two phases then messages
+always arrive at a predictable time; the only remaining problem is
+that incoming messages should not affect outgoing ones in the same
+timestep: hence the output buffer. This sequence eliminates the need
+for timestamps on messages inside a process: because of potential
+time-delays they are, however, still needed on most inter-process
+communcations.
+
+\subsubsection{Example}
+
+An example of a network in NRS.nsim containing two neurons, an axon and
+a synapse is shown in figure \ref{pic:sim-ex} with most of the
+important connections to make it function.
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{example-sim.pdf}
+    \caption{An example of the construction of a network in NRS.nsim
+    using NRS.gui: node names are inside their boxes, and Variables
+    interfacing between nodes are in italics on the connection lines.}
+    \label{pic:sim-ex}
+  \end{center}
+\end{figure}
+\fi
+
+\subsection{NRS.gui}
+
+\subsection{Essential Node Classes}
+
+Figure \ref{pic:nrsgui_component_classes} presents some of the essential
+classes involved in representing NRS component-nodes within Java based
+NRS applications. Some brief notes on each of these classes follow:
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{nrsgui_component_classes.pdf}
+    \caption{UML depiction of essential Java classes for representing
+    component nodes (methods are not shown for \code{BaseComponentNode}
+    and \code{DefaultComponentNode}). The three classes
+    \code{MessageProcessor}, \code{BaseComponentNode} and
+    \code{Variable} are classes that can be used in any Java NRS
+    application, while \code{DefaultComponentNode} is very specific to
+    the \NRSgui~component.}
+    \label{pic:nrsgui_component_classes}
+  \end{center}
+\end{figure}
+\fi
+
+
+\begin{description}
+
+\item{\code{MessageProcessor}} -- this is a Java {\it interface}; any
+  object which is intended to receive NRS messages internally should
+  implement its methods.
+
+\item{\code{BaseComponentNode}} -- all classes which are intended to
+  represent the main component-node of an NRS component should extend
+  this base class. It creates a list of all of the default variable
+  types, together with handler methods. Since \code{BaseComponentNode}
+  implements \code{MessageProcessor} it can receive NRS message objects
+  (which are instances of the \code{Message} class); upon doing so this
+  base class dispatches a message to the appropriate variable, which in
+  turn passes it to one of the many message handler methods this class
+  provides (as illustrated in figure
+  \ref{pic:nrsgui_basecompnode_internal}).
+
+\item{\code{Variable}} -- this class is used to represent NRS variables
+  internally; the class is abstract because the \code{deliver(...)}
+  method must be implemented to specify what happens if this variable
+  receives a message.
+
+\item{\code{DefaultComponentNode}} -- this is the class which represents
+  the main component-node for the \NRSgui~component.
+
+
+\end{description}
+
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{nrsgui_basecompnode_internal.pdf}
+    \caption{Partial UML depiction of message handling within an object
+    derived from \code{BaseComponentNode}. NRS messages are represented
+    internally within a Java application as \code{Message}
+    objects. These arrive at a component-node object by its
+    \code{deliver(...)}  method, which uses the \code{dispatch(...)}
+    method to pass individual messages to an appropriate variable
+    object. Each of these objects is an instance of a Java anonymous
+    class inherited from \code{Variable}; these variables in turn
+    forward messages to an appropriate message handler method defined
+    within \code{BaseComponentNode}. These handler-methods undertake no
+    processing; dervied classes should override them to provide
+    application-specific functionality.}
+    \label{pic:nrsgui_basecompnode_internal}
+  \end{center}
+\end{figure}
+\fi
+
+\subsection{NRS Java Framework}
+
+This section contains diagrams and descriptions of the principle
+classes, objects and relationships required to build an NRS component
+using the NRS Java Framework.
+
+Building a NRS component from the NRS Java Framework essentially
+involves creating and configuring instances of appropriate classes of
+the framework. Within the following section, classes/object are
+\emph{shaded} to indicate that instances of only these need be
+constructed to build an NRS component.
+
+\subsection{Javadoc Documentation}
+
+Javadoc comments are provided for the NRS Java Framework, and for most
+other Java componets that are part of NRS.
+
+These comments, which take the form of webpages, are automatically built
+along with the code if the source code has been configured with the
+\emph{--enable-javadoc} option.
+
+\subsubsection{PML byte-sequence to \code{Message} objects}
+
+For an NRS component to communicate with other components, using PML, a
+PML-port needs to be constructed and configured to use supporting
+objects. The combined role of all of these objects is to read complete
+NRS messages from a FIFO, transform the byte-sequence representation
+into a much more useful \code{Message} object, perform port-level
+preprocessing (\eg the processing of any intelligent fields) and finally
+pass the finished \code{Message} object to another object to begin
+application specific processing.  These steps are illustrated in figure
+\ref{pic:java_fifo_to_message}, and a supporting class diagram is
+provided in figure \ref{pic:java_comms_classes}. An explanation of each
+object follows:
+
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{java_fifo_to_message.pdf}
+    \caption{Object relationships and message flow of objects involved
+    in turning PML byte-sequences received from a FIFO into
+    \code{Message} objects, which are then used internally. Objects that
+    are shared are those which an NRS component using the NRS Java
+    Framework will need to create and use. Refer to text for further
+    explanation.}
+    \label{pic:java_fifo_to_message}
+  \end{center}
+\end{figure}
+\fi
+
+\begin{description}
+
+\item{\code{FIFOCommsRoute}} An NRS application must create one instance
+  of this class for each FIFO it will use. The main use for this object
+  is for reading and writing byte-sequence data on the FIFO. For its
+  role here, complete NRS messages, represented as a raw sequence of
+  bytes, are read and passed to the \code{PMLParser} for XML/PML
+  decoding.
+
+\item{\code{PMLParser}} An NRS application will create an instance of
+  this class; it is used by, and so must be provided to, the
+  \code{FIFOCommsRoute}. Its purpose is to decode byte sequences which
+  contain PML messages. It creates and uses an instance of
+  \code{PML\_XMLEventProcessor} to do this.
+
+\item{\code{PML\_XMLEventProcessor}} This performs the actual XML/PML
+decoding, and the construction of \code{Message} instances from the
+decoded PML. When a \code{Message} object is constructed it is first
+passed back to the originating port for processing of any intelligent
+fields. Following that it is sent onto another object for application
+specific processing; typically this will be an instance of
+\code{InboundPipeline}.
+
+\item{\code{InboundPipeline}} This contains, and provides the message
+  routing for, major code modules that require the receipt, and perform
+  processing, of \code{Message} objects. These modules, described later,
+  provide many core features that an NRS component will required; so an
+  NRS application will typically create and appropriately configure an
+  instance of \code{InboundPipeline}.
+
+\end{description}
+
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{java_comms_classes.pdf}
+    \caption{Some of the classes and relationships involved in receiving
+    byte sequences from a FIFO. Note that not all methods and data
+    members are shown.}
+    \label{pic:java_comms_classes}
+  \end{center}
+\end{figure}
+\fi
+
+\subsubsection{Routing \code{Message} objects to \code{Variable}s}
+
+The NRS Java Framework provides the classes involved in routing newly
+formed \code{Message} objects to \code{Variable} objects; once a
+\code{Variable} has received a \code{Message} application specific
+processing can then take place. The objects involved in message routing
+are illustrated in figure \ref{pic:java_inbound_routing}, and a brief
+description of each follows:
+
+\begin{description}
+
+\item{\code{InboundPipeline}} As described earlier, this is the first
+  object to receive newly constructed \code{Message} objects. It is also
+  responsible for ``wiring up'' the other three components shown (figure
+  \ref{pic:java_inbound_routing}). When messages are received by the
+  \code{InboundPipeline} they are immediately passed to the
+  \code{MessageStorage} object.
+
+\item{\code{MessageStorage}} An NRS application will create an instance
+  of this class. It is used to store messages which are sent to other
+  NRS components and then to pair up received replies with the original
+  message sent. That latter function takes place in the inbound role;
+  the received \code{Message} is given its original request (if one
+  exists); it is then passed to the next object, \code{VariableManager}.
+
+\item{\code{VariableManager}} An NRS application will create an instance
+  of this class. It is used to maintain by-\emph{VNID} references to
+  every \code{Variable} object registered with it (and generally all
+  \code{Variable} objects within an NRS component should be so
+  registered). Upon receiving a \code{Message} object, it determines
+  whether that message can be immediately dispatched to a
+  \code{Variable} instance (based on the \emph{nrsa:toVNID} field); if it
+  can, the message is passed to the variable, otherwise it is passed to
+  the main component class.
+
+\item{\code{CustomComponentNode}} An NRS application will create this
+  class and construct a single instance. As it inherits from
+  \code{BaseComponentNode} (see figure \ref{pic:java_comms_classes}) it
+  contains all of the default variables. It will attempt to dispatch any
+  \code{Message} objects received to one of its internal
+  \code{Variable}s (as illustrated in figure
+  \ref{pic:nrsgui_basecompnode_internal}).
+
+\end{description}
+
+\ifpdf
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{java_inbound_routing.pdf}
+    \caption{Objects and processes involved in routing newly formed
+    \code{Message} objects to individual \code{Variable} instances
+    within an NRS component.}
+    \label{pic:java_inbound_routing}
+  \end{center}
+\end{figure}
+\fi
+
+
+
+\subsubsection{Network encapsulation}
+
+Users should be able to create functional networks of neurons and
+synapses \et. Networks can be saved in the form of a {\em package},
+which is a network file which has the addition that only a subset of
+the connection points in the network are accessible to the outside
+world; \ie these input and output point would be the only ones which
+are addressable from the standpoint of external nodes. This package
+functionality allows for developed networks to be reused. It should
+also be possible to mark that no alterations can be made to the
+network when it is included, so that for instance a fixed aVLSI chip
+design can be drawn up as a package and then marked read-only, and can
+be used without accidentally deleting or adding connections or nodes
+which are really fixed on the chip.
+
+\subsection{NRS.tracker}
+
+The visual tracking component solves the problems of correcting for
+camera-distortion and scaling from pixel to real-world coordinates by
+adopted approaches described in \cite{Klancar2004}.
+
+\bibliographystyle{plainnat}
+\bibliography{NRS}
+
+\end{document}

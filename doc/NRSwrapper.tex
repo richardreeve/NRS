@@ -1,0 +1,86 @@
+\documentclass[10pt, notitlepage, a4paper]{article}
+
+\usepackage[pdftex]{graphicx, color}
+\usepackage[pdftex,colorlinks,hyperfigures,pagebackref,hyperindex,linkcolor=black,anchorcolor=black,citecolor=black,pagecolor=black]{hyperref}
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{NRS Wrapper Documentation}
+\author{$Revision: 1.1 $}
+\maketitle
+
+\section{Wrapper}
+NRS.wrapper is a Java-based NRS component for executing non-NRS
+applications via the command-line. Programs are executed using nodes and
+variables and run as a separate process in the Java application. Using
+NRS attributes it is possible to run these applications with a set of
+command-line arguments. When executing, each application's output stream
+is monitored and printed out to console of the NRS.wrapper
+application. Note that this component has no front-end user
+interface. All control of running applications is done through NRS variables.
+
+This component offers one root node, called {\it WrapperNode}, which
+acts as a container for {\it ExecuteNode}s. It is the {\it ExecuteNode}s
+which are used to run applications. In fact, one {\it ExecuteNode} represents
+one application to be run. However, each application can be run multiple
+times. Also, there is no limit on the number of {\it ExecuteNode}s which
+a {\it WrapperNode} can contain.
+
+On creation of an {\it ExecutionNode}, the application name and any
+program arguments must be set as attributes of the node. To change
+the command, it is only necessary to edit the attributes of the node.
+
+Each {\it ExecuteNode} has three variables: {\it Start, Stop} and {\it
+  Running}. These are summarised in table \ref{execute_node_vars}
+and explained further below.
+
+\begin{table}[!ht]
+\begin{center}
+\label{execute_node_vars}
+\caption{ExecuteNode's variables}
+\begin{tabular}{|c|l|l|}
+\hline Variable & Type & Interfaces\\ \hline
+\hline Start & void & input only\\
+\hline Running & boolean & input/output\\
+\hline Stop & void & input/output\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The {\it Start} variable, as it's name suggests, is used to start a
+program executing. The application then runs until completion or until
+it gets interrupted. Sending multiple messages to this variable while a
+program is executing has no effect. To restart a process it is first
+necessary to stop it and then start it up again. To run multiple
+processes simultaneously using the same command it is necessary to
+create multiple {\it ExecuteNode}s. 
+
+The {\it Running} variable has two uses. The first is to indicate the
+status of a process. When a process is started, the {\it Running}
+variable is in a {\tt true} state, then when the process finishes the
+variable is in a {\tt false} state. The second use is to set the state
+of a process. That is, by setting the state of the variable, the state
+of the running process is set accordingly. If the variable is set to a
+true state and no process is running, a process is started. If one is
+currently running, it is immediately interrupted. In any other case, no
+steps are taken.
+
+Finally, the {\it Stop} variable, which is similar to the {\it Running}
+variable, can be used to stop a running process. It can also be used to
+indicate that a process has completed.
+
+\subsection{Implementation issues}
+When an application begins to execute two Java Threads are started. One is
+used to monitor the current status of the process, and the second one is used to
+monitor the output stream of the process. The first thread blocks on a call to
+the {\tt waitFor()} method of a Java {\tt Process} and completes when the
+process finishes. The second thread works by looping over the output stream of
+the process, displaying any characters output to this stream.
+
+It would be easy to monitor the error stream of a running process as well. This
+could be done by adding another monitoring thread. However, currently, this
+functionality is not seen as required.
+
+\end{document}

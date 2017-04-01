@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0">
+<Author name=""/>
+<Name name="nsim"/>
+<Description></Description>
+<Nodes>
+<Component cType="nsim" cVersion="2.0-alpha">
+<NSim _x="55" _y="75" name="ns">
+<PeriodicTrigger _x="189" _y="240" count="5.0" name="win" t_offset="2000.0" t_period="3000.0">
+<BooleanEnvelope _x="165" _y="143" name="env" t_length="500.0" t_offset="0.0"/>
+<PeriodicTrigger _x="130" _y="320" count="3.0" name="sec" t_offset="250.0" t_period="1000.0">
+<BooleanEnvelope _x="222" _y="86" name="env" t_length="250.0" t_offset="0.0"/>
+</PeriodicTrigger>
+</PeriodicTrigger>
+<Timer _x="185" _y="344" initTime="0.0" name="tim" timestep="1.0">
+<TimeCheck _x="152" _y="82" endTime="20000.0" name="tc"/>
+</Timer>
+</NSim>
+</Component>
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="286" _y="76" name="ctl">
+<CheckBoxNode _x="37" _y="23" label="Start!" name="start" on="false"/>
+<CheckBoxNode _x="45" _y="99" label="Period" name="per" on="false"/>
+<CheckBoxNode _x="99" _y="218" label="Period2" name="per2" on="false"/>
+</ControlNode>
+</Component>
+</Nodes>
+<Links>
+<Link source="ctl.start.Output" target="ns.Activate"/>
+<Link source="ns.Activate" target="ctl.start.Output"/>
+<Link source="ns.tim.tc.SimOff" target="ns.Activate"/>
+<Link source="ns.MainLoop" target="ns.tim.MainLoop"/>
+<Link source="ns.MessageSender" target="ns.win.MessageSender"/>
+<Link source="ns.tim.MessageSender" target="ns.MessageSender"/>
+<Link source="ns.SimTime" target="ns.win.SimTime"/>
+<Link source="ns.tim.SimTime" target="ns.SimTime"/>
+<Link source="ns.Timestep" target="ns.win.Timestep"/>
+<Link source="ns.tim.Timestep" target="ns.Timestep"/>
+<Link source="ns.Updater" target="ns.win.Updater"/>
+<Link source="ns.tim.Updater" target="ns.Updater"/>
+<Link source="ns.win.MessageSender" target="ns.win.env.MessageSender"/>
+<Link source="ns.win.MessageSender" target="ns.win.sec.MessageSender"/>
+<Link source="ns.win.SimTime" target="ns.win.env.SimTime"/>
+<Link source="ns.win.SimTime" target="ns.win.sec.SimTime"/>
+<Link source="ns.win.Timestep" target="ns.win.env.Timestep"/>
+<Link source="ns.win.Timestep" target="ns.win.sec.Timestep"/>
+<Link source="ns.win.Trigger" target="ns.win.env.Trigger"/>
+<Link source="ns.win.Trigger" target="ns.win.sec.Trigger"/>
+<Link source="ns.win.Updater" target="ns.win.env.Updater"/>
+<Link source="ns.win.Updater" target="ns.win.sec.Updater"/>
+<Link source="ns.win.env.Activate" target="ctl.per.Output"/>
+<Link source="ns.win.sec.MessageSender" target="ns.win.sec.env.MessageSender"/>
+<Link source="ns.win.sec.SimTime" target="ns.win.sec.env.SimTime"/>
+<Link source="ns.win.sec.Timestep" target="ns.win.sec.env.Timestep"/>
+<Link source="ns.win.sec.Trigger" target="ns.win.sec.env.Trigger"/>
+<Link source="ns.win.sec.Updater" target="ns.win.sec.env.Updater"/>
+<Link source="ns.win.sec.env.Activate" target="ctl.per2.Output"/>
+<Link source="ns.tim.SimTime" target="ns.tim.tc.SimTime"/>
+</Links>
+</Network>

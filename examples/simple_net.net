@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><Network
+xmlns="http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/dnl/1.0"><Author
+name="Thomas French"/><Name name="Simple
+network"/><Description></Description><Nodes>
+
+<Component cType="nsim" cVersion="2.0-alpha">
+<NSim _x="89" _y="78" name="ns">
+<ConductanceBasedSynapse _x="147" _y="276" decay_half_life="1.0"
+e_syn="0.0" g_syni="10.0" g_fac="0" fac_half_life="1"
+dep_half_life="5" dep_frac="0.8" name="cb1"/>
+<PoissonNeuron _x="142" _y="102" name="p1" t_sg="5"/>
+<SpikingNeuron _x="153" _y="188" c_memb="1.0" g_memb="1.0" name="sp1" t_refractory="1.0" v_actual="-80.0" v_recovery="-60.0" v_rest="-80.0" v_threshold="-40.0"/><Counter _x="142" _y="353" name="count"/>
+<Evaluator _x="150" _y="433" name="eval"/>
+<FullSpeedTimer _x="147" _y="15" initTime="0.0" name="timer" timestep="1.0">
+<TimeCheck _x="126" _y="128" endTime="10000.0" name="tc"/>
+</FullSpeedTimer>
+</NSim>
+</Component>
+
+<Component cType="control" cVersion="1.0">
+<ControlNode _x="265" _y="95" name="control">
+<CheckBoxNode _x="37" _y="58" label="Go!" name="go" on="false"/>
+<FloatDisplayNode _x="52" _y="174" label="Evaluation:" name="val"/>
+<FloatButtonNode _x="47" _y="288" label="Mean spike interval" name="misi" value="20.0"/>
+</ControlNode>
+</Component>
+</Nodes>
+
+<Links><Link
+source="control.go.Output" target="ns.Activate"/><Link
+source="ns.timer.tc.SimOff" target="ns.Activate"/><Link
+source="ns.MainLoop" target="ns.timer.MainLoop"/><Link
+source="ns.timer.MessageSender" target="ns.MessageSender"/><Link
+source="ns.MessageSender" target="ns.p1.MessageSender"/><Link
+source="ns.MessageSender" target="ns.cb1.MessageSender"/><Link
+source="ns.MessageSender" target="ns.sp1.MessageSender"/><Link
+source="ns.timer.SimTime" target="ns.SimTime"/><Link
+source="ns.timer.Timestep" target="ns.Timestep"/><Link
+source="ns.Timestep" target="ns.p1.Timestep"/><Link
+source="ns.Timestep" target="ns.cb1.Timestep"/><Link
+source="ns.Timestep" target="ns.sp1.Timestep"/><Link
+source="ns.timer.Updater" target="ns.Updater"/><Link
+source="ns.Updater" target="ns.p1.Updater"/><Link source="ns.Updater"
+target="ns.cb1.Updater"/><Link source="ns.Updater"
+target="ns.sp1.Updater"/><Link source="ns.p1.Spike"
+target="ns.cb1.InputSpike"/><Link source="ns.cb1.SynapticOutput"
+target="ns.sp1.SynapticInput"/><Link source="control.misi.Output"
+target="ns.p1.MeanSG"/><Link source="ns.sp1.Spike"
+target="ns.count.Spike"/><Link source="ns.count.Sum"
+target="ns.eval.Evaluation"/><Link source="ns.timer.tc.SimOff"
+target="ns.eval.Activate"/><Link source="ns.eval.Evaluation"
+target="control.val.Input"/><Link source="ns.timer.SimTime"
+target="ns.timer.tc.SimTime"/><Link source="ns.timer.tc.SimOff"
+target="control.go.Output"/></Links></Network>

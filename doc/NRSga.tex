@@ -1,0 +1,305 @@
+\documentclass[10pt, notitlepage, a4paper]{article}
+
+\usepackage[pdftex]{graphicx, color}
+\usepackage[pdftex,colorlinks,hyperfigures,pagebackref,hyperindex,linkcolor=black,anchorcolor=black,citecolor=black,pagecolor=black]{hyperref}
+\usepackage{verbatim}
+
+\begin{document}
+
+\title{NRS GA Documentation}
+\author{$Revision: 1.7 $}
+\maketitle
+
+\tableofcontents
+\newpage
+
+This document is heavily based on my final year project report, mainly chapter 3 - Implementation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% NRS.ga %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}\label{intro}
+The task of {\it NRS.ga} is to provide Genetic Algorithm capabilities to the Neural Robotic System (NRS)\footnote{http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/}, to be used to evolve parameters of neural networks being studied. More generally, it can be used to evolve any values of NRS, through variables.
+
+The main focus of this documentation is to describe the structure of the GA component, the GA framework, and how to use the component.
+
+Note that a fairly good understanding of NRS is assumed, e.g. knowledge of components, nodes, variables, links, etc. Plus knowledge of how to setup NRS and use the NRS GUI component. Finally, also an understanding of Genetic Algorithms is assumed.
+
+\section{Overall Structure}\label{struct}
+{\it NRS.ga} uses a simple structure that closely mimics that of a standard GA, as described in any GA textbook\footnote{For example, Mitchell's An Introduction to Genetic Algorithms.}. However, at the same time it attempts to keep with the NRS component design ideology, using nodes, variables, links, etc. On top of this, it was desired to make the system flexible enough to solve a variety of problems. This issue of flexibility thus defined the first major decision stage: how to define and constrain the GA structure enough to allow for different types of problems to be solved. It followed that certain restrictions were imposed on the GA framework. The main one is that only fixed length chromosomes can be used, and also that all gene values are represented as double-precision numbers. The former applies because the idea of ``messy GAs''\footnote{Messy GAs are GAs that involve adaptive representations, e.g. variable-length genomes.} does not apply to the problems here. The latter because a majority of the parameters in the system are represented as double-precision numbers or integers and since integers can be represented as double-precision numbers, this was a logical choice.
+
+One way to visualise the node structure of the GA component, which is particularly pertinent to NRS, as this is how the GUI represents each component, is as a tree hierarchy, see figure \ref{hierarchy}. At the root of the tree is the root node, {\it GANode}, which handles high level functionality and control. Under the top level node, there are two nodes, one is the {\it RNGNode}, which acts as the random number generator node for the component, and the second one is the {\it PopulationNode}, which deals with the GA population strategy. There are no levels below the {\it RNGNode}, but below the {\it PopulationNode} is the genetic operator level, with a {\it SelectionNode}, a {\it MutationNode}, a {\it CrossoverNode}, {\it GenomeNode}, etc. Out of these, it is only the {\it GenomeNode} which can contain subnodes, and this is where the basic {\it GeneNode}s are created.
+
+%Diagram showing node hierarchy
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.35]{ga_hierarchy}\\
+\end{center}
+\caption{The node hierarchy of the GA component, where each level represents the minimum/maximum requirements for each parent node. The dotted line is used to connect the {\it PopulationNode} and the {\it ReplacementNode} because this subnode is only required if a steady-state GA has been chosen. Note that the ellipsis (or three dots) at the {\it GeneNode} level signifies `many instances of'.}
+\label{hierarchy}
+\end{figure}
+
+\begin{table}[!ht]
+\begin{center}
+\caption{Types of nodes provided by NRS.ga and how they relate to a GA.}
+\label{nodes}
+\begin{tabular}{|l|l|l|}
+\hline {\bf Node} & {\bf Genetic Algorithm}\\\hline
+\hline GANode & Top-level program control\\
+\hline RNGNode & Random number generator\\
+\hline PopulationNode & Population strategy\\
+\hline SelectionNode & Selection scheme\\
+\hline CrossoverNode & Crossover (recombination) operator\\
+\hline MutationNode & Mutation operator\\
+\hline ReplacementNode & Replacement strategy for steady-state GA\\
+\hline GenomeNode & Genome structure\\
+\hline GeneNode & Genes\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Although every effort has been made to keep the structure of the GA component consistent with the framework presented by NRS, building a GA component is different from other components. The NRS framework dictates, specifically, that connections between different subnodes of a component should be made explicit, e.g. details of variables, etc, must be specified in the CSL of the component. However, since this component presents a more complex case, it is simpler to make some connections implicitly. For example, a lot of the nodes of in {\it NRS.ga} use the {\it RNGNode} for generating random numbers. However, the {\it RNGNode} is not declared to have variables, its links are made implicitly so that they are hidden from the user. This also happens with the genetic operators. Instead of users having to create links between the {\it CrossoverNode} and {\it MutationNode} and the {\it GenomeNode}, for example, these links are made implicitly. This helps improve the usability of the system as users are not required to build links between nodes which are required by every GA setup. However, this does impose certain restrictions on the system, but it is safe to assume that these genetic operators, which are fundamental to the success of GAs in general, will always be created. Nevertheless, if a user does not want to use, e.g. crossover, then the rate of probability for the {\it CrossoverNode} can be set to 0.
+
+\section{The Framework}
+One of the main complexities of creating a GA framework is that the system needs to be built in an extensible way, so that new nodes can be added to the system. This was done using Java's object-oriented programming techniques, involving the design of a class hierarchy. Principally, this was done using {\tt abstract} classes to represent an abstract GA concept, such as crossover ({\it CrossoverNode}), which itself will not be instantiated, but a subclass of it will, e.g. for one-point crossover - {\it OnePointCrossoverNode}. Using this technique means that to implement a new type of crossover, it is only required to {\tt extend} the superclass, e.g. {\it CrossoverNode}, and implement its {\tt abstract} methods. This way all the handling code for NRS nodes is taken care of by the superclass, implemented in its non-{\tt abstract} methods. However, these methods can be overwritten by the subclass if need be. This flexibility means that subclasses can add their own variables and attributes on top of those required by the superclass. An example of this is seen below, in section \ref{pop_node}, where two subclasses of {\it PopulationNode} are implemented and each one requires its own attributes on top of those of the superclass. Furthermore, some classes haven't been implemented as {\tt abstract} classes, yet, they can still be subclassed should a user find it useful, e.g. {\it GenomeNode}, or even the root node {\it GANode}.
+
+As a consequence of this structure the names used here, like  {\it MutationNode} \& {\it PopulationNode}, refer to the {\tt abstract} class itself but also to any of its subclasses. For example, the {\it CrossoverNode} class refers to {\bf any} {\it CrossoverNode}, e.g. subclasses like {\it OnePointCrossoverNode} and {\it NPointCrossoverNode}, but also to itself.
+
+In fact, the example genetic operators and population strategies implemented here, have been included as an exercise to show that the system is extensible and flexible. Java's system for documentation comments - {\it javadoc}, has been used throughout the implementation of {\it NRS.ga}. This enables the compiling of an API (Application Programming Interface) for {\it NRS.ga}, which can be used by users wishing to extend the capabilities of the component, e.g. add new genetic operators. This documentation is compiled with the rest of the NRS system.
+
+%Diagram showing whole structure of NRS.ga with nodes and variables, and links required
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[scale=0.35]{ga_NRSga}\\
+\end{center}
+\caption{The overall structure of the GA component with nodes, and variables within nodes, and the links that are required to be made between variables. (Outdated)}
+\label{struct_dia}
+\end{figure}
+
+Since all nodes in NRS must have a {\it name} attribute and since it plays no useful part in this component, it is omitted from the discussions below.
+
+\subsection{GANode}
+At the root level of the GA component a root node is provided, called {\it GANode}. This node acts as the main controller of the GA component, controlling the GA at the top-level and the interface to the rest of the NRS. As a consequence of this, when a {\it GANode} is created, one parameter must be specified: {\it epochs}. This attribute specifies the number of epochs the GA will run for.
+
+The {\it GANode} has three variables and they are described below.
+\begin{description}
+\item[StartGA] An input variable of type boolean, which is used by the system to trigger the GA to commence. Or it can be used to interrupt and stop the GA when running.
+\item[StartRun] An output variable of type boolean, which through it the {\it GANode} sends a messages to the {\it StartRun} variable of the {\it PopulationNode} to start the next epoch of the GA's run.
+\item[FinishedRun] An input variable, of type void, which, in contrary to the {\it StartRun} variable, receives message from {\it PopulationNode}'s {\it FinishedRun} variable to indicate that it has finished the current iteration.
+\end{description}
+Through these variables the {\it GANode} can control the GA's iterations and tell the {\it PopulationNode} to run for however many iterations have been specified by the user.
+
+Only one of these root nodes is allowed to be created, and it must contain two subnodes: a {\it RNGNode} and a {\it PopulationNode}, which are both described next.
+
+\subsection{PopulationNode}\label{pop_node}
+The {\it PopulationNode} is the most important node of the GA component and its job is to implement the GA's population strategy, i.e. controlling the population and individuals, and managing crossover, mutation and selection.
+
+Also, data structures storing population of GA was not explicitly shown in the PopulationNode. This is because the user of the system would not gain anything by viewing it. Also in the interest of screen estate, it would clutter up the GUI.
+
+ This node has one attribute: {\it popSize} which specifies the population size of the GA, e.g. 20 or 100.  As well as this attribute, it has four variables - two input and two output. These are described below:
+\begin{description}
+\item[StartRun] An input variable of type boolean, linked to the {\it GANode}'s {\it StartRun} variable, which indicates when to start another experiment on the population.
+\item[StartEx] An output variable also of type void, linked to the {\it StartEx} variable on {\it GenomeNode}, to indicate that the next experiment should start.
+\item[FinishedRun] Another output variable of type void, which is linked to the {\it FinishedRun} variable of the {\it GANode}, to indicate a generation of experiments has finished.
+\item[Evaluated] An input variable of type float (double), which is linked from the {\it Evaluated} variable of the {\it GenomeNode}, described more later. This variable indicates that an experiment has finished, and the value of the variable is the evaluation of the genome that has just been evaluated.
+\end{description}
+
+Here two subclasses of {\it PopulationNode} have been implemented: {\it GenerationalPopNode} and {\it SteadyStatePopNode}. {\it GenerationalPopNode} provides a classical GA generational strategy, where the whole population is replaced at once using an elitist selection strategy. This strategy was chosen because it is traditional, but more importantly it is known to be useful. {\it SteadyStatePopNode} implements a different scheme, using a biased replacement strategy, so that the worst individuals are replaced each epoch. A steady-state strategy was implemented because it has specific applications where experiments are done using robots. A steady-state GA is not as destructive as a generational GA on the population, since it only attempts to replace a few individuals in each epoch. Hence it does not require as many evaluations of individuals, thus cutting down on the number of experiments to be run with the robots. There is also some evidence that steady-state GAs can perform better, or at least as good, as generational GAs (Syswerda1991).
+
+Both {\it GenerationalPopNode} and {\it SteadyStatePopNode} require one other attribute:
+\begin{description}
+\item[elitism] for {\it GenerationalPopNode}, this determines whether to use elitism\footnote{Elitism is where the best (or top few) chromosome(s) from a generation is (are) automatically copied to the next generation. This can be beneficial when using a selection method where the best chromosome has a chance of not getting selected.}. If value for elitism is $>0$, then the specified number of best individuals are automatically carried through to the next generation without being crossed-over or mutated.
+\item[individuals] for {\it SteadyStatePopNode}, the number of individuals to be replaced using some replacement scheme, e.g. replace worst or random replacement.
+\end{description}
+
+Finally, there are a number of constraints on which nodes the {\it PopulationNode} must contain. There can only be one {\it GenomeNode}, one {\it CrossoverNode}, one {\it MutationNode} and one {\it SelectionNode}. Also, if a {\it SteadyStatePopNode} has been chosen, then a {\it ReplacementNode} is also required.
+
+Note that although the {\it PopulationNode} controls the GA population, it has no explicit links through variables to any of the {\it CrossoverNode}s, {\it MutationNode}s, or {\it SelectionNode}s, also the {\it ReplacementNode}s case its required. This is because of the implicit links as explained in section \ref{struct}.
+
+\subsection{RNGNode}
+This class of nodes' job is to generate random numbers for other nodes. For example, the {\it GenomeNode} uses it to generate random numbers to use as initial values for genes. They can be used to generate random integers and random double-precision numbers.
+
+As of now only a uniform random number generator has been implemented\footnote{Note that these random numbers are generated using Java's pseudo-random number generator. Hence, they are not truly random numbers.}, aptly named  {\it UniformRNGNode}, which, obviously, generates random numbers from a uniform distribution of values. Others could also be added, e.g. using Gaussian or Sigmoid distributions.
+
+This node has no variables for the reasons mentioned above (section \ref{struct}). Specifically, since a lot nodes use a {\it RNGNode} for generating random numbers, there would many links between the {\it RNGNode} and other nodes, and this would not be good for usability.
+
+Finally, the {\it GANode} must create one of these nodes.
+
+\subsection{SelectionNode}
+{\it SelectionNode} nodes correspond to the selection schemes used by GAs, e.g. rank based selection or tournament selection. These nodes do not have any explicit variables and thus no links. They work by simply accepting a vector of the current population and carrying out the appropriate selection scheme, and then returning the outcome.
+
+Two types of selection have been implemented: {\it RouletteWheelSelectionNode} and {\it TournamentSelectionNode}. {\it RouletteWheelSelectionNode} implements the well known roulette-wheel selection scheme which is a fitness-proportionate scheme, where each individual's chance of selection is proportionate to its fitness compared to rest of the population. So the probability, $p$, of an individual, $i$, with fitness, $f_i$ and a population size $N$, getting selected is \[p_i = \frac{f_i}{\sum\limits_{j}^N f_j}\]
+
+{\it TournamentSelectionNode} provides another well known, but different type of selection scheme: binary tournament selection. Here two randomly selected individuals are chosen and with some probability, $p$, the one with the highest fitness goes through, otherwise, with probability $1-p$, the weaker one goes through to next generation. This node requires one parameter, the probability, $p$, which is defined as a number between 0 and 100\%.
+
+Both {\it GenerationalPopNode} and {\it SteadyStatePopNode} are required to contain one of these nodes.
+
+\subsection{MutationNode}
+This class of nodes is used to mutate current gene values within some specified range, i.e. the minimum and maximum range of a gene. It has no explicit variables, instead its input and output variables are implicitly known about by the system.
+
+These nodes have one attribute, a mutation {\it rate} attribute, which determines the likelihood of mutation occurring and is specified as as a number between 0 and 100\%, where 0 means no mutation and 100 means certain mutation. Also, similar to the {\it SelectionNode}, these nodes contain no explicit variables.
+
+Two types of {\it MutationNode} have been implemented: the basic {\it SimpleMutationNode} and the more sophisticated {\it GaussianMutationNode}. The {\it SimpleMutationNode} simply chooses a random number between the minimum and maximum allowed for a particular gene and replaces the current value with that new value, according to some probability. The {\it GaussianMutationNode} is slightly more intelligent. Instead of choosing a completely random number, this node chooses a new value from a Gaussian distribution, using the current value of the gene as the {\it mean}, while the {\it standard deviation} is supplied by the user as an attribute. This type of mutation is widely accepted and much more effective (Yao93).
+
+Finally, a {\it PopulationNode} is required to create one of these nodes.
+
+\subsection{CrossoverNode}
+{\it CrossoverNode} is a class of nodes which implement genetic crossover. These nodes take in two parent genomes and output one or two crossed-over children. In fact, this genetic operator acts much like the {\it MutationNode}, where its input and output variables are implicitly known about by the system.
+
+Again, this node also has the {\it rate} attribute, where {\it rate} specifies the crossover rate, ranging from 0 to 100\%, where this determines the probability of crossover occurring. A probability of 0 means no crossver, while 100 means certain crossover.
+
+Many implementations are possible, e.g. one-point crossover, two-point crossover, multiple-point crossover, etc. In fact, many have been implemented: {\it OnePointCrossoverNode}, {\it TwoPointCrossoverNode}, {\it NPointCrossoverNode}, {\it RandomMultiPointCrossoverNode} and {\it UniformCrossoverNode}. Obviously, each one of these nodes implements a slightly different type of crossover.
+\begin{description}
+\item[OnePointCrossoverNode] single point crossover, where the single point is chosen from the $n-1$ crossover points, where $n$ is the length of the chromosome.
+\item[TwoPointCrossoverNode] two point crossover, where two points are chosen randomly, again from the $n-1$ crossover points.
+\item[NPointCrossoverNode] $n$-point crossover, where $n$ is supplied by the user as an attribute - {\it npoints}.
+\item[RandomMultiPointCrossoverNode] similar to n-point crossover, except that here $n$ is chosen randomly.
+\item[UniformCrossoverNode] crossover where each allele of each parent has a uniform probability of getting chosen to be copied to a child's genome.
+\end{description}
+
+The reason for choosing so many crossover nodes is that since crossover is such a vital part of a GA setup, and since there is much debate of each type's effectiveness, it can now be left to the user of the system to decide which one suits their needs.
+
+One of these nodes must exist within a {\it PopulationNode}.
+
+\subsection{ReplacementNode}
+These nodes are used only with {\it SteadyStatePopNode}, and their purpose is to implement the replacement strategy for the few new individuals generated through the steady-state population strategy. Again these nodes have no explicit variables.
+
+Two of the simplest types of replacement strategy are provided: random replacement and worst replacement, as {\it RandomReplacementNode} and {\it WorstReplacementNode}. The former works by replacing random members of the population with the new individuals. The latter implements a more successful strategy, which replaces the current worst members with the new ones, if the newer ones are fitter.
+
+A {\it PopulationNode} must only contain one of these nodes if it is a {\it SteadyStatePopNode}.
+
+\subsection{GenomeNode}
+Unlike the nodes mentioned above, the {\it GenomeNode} is not a class of nodes but a node itself, whose purpose is to manage the {\it GeneNode}s and {\it CalcNode} which it contains. This node also coordinates between the {\it PopulationNode} and the neural simulator (or any target component). In order to do this it requires three variables, one input and two output:
+\begin{description}
+\item[StartEx] An input variable of type void, linked to the {\it StartEx} variable of the {\it PopulationNode}, which indicates ready to start another experiment.
+\item[Go] An output variable of type boolean, linked to the {\it Activate} variable of the neural simulator, which indicates that the simulation should begin.
+\item[Evaluated] An output variable of type float (double), linked to the {\it PopulationNode} variable {\it Evaluated}, which forwards the fitness score of the current individual. This has two effects: one, it indicates that the current genome has finished its run and been evaluated, and two, what its fitness score is.
+\end{description}
+
+This node is also required by the {\it PopulationNode}.
+
+\subsection{CalcNode}
+An abstract class, used to define a specific type of calculation node, which calculates, once it has received all evaluations (from its children {\it EvaluationNode}s), the fitness score of the current individual. One of this nodes is required by every {\it GenomeNode}. An example sub-type (or subclass) has been implemented, {\it AddCalcNode}, which simple adds all the evaluations together. Due to the vast number of possible functions, it is up to the user to define a fitness function which suits their specific problem. Note that this node acts as a `container' for {\it EvaluationNode}s.
+
+\noindent Each {\it CalcNode} has three variables and these are described below.
+\begin{description}
+\item[Evaluation]An input variable of type float, which is used to receive evaluations from {\it EvaluationNode}s. Once evaluations have been received from all children nodes, it calculated the fitness score for the current chromosome.
+\item[Evaluated]An output variable also of type float, which is used to send the fitness value when it has been calculated to the parent {\it GenomeNode}.
+\item[Go]An input and output variable of type boolean, which is used as an intermediary between the Go variable of {\it EvaluationNode}s and the Go variable of the {\it GenomeNode}.
+\end{description}
+
+\subsection{EvaluationNode}
+At least one of these nodes is required by every NRS.ga setup. In the case of a multi-objective setup, it is most likely that more than one of the these nodes will be required. When there are multiple of these nodes they work in series, so that once one has received its evaluation, it triggers the next to start a new run. Once the last one has been evaluated, the {\it CalcNode} will calculate the fitness for this chromosome and the value will be propagated up the system to the {\it GenomeNode} and further up to the {\it PopulationNode}. This will then cycle each iteration of the GA. Note that if the GA has been setup to run for 10 iterations and there are 3 objectives, then there will be 30 experiment runs.
+
+In the case that two or more {\it EvaluationNode}s with the same {\it ValueNode}s are added, a synchronisation error could occur, whereby an {\it EvaluationNode} will receive a message at {\it StartEx} and the {\it ValueNode}s will be consistent, therefore accepting the previous {\it EvaluationNode}'s evaluation score. This problem arises in a situation where perhaps the same values are being used in order to get a sampling over a number of runs, where the results may vary due to some non-determinism. Thus it is necessary to introduce a dummy variable (and value) on the target and add an appropriate {\it ValueNode} to each {\it EvaluationNode}, so that every {\it EvaluationNode} has at least one different {\it ValueNode}.
+
+\noindent EvaluationNode variables are:
+\begin{description}
+\item[StartEx]A void input variable, which indicates to start a new experiment. For the first {\it EvaluationNode} to be run this is linked from the {\it GenomeNode}, but for all other {\it EvaluationNode}s this is linked from the previous {\it EvaluationNode} in the series of nodes.
+
+\item[StartNextEx]A void output variable, used to join {\it EvaluationNode}s together where the first {\it EvaluationNode} will connect its {\it StartNextEx} variable to the {\it StartEx} of the second one, and the second one to the third one, and so on. The last {\it EvaluationNode} in the series will have its {\it StartNextEx} unlinked.
+
+\item[Evaluation]An input and output variable of type float, used to receive an evaluation from target evaluator nodes and pass it on to its parent {\it CalcNode}.
+
+\item[Trigger]A void output variable used to trigger children {\it ValueNode}s to send their values to their respective targets.
+
+\item[Go]A boolean output variable, used to indicate to the {\it GenomeNode} to start next experiment (by sending a true flag through its Go variable to target).
+
+\item[Consistent]An input variable of type boolean, used to receive booleans directly from {\it ValueNode}s, to say that target values are consistent with {\it ValueNode} values, thus ready to start next experiment.
+\end{description}
+
+\subsection{ValueNode}
+Inside each {\it EvaluationNode} it is possible to add {\it ValueNode}s. However, {\it ValueNode} is abstract, so particular sub-types of {\it ValueNode}s must be implemented and added, e.g. {\it BooleanValueNode} for boolean values and {\it FloatValueNode} for double values. Others are also possible. These nodes are used to change particular parameters (ones not being evolved, obviously) on the target for each particular evaluation. For example, if the GA was evolving a particular neural network on the neural simulator, and the genes of the GA were the weights of the network, then it could be beneficial to be able to change the setup of the neural simulator, e.g. rate at which spikes are introduced into the system, for example by varying the Mean Spike Gap of a poisson neuron, and evaluate the neural network against these different rates. These varying rates could be set using, e.g. {\it FloatValueNode}s, so that before each evaluation these values would be sent to the poisson neuron in the neural simulator.
+
+\noindent ValueNode - BooleanValueNode and FloatValueNode, variables:
+\begin{description}
+\item[Output]An output variable used to send a set value to a particular target. The type of this variable is dependent on the sub-type of {\it ValueNode}, e.g. for {\it BooleanValueNode} the value is boolean.
+
+\item[Trigger]A void output variable used to receive a flag from the parent {\it EvaluationNode}'s {\it Trigger} variable to set off the Output variable to send the node's value to the target.
+
+\item[Input]An input variable whose type is again dependent on the particular sub-type of the {\it ValueNode}. This variable is used to receive a value back from target to check it has received and acknowledged the correct value.
+
+\item[Consistent]A boolean input variable used to indicate to parent {\it EvaluationNode} whether the target's value is consistent with this node's value.
+\end{description}
+
+
+\subsection{GeneNode}
+These nodes are analogous to natural genes, where each {\it GeneNode} represents one gene on a genome. Here each {\it GeneNode} represents one individual parameter to be evolved, and thus the {\it GenomeNode} can contain many of these nodes.
+
+{\it GeneNode}'s require the following attributes (see table \ref{attrbs} for an example): {\it name} of the node; a maximum and minimum value, {\it max} and {\it min}, that this parameter can take; a boolean value, {\it initial}, indicating whether to use an initial value or not; and finally an attribute {\it value}, which is the starting value if {\it initial} is true, otherwise it is randomly generated.
+
+Each {\it GeneNode} has one variable: {\it Value}, which is used to send the value of the gene to the target parameter. Before an experiment begins, the value of the {\it GeneNode} is sent to the target variable. While each gene may have multiple links from its {\it Value} variable, only one {\it GeneNode} per target variable is allowed.
+
+Also, although there is a link between the {\it GenomeNode} and each {\it GeneNode}, this is not shown explicitly, for the same reasons given above.
+
+\begin{table}[!ht]
+\begin{center}
+\caption{An example {\it GeneNode} attributes.}
+\label{attrbs}
+\begin{tabular}{|c|l|}
+\hline Attribute & Value\\ \hline
+\hline name & gene1\\
+\hline type & Membrane Capacitance of spiking neuron\\
+\hline min & 1\\
+\hline max & 20\\
+\hline initial & true\\
+\hline value & 10\\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Component Control Flow for Single Evaluation}
+The above descriptions explain how each individual node works, however, it is almost more important to visualise how the whole GA component works together. At a high-level the GA works as described by the Genetic Algorithm. However, at the NRS level it is necessary to understand how the component functions as a reactive system, receiving and sending messages between nodes and components. The description below, along with figure \ref{struct_dia} and the flow chart in figure \ref{p_flow}, provide a better way of understanding this process.
+
+Once all GA nodes have been created, all attributes have been set, all variables have been linked, and all dependencies have been satisfied, {\it NRS.ga} is ready to run. If for some reason not all the dependencies have been satisfied, the component will output which nodes and links are still missing.
+
+Depending on which {\it PopulationNode} has been chosen, a few of the finer details of how {\it NRS.ga} works will vary. Hopefully these details are made apparent in the appropriate places. Further, there are also differences between the initial run of the system and the subsequent runs. It is intended to point out these differences as well.
+
+To get the system started a boolean message with a true value is sent to the {\it StartGA} variable of the {\it GANode}. {\it GANode} then checks that it has not run for the total number of epochs, which it has not since this is the first run, and so sends a boolean message with true through the variable {\it StartRun}. {\it GANode} then waits for a void message to arrive at the {\it FinishedRun} variable. The receipt of a message at {\it FinishedRun} indicates that a GA run has ended and that the rest of the system is ready to run again. Bear in mind that the rest of the system is not aware how many runs it is intended to do, it is merely a ``slave'' to the {\it GANode}.
+
+When a {\it PopulationNode} receives a true value in a boolean message at its {\it StartRun} variable, assuming its not the initial case, it will do selection, crossover and mutation, plus replacement if using a {\it SteadyStatePopNode}. Once once all these operators have been applied, the population is then evaluated one individual at a time. However, for a {\it SteadyStatePopNode} only the number of individuals chosen, e.g. 1 or 2, are evaluated. Before each member can be evaluated the network must be updated with its gene values. So, the {\it GenomeNode} is signalled to update all the {\it GeneNode}'s genes with the current member's gene values. Since there is no vector representation in NRS this update is done implicitly in the background without the user having any knowledge of its occurrence. Once the {\it GeneNode}'s values are updated, the new values get sent out through each {\it GeneNode}'s {\it Output} variable to their respective variables, the ones getting evolved. Once this is completed, a void message is sent from the {\it PopulationNode}'s {\it StartEx} variable to the {\it GenomeNode}'s variable {\it StartEx}. On receipt of this void message, the {\it GenomeNode} forwards the message to its {\it EvaluationNode} (which is contained in a {\it CalcNode}). It then waits to receive a true value at its {\it Go} variable. This has the effect of sending a boolean message with a true value from {\it Go} out of the GA component to the {\it NRS.nsim}'s {\it Activate} variable. There are then several state changes within the neural simulator and the simulations runs. When the timer of the {\it NRS.nsim} has elapsed, and hence the simulation is over, an evaluation score is sent out of the {\it NRS.nsim} node into the {\it NRS.ga} component directed at the {\it EvaluationNode}'s {\it Evaluation} variable. This value is then passed to the {\it CalcNode}, and this node will calculate, depending on it type, the fitness value for the current genome. This value is then sent through the {\it Evaluated} variable to the {\it CalcNode}s parent {\it GenomeNode}, which forwards it through the {\it Evaluated} variable to the {\it PopulationNode}'s variable of the same name - {\it Evaluated}. On arrival at the this variable the fitness score is stored with the corresponding genotype.
+
+Now the process of evaluating the next individual continues, so that the next member of the current population is evaluated, unless all have been evaluated. In that case a void message is sent from the {\it PopulationNode}'s {\it FinishedRun} variable to the {\it GANode}'s {\it FinishedRun} variable. This indicates that the run has finished, and the {\it GANode} will then check that there are epochs left, if so, then the whole process starts again. If using {\it SteadyStatePopNode}, at the end of a run a replacement strategy is used to replace the new individuals into the population, before signalling to {\it GANode} that the run has finished.
+
+The initial run is slightly different in that, firstly, the population needs to be generated, and secondly, the initial population needs to be evaluated before selection and the application of any genetic operators. This applies to both implementations of the {\it PopulationNode}.
+
+In the case that the GA's run is interrupted, the {\it StartRun} variable of the {\it GANode} sends a false message to {\it PopulationNode}'s variable {\it StartRun}. This then causes the {\it PopulationNode} to continue the current run but stop at the end, and not start up again until the GA is restarted.
+
+% program control flow diagram
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{ga_prog_flow}
+\end{center}
+\caption{Program flow of {\it NRS.ga} showing only the message passing between variables. This diagram represents both the initial case and subsequent runs. Also, it shows the flow for both types of {\it PopulationNode}s, except that for {\it SteadyStatePopNode} the `population size' - pS, is not the size of the population but the number of individuals to replace each epoch. (Outdated)}
+\label{p_flow}
+\end{figure}
+
+\section{Control Flow for Multi-Objective Evaluation}
+Obviously the control flow for evaluation with multiple objectives varies slightly from the control flow for a single evaluation, as described above. These specific differences are detailed below.
+
+The main difference being that multiple {\it EvaluationNode}s are added to the {\it CalcNode}.
+
+Once the GA is started, assuming all dependencies have been satisfied, the {\it GenomeNode} will receive a boolean value true at its {\it StartEx} variable. This value is then propagated down to the first {\it EvaluationNode}'s {\it StartEx} variable, to start off the whole process. This then causes the {\it Trigger} variable to send a void flag to all its children {\it ValueNode}s' {\it Trigger} variables. These children then send their values, through their {\it Output} variable over their links and wait to receive that value back through their {\it Input} variable. If the values match, then a true flag is sent through the {\it Consistent} variable to the {\it Consistent} variable of the parent {\it EvaluationNode}. When this occurs, the {\it EvaluationNode} checks to see if all its children are consistent. If they are, then a true value is sent through the {\it Go} variable up the chain to the {\it CalcNode}, which forwards the value to the {\it GenomeNode}, which, finally, sends the value to the target, e.g. the neural simulator, to start an experiment.
+
+Once an experiment is over, an evaluation value is sent back to the {\it EvaluationNode}s. Depending on the setup, there could be various different sources for evaluation values. If an {\it EvaluationNode} is expecting an evaluation value, and all its children {\it ValueNode}s have return true consistent flags, then the evaluation value is passed on to the {\it CalcNode}'s {\it Evaluation} variable. The {\it CalcNode} will then check to see if it has received all evaluation scores. In the case that it has, it will calculate and forward the fitness score to the {\it GenomeNode} through its {\it Evaluated} variable.
+
+Meanwhile the {\it EvaluationNode} will indicate, by sending a void flag through its {\it StartNextEx} variable, to the next {\it EvaluationNode}, receiving the flag at its {\it StartEx} variable, to start a new experiment. This cycles until the {\it CalcNode} has received all evaluations, i.e. all {\it EvaluationNode}s have run and received evaluations back.
+
+% Describe the links necessary for this extension of NRS.ga to work
+\subsection{Links required for Multi-Objective Evaluation}
+Many of the required links for the multi-objective extension, similar to the rest of the GA component, are made automatically. This helps to reduce the requirement of users to create the same links repeatedly. However, this is not possible for all links. Links made automatically includes all three of the {\it CalcNode} variables, some of the {\it EvaluationNode} variables: the {\it Evaluation} output link, {\it Trigger} variable, the {\it Consistent} variable and finally the {\it Go} variable too. For the {\it ValueNode}, its {\it Trigger} and {\it Consistent} variables are linked automatically.
+
+Links still required to be created are {\it EvaluationNode}'s {\it StartEx, StartNextEx} and {\it Evaluation.input}. Also, for the {\it ValueNode}, both the {\it Output} and {\it Input} variables are necessary to link up.
+
+\section{How to use the system?}
+Being a component of NRS and not supplying a GUI of its own, means that NRS GA must be configured using the NRS GUI component. Also, on top of this, NRS GA itself provides no means to control its program flow, e.g. starting and stopping experiments. This must be done using, e.g., NRS Control component and linking to the {\it StartGA} variable of the root node. Also, all nodes and links must be created (and deleted) using NRS GUI.
+
+\subsection{Command-line arguments for NRS.ga}
+The command-line arguments for NRS.ga are similar to those of other Java
+NRS components. These can be displayed onto a terminal by typing {\it
+./NRS.ga --help}.
+
+\end{document}
+
