@@ -1,0 +1,14 @@
+<NodeDescription name='CheckBoxNode' displayName='Check Box Node'>
+<Description>
+Represents a GUI CheckBox
+</Description>
+ <Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for CheckBox Button' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Attribute name='on' displayName='Default state' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+
+<Variable name='Output' displayName='Output' messageType='boolean' selfUpdating='true' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+</NodeDescription>

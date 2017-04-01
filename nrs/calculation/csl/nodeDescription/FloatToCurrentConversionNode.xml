@@ -1,0 +1,20 @@
+<NodeDescription name='FloatToCurrentConversionNode' displayName='Float to Current Node'>
+<Description>
+Converts floats to current
+</Description>
+<InGroup name='FloatConversionNode' displayName='Float Conversion Nodes' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Input' displayName='Input' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.0' />
+<Variable name='Input' displayName='Input' messageType='float' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='Current' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

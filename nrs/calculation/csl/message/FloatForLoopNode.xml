@@ -1,0 +1,5 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='FloatForLoopNode' >
+<Segment name='From' unit='float' />
+<Segment name='To' unit='float' />
+</Message>

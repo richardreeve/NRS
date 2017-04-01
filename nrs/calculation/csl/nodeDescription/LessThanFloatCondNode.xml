@@ -1,0 +1,27 @@
+<NodeDescription name='LessThanFloatCondNode' displayName='Float Less Than Node'>
+<Description>
+Outputs true if input less than value
+</Description>
+<InGroup name='ConditionNode' displayName='Condition Node' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Input' displayName='Input' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.0' />
+<Attribute name='CompareTo' displayName='CompareTo' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.0' />
+<Variable name='Input' displayName='Input' messageType='float' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='CompareTo' displayName='CompareTo' messageType='float' selfUpdating='false'  stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='boolean' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

@@ -1,0 +1,23 @@
+<NodeDescription name='GenomeNode' displayName='Genome Node' rootNode='false'>
+<Description>
+Genome Node.
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Contains type='GeneNode' minOccurs='1' maxOccurs='unbounded' />
+<Contains type='CalcNode' minOccurs='1' maxOccurs='1' />
+<Variable name='StartEx' displayName='StartEx' messageType='void' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+<Variable name='Go' displayName='Go' messageType='boolean' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+<Variable name='Evaluated' displayName='Evaluated' messageType='float' selfUpdating='true'  stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+</NodeDescription>

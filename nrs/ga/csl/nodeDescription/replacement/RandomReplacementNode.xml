@@ -1,0 +1,7 @@
+<NodeDescription name='RandomReplacementNode' displayName='Random Replacement Node' rootNode='false'>
+<Description>
+Random Replacement Node.
+</Description>
+<InGroup name='ReplacementNode' displayName='Type of GA Replacement strategy' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+</NodeDescription>

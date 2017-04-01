@@ -1,0 +1,23 @@
+<NodeDescription name='AddCalcNode' displayName='Addition Calculation Node' rootNode='false'>
+<Description>
+Calculation Node.
+</Description>
+<InGroup name='CalcNode' displayName='Type of Calculation Node' />
+<Contains type='EvaluationNode' minOccurs='1' maxOccurs='unbounded' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Variable name='Evaluation' displayName='Evaluation' messageType='float' selfUpdating='true' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Evaluated' displayName='Evaluated' messageType='float' selfUpdating='true' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+<Variable name='Go' displayName='Go' messageType='boolean' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+</NodeDescription>

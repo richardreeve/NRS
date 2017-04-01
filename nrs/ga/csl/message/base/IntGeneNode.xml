@@ -1,0 +1,8 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='IntGeneNode' >
+<Segment name='type' unit='string' />
+<Segment name='min' unit='integer' />
+<Segment name='max' unit='integer' />
+<Segment name='initial' unit='boolean' />
+<Segment name='value' unit='integer' />
+</Message>

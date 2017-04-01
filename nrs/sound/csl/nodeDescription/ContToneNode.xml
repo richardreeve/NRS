@@ -1,0 +1,28 @@
+<NodeDescription name='ContToneNode' displayName='Tone Node'>
+<Description>
+Creates a tone with specified parameters
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='SignalFreq' displayName='SignalFrequency' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='1000.0' />
+<Attribute name='Amplitude' displayName='Amplitude' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.7' />
+<Attribute name='WaveFormType' displayName='Wave(sine,triangle,square,sawtooth)' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='sine' />
+
+<Variable name='SignalFreq' displayName='SignalFreq' messageType='float' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Amplitude' displayName='Amplitude' messageType='float' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='WaveFormType' displayName='WaveFormType(sine,triangle,square,sawtooth)' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

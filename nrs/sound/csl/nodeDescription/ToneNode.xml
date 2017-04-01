@@ -1,0 +1,49 @@
+<NodeDescription name='ToneNode' displayName='Tone Node'>
+<Description>
+Creates a tone with specified parameters
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='SignalFreq' displayName='SignalFrequency' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='1000.0' />
+<Attribute name='Amplitude' displayName='Amplitude' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.7' />
+<Attribute name='secsOn' displayName='secsOn' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='1' />
+<Attribute name='secsOff' displayName='secsOff' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='1' />
+<Attribute name='WaveFormType' displayName='Wave(sine,triangle,square,sawtooth)' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='sine' />
+<Attribute name='OffFirst' displayName='OffFirst' unitName='boolean' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='false' />
+
+<Variable name='OffFirst' displayName='OffFirst' messageType='boolean' selfUpdating='false' occurrenceType='onChange' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='SignalFreq' displayName='SignalFreq' messageType='float' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Amplitude' displayName='Amplitude' messageType='float' selfUpdating='false'  stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='secsOn' displayName='secsOn' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='secsOff' displayName='secsOff' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='WaveFormType' displayName='WaveFormType(sine,triangle,square,sawtooth)' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

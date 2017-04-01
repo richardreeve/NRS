@@ -1,0 +1,8 @@
+<NodeDescription name='UniformCrossoverNode' displayName='Uniform Crossover Node' rootNode='false'>
+<Description>
+Uniform Crossover Node.
+</Description>
+<InGroup name='CrossoverNode' displayName='Type of GA Crossover' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='rate' displayName='Rate of crossover (0 to 100%)' unitName='integer' defaultValue='0' isConst='false' inNRSNamespace='false' liveChange='false' />
+</NodeDescription>

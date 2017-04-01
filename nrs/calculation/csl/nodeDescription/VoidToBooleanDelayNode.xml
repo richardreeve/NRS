@@ -1,0 +1,28 @@
+<NodeDescription name='VoidToBooleanDelayNode' displayName='Void To Boolean Delay Node'>
+<Description>
+converts void input to boolean true for duration of delay
+</Description>
+<InGroup name='VoidConversionNode' displayName='Void Conversion Nodes' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='msDelay' displayName='msDelay' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='2000' />
+
+<Variable name='Input' displayName='Input' messageType='void'
+selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='msDelay' displayName='msDelay' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='boolean' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

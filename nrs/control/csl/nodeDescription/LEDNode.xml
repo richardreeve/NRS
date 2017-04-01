@@ -1,0 +1,12 @@
+<NodeDescription name='LEDNode' displayName='Led Node'>
+<Description>
+Represents a GUI LED
+</Description>
+ <Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='on' displayName='Default state' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+<Attribute name='label' displayName='Label for LED' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Attribute name='holdTime' displayName='hold time for blink' mustHave='true' unitName='integer' defaultValue='700' isConst='false' inNRSNamespace='false' liveChange='true' />
+<Variable name='Input' displayName='Blink' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+</NodeDescription>

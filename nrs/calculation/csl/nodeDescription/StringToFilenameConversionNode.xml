@@ -1,0 +1,20 @@
+<NodeDescription name='StringToFilenameConversionNode' displayName='String to Filename Node'>
+<Description>
+Converts strings to filenames
+</Description>
+
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Input' displayName='Input' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='' />
+<Variable name='Input' displayName='Input' messageType='string' selfUpdating='false'  stateHolding='false'  >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='filename' selfUpdating='false'  stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

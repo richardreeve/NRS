@@ -1,0 +1,29 @@
+<NodeDescription name='VoidLatchNode' displayName='Void Latch Node'>
+<Description>
+Allows an void input to be passed on to the output if boolean input is set to true
+</Description>
+<InGroup name='LatchNode' displayName='Latch Node' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Condition' displayName='Condition' unitName='boolean' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='false' />
+
+<Variable name='Input' displayName='Input' messageType='void'
+selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Condition' displayName='Condition' messageType='boolean' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='void'
+selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

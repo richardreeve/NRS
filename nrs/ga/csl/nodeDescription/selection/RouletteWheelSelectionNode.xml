@@ -1,0 +1,7 @@
+<NodeDescription name='RouletteWheelSelectionNode' displayName='Roulette-Wheel Selection Node' rootNode='false'>
+<Description>
+Roulette-Wheel Selection Node.
+</Description>
+<InGroup name='SelectionNode' displayName='Type of GA Selection strategy' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+</NodeDescription>

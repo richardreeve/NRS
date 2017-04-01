@@ -1,0 +1,6 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='ToneNode' >
+<Segment name='WaveFormType' unit='string' />
+<Segment name='SignalFreq' unit='float' />
+<Segment name='Amplitude' unit='float' />
+</Message>

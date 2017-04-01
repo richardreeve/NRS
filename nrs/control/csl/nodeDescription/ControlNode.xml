@@ -1,0 +1,16 @@
+<NodeDescription name='ControlNode' displayName='Control Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+Root node for NRS.control component.
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Contains type='ButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='LEDNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='CheckBoxNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='FloatButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='FloatDisplayNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='IntegerButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='IntegerDisplayNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='StringButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='StringDisplayNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='TimeButtonNode' minOccurs='0' maxOccurs='unbounded' />
+</NodeDescription>

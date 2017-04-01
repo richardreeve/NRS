@@ -1,0 +1,512 @@
+<Capabilities xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0' cType='control' version='2.0-alpha' >
+<!-- Type name='boolean'>
+ <Description>
+The built-in type for messages with one truth value
+ </Description>
+</Type -->
+<!-- Type name='float'>
+ <Description>
+The built-in type for messages with one float or double argument.
+ </Description>
+</Type -->
+<!-- Type name='route'>
+ <Description>
+The built-in type for messages with one route argument.
+ </Description>
+</Type -->
+<!-- Type name='string'>
+ <Description>
+The built-in type for messages with one string argument.
+ </Description>
+</Type -->
+<!-- Type name='integer'>
+ <Description>
+The built-in type for messages with an integer argument, generally for an id.
+ </Description>
+</Type -->
+<!-- Type name='void'>
+ <Description>
+The built-in type for events (with no arguments).
+ </Description>
+</Type -->
+<Unit name='Capacitance' type='float'>
+ <Description>
+Capacitance is measured in Farads.
+ </Description>
+ <NumberInfo scale='p' abbreviation='F' minVal='0'/>
+</Unit>
+<Unit name='Conductance' type='float'>
+ <Description>
+Conductance is measured in Siemens.
+ </Description>
+ <NumberInfo scale='n' abbreviation='S' minVal='0'/>
+</Unit>
+<Unit name='Time' type='float'>
+ <Description>
+Time is measured in seconds.
+ </Description>
+ <NumberInfo scale='m' abbreviation='s' minVal='0'/>
+</Unit>
+<Unit name='Voltage' type='float'>
+ <Description>
+Voltage measures potential difference in Volts.
+ </Description>
+ <NumberInfo scale='m' abbreviation='V'/>
+</Unit>
+<Unit name='compass' type='string'>
+ <Description>
+The type for messages with one argument, which is a compass direction.
+ </Description>
+<StringInfo restriction='list'>
+ <ListMember value='north'/>
+ <ListMember value='east'/>
+ <ListMember value='south'/>
+ <ListMember value='west'/>
+</StringInfo>
+</Unit>
+<Unit name='filename' type='string'>
+ <Description>
+A string restricted to an alphanumeric sequence of characters which can also contain any valid characters for a filename.
+ </Description>
+<StringInfo restriction='filename'/>
+</Unit>
+<Unit name='token' type='string'>
+ <Description>
+A string restricted to an alphanumeric sequence of characters which can also contain the underscore character.
+ </Description>
+<StringInfo restriction='token'/>
+</Unit>
+<Unit name='vnname' type='string'>
+ <Description>
+A string restricted to a sequence of tokens separated by full stops, used for variable and node names.
+ </Description>
+<StringInfo restriction='vnname'/>
+</Unit>
+<Message name='CMemb' displayName='Basic membrane capacitance'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its basic membrane capacitance.
+ </Description>
+ <Segment name='CMemb' unit='Capacitance' segmentInContents='false'>
+ <Description>
+The basic membrane capacitance setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='CreateLink'>
+ <Description>
+The built-in type for messages which create links.
+ </Description>
+ <Segment name='cid' displayName='CID of source' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of source' unit='integer' segmentInContents='false'/>
+ <Segment name='targetCID' displayName='CID of target' unit='token' segmentInContents='false'/>
+ <Segment name='targetVNID' displayName='VNID of target' unit='integer' segmentInContents='false'/>
+ <Segment name='passOnRequest' displayName='Pass on request to other end?' unit='boolean' segmentInContents='false'/>
+ <Segment name='logPort' displayName='Port for logging connection' unit='route' segmentInContents='false'/>
+ <Segment name='temporary' displayName='A temporary connection?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='CreateNode'>
+ <Description>
+The built-in type for messages which create nodes.
+ </Description>
+ <Segment name='vnType' displayName='node type to create' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of node' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='node name' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='DeleteLink'>
+ <Description>
+The built-in type for messages which delete nodes.
+ </Description>
+ <Segment name='cid' displayName='CID of source' unit='token' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID of source' unit='integer' segmentInContents='false'/>
+ <Segment name='targetCID' displayName='CID of target' unit='token' segmentInContents='false'/>
+ <Segment name='targetVNID' displayName='VNID of target' unit='integer' segmentInContents='false'/>
+ <Segment name='passOnRequest' displayName='Pass on request to other end?' unit='boolean' segmentInContents='false'/>
+ <Segment name='logPort' displayName='Port for logging connection' unit='route' segmentInContents='false'/>
+</Message>
+<Message name='DeleteNode'>
+ <Description>
+The built-in type for messages which delete nodes.
+ </Description>
+ <Segment name='vnid' displayName='VNID of node' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='node name' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='GMemb' displayName='Basic membrane conductance'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its basic membrane conductance.
+ </Description>
+ <Segment name='GMemb' unit='Conductance' segmentInContents='false'>
+ <Description>
+The basic membrane conductance setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='MainLoop' displayName='System main loop'>
+ <Description>
+This variable/message type allows recipients to
+be added to the main loop of the source's program.
+ </Description>
+</Message>
+<Message name='MessageSender' displayName='System message sender'>
+ <Description>
+This variable/message type allows recipients to
+be told that their Node should send any outstanding messages.
+ </Description>
+</Message>
+<Message name='NSim' displayName='Neural simulator root variable'>
+ <Description>
+This variable/message type is the empty type for configuration messages to the neural simulator component
+ </Description>
+</Message>
+<Message name='Network' displayName='Network variable'>
+ <Description>
+This variable/message type is the empty type for configuration messages to a network component
+ </Description>
+</Message>
+<Message name='QueryCID'>
+ <Description>
+The built-in type for messages which query component IDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='port' displayName='outgoing port' unit='route' segmentInContents='false'/>
+ <Segment name='cid' displayName='suggested CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='QueryCSL'>
+ <Description>
+The built-in message for requests for CSL
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryCType'>
+ <Description>
+The built-in message for requests for CType
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryConnectedCIDs'>
+ <Description>
+The built-in type for messages which query a component to determine which components it is connected to.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cid' displayName='suggested CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='QueryLanguage'>
+ <Description>
+The built-in message for queries of languages capabilities
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryMaxVNID'>
+ <Description>
+The built-in message for requests for an upper bound for current VNID values
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryNumberType'>
+ <Description>
+The built-in message for queries of languages capabilities
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryRoute'>
+ <Description>
+The built-in message for queries of routes
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='forwardRoute' displayName='forward route' unit='route' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNID'>
+ <Description>
+The built-in message for queries of variable or node vnids from their names.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='VNName query' unit='vnname' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNName'>
+ <Description>
+The built-in message for queries of variable or node VNNames from their VNIDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID query' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='QueryVNType'>
+ <Description>
+The built-in message for queries of variable or node VNTypes from their VNIDs.
+ </Description>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='returnToVNID' displayName='return VNID' unit='integer' segmentInContents='false'/>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID query' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyCID'>
+ <Description>
+The built-in type for messages which reply to requests for component IDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='port' displayName='outgoing port' unit='route' segmentInContents='false'/>
+ <Segment name='cid' displayName='CID' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='ReplyCSL'>
+ <Description>
+The built-in message type for replies to requests for CSLs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='Capabilities' displayName='CSL reply' unit='string' segmentInContents='true'/>
+</Message>
+<Message name='ReplyCType'>
+ <Description>
+The built-in message type for replies to requests for CTypes.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='cType' displayName='CType reply' unit='token' segmentInContents='false'/>
+ <Segment name='cVersion' displayName='CVersion reply' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='ReplyLanguage'>
+ <Description>
+The built-in message type for replies to requests for language capabilities of a component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='speaksBMF' displayName='Speaks BMF?' unit='boolean' segmentInContents='false'/>
+ <Segment name='speaksPML' displayName='Speaks PML?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='ReplyMaxVNID'>
+ <Description>
+The built-in message type for replies to requests for an upper limit on VNIDs for this component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='MaxVNID reply' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyNumberType'>
+ <Description>
+The built-in message type for replies to requests for language capabilities of a component.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='maxBits' displayName='Max no. bits in integers' unit='integer' segmentInContents='false'/>
+ <Segment name='floatingPoint' displayName='Handles floating point?' unit='boolean' segmentInContents='false'/>
+</Message>
+<Message name='ReplyRoute'>
+ <Description>
+The built-in message type for replies to requests for Routes.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='forwardRoute' displayName='forward route' unit='route' segmentInContents='false'/>
+ <Segment name='returnRoute' displayName='return route' unit='route' segmentInContents='false'/>
+ <Segment name='translationCount' displayName='translation count' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNID'>
+ <Description>
+The built-in message type for replies to requests for VNIDs of variables or nodes from their VNNames.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnid' displayName='VNID reply' unit='integer' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNName'>
+ <Description>
+The built-in message type for replies to requests for VNNames of variables or nodes from their VNIDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnName' displayName='VNName reply' unit='vnname' segmentInContents='false'/>
+</Message>
+<Message name='ReplyVNType'>
+ <Description>
+The built-in message type for replies to requests for VNTypes of variables or nodes from their VNIDs.
+ </Description>
+ <Segment name='msgID' displayName='Message ID' unit='integer' segmentInContents='false'/>
+ <Segment name='vnType' displayName='VNType reply' unit='token' segmentInContents='false'/>
+</Message>
+<Message name='Reset'>
+ <Description>
+The built-in type for messages which reset the component.
+ </Description>
+</Message>
+<Message name='Spike' displayName='Spike'>
+ <Description>
+This variable/message type allows recipients to
+receive spikes.
+ </Description>
+</Message>
+<Message name='Timer' displayName='Real-time timer for neural simulator'>
+ <Description>
+This variable/message type is simply the timestep and the starting time of the simulation
+ </Description>
+ <Segment name='timestep' unit='Time' segmentInContents='false'>
+ <NumberInfo scale='m' minVal='0'/>
+</Segment>
+ <Segment name='simTime' unit='Time' segmentInContents='false'>
+ <NumberInfo scale='m' minVal='0'/>
+</Segment>
+</Message>
+<Message name='Updater' displayName='System updater'>
+ <Description>
+This variable/message type allows recipients to
+be told that their Node should update the state
+of all of its variables.
+ </Description>
+</Message>
+<Message name='VActual' displayName='Potential currently'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its current potential.
+ </Description>
+ <Segment name='VActual' unit='Voltage' segmentInContents='false'>
+ <Description>
+The current potential setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='VBaseMemb' displayName='Base membrane potential'>
+ <Description>
+This variable/message type allows recipients to
+be told that their Node has changed its base membrane potential.
+ </Description>
+ <Segment name='VBaseMemb' unit='Voltage' segmentInContents='false'>
+ <Description>
+The base membrane potential setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='VRecovery' displayName='Potential after spike'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its recovery potential after spiking.
+ </Description>
+ <Segment name='VRecovery' unit='Voltage' segmentInContents='false'>
+ <Description>
+The spiking recovery potential setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='VTarget' displayName='Potential after decay'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its target potential, the value to which VActual will decay over time.
+ </Description>
+ <Segment name='VTarget' unit='Voltage' segmentInContents='false'>
+ <Description>
+The decay potential setting.
+ </Description>
+</Segment>
+</Message>
+<Message name='VThreshold' displayName='Spiking threshold potential'>
+ <Description>
+This variable/message type allows recipients to be
+told that their Node has changed its spiking threshold potential.
+ </Description>
+ <Segment name='VThreshold' unit='Voltage' segmentInContents='false'>
+ <Description>
+The spiking threshold potential setting.
+ </Description>
+</Segment>
+</Message>
+
+<NodeDescription name='ControlNode' displayName='Control Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+A Control Node which allows users to add Java JButtons (representing ButtonNodes) to a simple external GUI, and setup events to occur when buttons are clicked on.
+</Description>
+<Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Contains type='ButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='LEDNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='CheckBoxNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='DoubleButtonNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='DoubleDisplayNode' minOccurs='0' maxOccurs='unbounded' />
+</NodeDescription>
+
+<NodeDescription name='ButtonNode' displayName='Button Node'>
+<Description>
+Represents a button, with a label, which triggers an event when clicked on.
+</Description>
+<Attribute name='name' displayName='Node name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for Button' unitName='token' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+
+<Variable name='Output' displayName='Output' messageType='Spike' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+
+</NodeDescription>
+
+<NodeDescription name='LEDNode' displayName='Led Node'>
+<Description>
+Represents a GUI LED
+</Description>
+ <Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='on' displayName='Default state' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+<Attribute name='label' displayName='Label for LED' unitName='token' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Attribute name='holdTime' displayName='hold time for blink' mustHave='true' unitName='integer' defaultValue='700' isConst='false' inNRSNamespace='false' liveChange='true' />
+<Variable name='input' displayName='Blink' messageType='Spike' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='0' maxOccurs='5' autoConnect='false' />
+</Variable>
+</NodeDescription>
+
+<NodeDescription name='CheckBoxNode' displayName='Check Box Node'>
+<Description>
+Represents a GUI CheckBox
+</Description>
+ <Attribute name='name' displayName='Name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for CheckBox Button' unitName='token' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Attribute name='on' displayName='Default state' mustHave='true' unitName='boolean' isConst='false' inNRSNamespace='false' liveChange='true' defaultValue='false'/>
+<Variable name='Output' displayName='Output' messageType='boolean' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+</NodeDescription>
+
+<NodeDescription name='DoubleButtonNode' displayName='Double Button Node'>
+<Description>
+Represents a button, with a label, which triggers an event when clicked on.
+</Description>
+<Attribute name='name' displayName='Node name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for Button' unitName='token' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Attribute name='value' displayName='Initial double value' unitName='float' isConst='false'  defaultValue='0.0' inNRSNamespace='false' liveChange='false'  />
+
+<Variable name='Output' displayName='Output' messageType='float' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+
+<Variable name='Go' displayName='Go' messageType='boolean' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+</NodeDescription>
+
+<NodeDescription name='DoubleDisplayNode' displayName='Double Display Node'>
+<Description>
+Represents a Swing JPanel with a JLabel and a JTextField for displaying double numbers.
+</Description>
+<Attribute name='name' displayName='Node name' unitName='token' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for label' unitName='token' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+
+<Variable name='Input' displayName='Input' messageType='float' selfUpdating='true' occurrenceType='onChange' stateHolding='true' variableMessageType='false' numberType='floating' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+</NodeDescription>
+</Capabilities>

@@ -1,0 +1,46 @@
+<NodeDescription name='IntForLoopNode' displayName='IntForLoop Node'>
+<Description>
+For loop using integer inputs and output
+</Description>
+<InGroup name='ForLoopNode' displayName='For Loop Node' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='From' displayName='From' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0' />
+<Attribute name='To' displayName='To' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0' />
+
+<Variable name='From' displayName='From' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='To' displayName='To' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='At' displayName='At' messageType='integer' selfUpdating='false'  stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+<Variable name='Reset' displayName='Reset' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Next' displayName='Next' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='AllFinished' displayName='AllFinished' messageType='boolean' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

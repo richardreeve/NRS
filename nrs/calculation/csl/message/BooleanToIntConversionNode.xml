@@ -1,0 +1,4 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='BooleanToIntConversionNode' >
+<Segment name='Input' unit='boolean' />
+</Message>

@@ -1,0 +1,8 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='FloatGeneNode' >
+<Segment name='type' unit='string' />
+<Segment name='min' unit='float' />
+<Segment name='max' unit='float' />
+<Segment name='initial' unit='boolean' />
+<Segment name='value' unit='float' />
+</Message>

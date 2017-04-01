@@ -1,0 +1,30 @@
+<NodeDescription name='SoundNode' displayName='Sound Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+A Sound Node which acts as a root node
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Enabled' displayName='Enabled' unitName='boolean'
+isConst='false'  inNRSNamespace='false' liveChange='true'
+defaultValue='false' />
+<Attribute name='Repeating' displayName='Repeating' unitName='boolean' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='false' />
+<Contains type='Speakers' minOccurs='0' maxOccurs='unbounded' />
+
+<Variable name='Go' displayName='Go' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Enabled' displayName='Enabled' messageType='boolean' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Repeating' displayName='Repeating' messageType='boolean' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

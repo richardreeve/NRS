@@ -1,0 +1,30 @@
+<NodeDescription name='IntegerValueNode' displayName='Integer Value Node' rootNode='false'>
+<Description>
+Integer Value Node.
+</Description>
+<InGroup name='ValueNode' displayName='Type of Value Node' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='value' displayName='Value' unitName='integer' defaultValue='0.0' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Variable name='Trigger' displayName='Trigger' messageType='void' selfUpdating='false' stateHolding='false'>
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Output' displayName='Output' messageType='integer'
+selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+<Variable name='Input' displayName='Input' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Consistent' displayName='Consistent' messageType='boolean'
+selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+</NodeDescription>

@@ -1,0 +1,21 @@
+<NodeDescription name='FloatNode' displayName='Float Node'>
+<Description>
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+
+<Variable name='Time' displayName='Time' messageType='Time' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Value' displayName='Value' messageType='float' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Reset' displayName='Reset' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+</NodeDescription>

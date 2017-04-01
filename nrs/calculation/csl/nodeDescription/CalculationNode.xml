@@ -1,0 +1,20 @@
+<NodeDescription name='CalculationNode' displayName='Calculation Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+A Calculation Node which acts as a root node
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Contains type='FloatArithmeticNodes' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='IntegerArithmeticNodes' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='BooleanOperationNodes' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='DeltaNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='ForLoopNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='ConditionNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='LatchNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='DelayNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='FloatConversionNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='StringToFilenameConversionNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='StringConcatNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='IntConversionNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='VoidConversionNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='BooleanConversionNode' minOccurs='0' maxOccurs='unbounded' />
+</NodeDescription>

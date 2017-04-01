@@ -1,0 +1,25 @@
+<NodeDescription name='GANode' displayName='GA Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+Top level node, which allows users to build and use a GA for optimising parameters of neural circuits.
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='epochs' displayName='Number of epochs (generations)' unitName='integer' defaultValue='1' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Attribute name='IntegerType' displayName='IntegerType' unitName='boolean' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='false' />
+<Contains type='PopulationNode' minOccurs='1' maxOccurs='1' />
+<Contains type='RNGNode' minOccurs='1' maxOccurs='1' />
+<Variable name='StartGA' displayName='StartGA' messageType='boolean' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+<Variable name='StartRun' displayName='StartRun' messageType='boolean' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+<Variable name='FinishedRun' displayName='FinishedRun' messageType='void' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+</NodeDescription>

@@ -1,0 +1,39 @@
+<NodeDescription name='EvaluationNode' displayName='Evaluation Node' rootNode='false'>
+<Description>
+Evaluation Node.
+</Description>
+<Contains type='ValueNode' minOccurs='0' maxOccurs='unbounded' />
+
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+
+<Variable name='StartEx' displayName='StartEx' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='StartNextEx' displayName='StartNextEx' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+<Variable name='Evaluation' displayName='Evaluation' messageType='float' selfUpdating='true' stateHolding='false' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+<Variable name='Trigger' displayName='Trigger' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='true' />
+</Variable>
+<Variable name='Go' displayName='Go' messageType='boolean' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='true' />
+</Variable>
+<Variable name='Consistent' displayName='Consistent' messageType='boolean' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='true' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+</NodeDescription>

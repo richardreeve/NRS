@@ -1,0 +1,5 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='EqualsFloatCondNode' >
+<Segment name='Input' unit='float' />
+<Segment name='CompareTo' unit='float' />
+</Message>

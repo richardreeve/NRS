@@ -1,0 +1,21 @@
+<NodeDescription name='SpeakerNode' displayName='Speaker Node'>
+<Description>
+Speaker node which uses the both speaker
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Balance' displayName='Balance' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.0' />
+<InGroup name='Speakers' displayName='Speakers' />
+<Contains type='ToneNode' minOccurs='0' maxOccurs='unbounded' />
+<Variable name='Balance' displayName='Balance' messageType='float' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='ToneOrdering' displayName='ToneOrdering' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

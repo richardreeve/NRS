@@ -1,0 +1,27 @@
+<NodeDescription name='StringConcatNode' displayName='String Concat Node'>
+<Description>
+Allows the user to concatenate strings
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Input1' displayName='Input1' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='' />
+<Attribute name='Input2' displayName='Input2' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='' />
+
+<Variable name='Input1' displayName='Input1' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Input2' displayName='Input2' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='string' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

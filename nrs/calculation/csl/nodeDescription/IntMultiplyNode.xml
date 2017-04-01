@@ -1,0 +1,28 @@
+<NodeDescription name='IntMultiplyNode' displayName='Integer Multiply Node'>
+<Description>
+Allows the user to multiply outputs from other nodes.
+</Description>
+<InGroup name='IntegerArithmeticNodes' displayName='Integer Arithmetic Nodes' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='Input1' displayName='Input1' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0' />
+<Attribute name='Input2' displayName='Input2' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0' />
+
+<Variable name='Input1' displayName='Input1' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Input2' displayName='Input2' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

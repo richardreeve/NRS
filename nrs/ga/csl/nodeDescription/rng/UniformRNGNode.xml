@@ -1,0 +1,7 @@
+<NodeDescription name='UniformRNGNode' displayName='Uniform RNG Node' rootNode='false'>
+<Description>
+A Random Number Generator Node which generates random numbers from a unifrom distribution.
+</Description>
+<InGroup name='RNGNode' displayName='Type of Random Number Generator' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+</NodeDescription>

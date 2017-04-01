@@ -1,0 +1,5 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='EqualsIntCondNode' >
+<Segment name='Input' unit='integer' />
+<Segment name='CompareTo' unit='integer' />
+</Message>

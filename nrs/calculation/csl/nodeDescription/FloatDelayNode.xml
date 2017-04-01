@@ -1,0 +1,28 @@
+<NodeDescription name='FloatDelayNode' displayName='Float Delay Node'>
+<Description>
+Allows an float input to be passed on to the output if boolean input is set to true
+</Description>
+<InGroup name='DelayNode' displayName='Delay Node' />
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='msDelay' displayName='msDelay' unitName='integer' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='2000' />
+<Attribute name='Input' displayName='Input' unitName='float' isConst='false'  inNRSNamespace='false' liveChange='true' defaultValue='0.0' />
+
+<Variable name='Input' displayName='Input' messageType='float' selfUpdating='true'  stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='msDelay' displayName='msDelay' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='1' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='Output' displayName='Output' messageType='float' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='1' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

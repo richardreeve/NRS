@@ -1,0 +1,34 @@
+<NodeDescription name='OscilloscopeNode' displayName='Oscilloscope Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+Oscilloscope Node
+</Description>
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='time' displayName='Time' unitName='Time' isConst='false' inNRSNamespace='false' liveChange='false' defaultValue='0.0' />
+<Attribute name='timestep' displayName='TimeStep' unitName='Time' isConst='false' inNRSNamespace='false' liveChange='false' defaultValue='1.0' />
+
+<Contains type='FloatNode' minOccurs='0' maxOccurs='unbounded' />
+<Contains type='VoidNode' minOccurs='0' maxOccurs='unbounded' />
+
+<Variable name='Time' displayName='Time' messageType='Time' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='unbounded' autoConnect='true' />
+</Variable>
+
+<Variable name='Counter' displayName='Counter' messageType='void' selfUpdating='true' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+
+<Variable name='TimeStep' displayName='TimeStep' messageType='Time' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='0' autoConnect='false' />
+</Variable>
+<Variable name='Reset' displayName='Reset' messageType='void' selfUpdating='false' stateHolding='false' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='unbounded' autoConnect='true' />
+</Variable>
+</NodeDescription>

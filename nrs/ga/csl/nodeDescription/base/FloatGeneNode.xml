@@ -1,0 +1,19 @@
+<NodeDescription name='FloatGeneNode' displayName='Float Gene Node' rootNode='false'>
+<Description>
+Float Gene Node.
+</Description>
+<InGroup name='GeneNode' displayName='GeneNode' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='type' displayName='Type of parameter, e.g. CMemb' unitName='string' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Attribute name='min' displayName='Minimum value of parameter' unitName='float' defaultValue='0' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Attribute name='max' displayName='Maximum value of parameter' unitName='float' defaultValue='0' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Attribute name='initial' displayName='Use initial value' unitName='boolean' defaultValue='false' isConst='false' inNRSNamespace='false' liveChange='false' />
+<Attribute name='value' displayName='Starting value (initial must be true)' unitName='float' defaultValue='0' isConst='false' inNRSNamespace='false' liveChange='false' />
+
+<Variable name='Value' displayName='Value' messageType='float' selfUpdating='true' stateHolding='true' >
+<Interface direction='in' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+
+</NodeDescription>

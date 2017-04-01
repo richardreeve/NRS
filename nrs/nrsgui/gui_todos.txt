@@ -1,0 +1,87 @@
+----------------------------------------------------------------------
+TOP PRIORITY
+----------------------------------------------------------------------
+
+* Too much work being done on the main event-dispatching thread (a.k.a.
+the Swing Thread). This is causing several bugs, e.g. the black-box bug where
+node boxes are painted black, and either remain black or repaint correctly when
+mouse cursor is moved over it.
+
+* Implement the Discovery Process. This process will allow the GUI to discover
+an existing NRS network, including nodes and links, and their states.
+
+* Stop Attribute editor throwing exceptions when an entry is blank. Should do
+checking when OK is clicked.
+
+* Show status information. Split status bar to display status information about
+performed operations, e.g. display 'Saved' when user saves a network. Improve
+UI design.
+
+* Automatic generation of CSL from source code. This would be ideal, for
+severalreasons. The main one being to improve consistency between the
+CSL and the actual code. It would also greatly reduce the hassle for new users.
+
+----------------------------------------------------------------------
+MEDIUM PRIORITY
+----------------------------------------------------------------------
+
+* For fast linking method, we will need to see the name of the variable
+  belonging to an interface as the mouse hovers over. Add this tool tip
+  support (doubt I can use JToolTip).
+
+* Response of variables to being clicked - eg, prep the popup menu for
+  variable actions. This is the general category of variable
+  manipulation.
+
+* The <NumberInfo/> minVal and MaxVal attributes aren't being used in
+  the Attributes dialog - any number is okay, even though two of the
+  attributes are conductance and capacitance which are
+  non-negative. This is the general category of attribute validation.
+
+* There should also be a right click option on the network browser to
+edit the item selected (ie to return to the attributes dialog). Ie., add
+a properties editor, which may or maynot be the same thing as the
+initial attributes editor dialog displayed when a node is first created.
+
+* As I said before, it would be nice to have a text printout in the
+types browser for the nodes.
+
+* The repainting in the NetworkBrowser is very inefficient. Currently
+  clip regions are not being used, which means repaint requests result
+  in a larger that necessary area being repainted.
+
+----------------------------------------------------------------------
+LOW PRIORITY
+----------------------------------------------------------------------
+
+* When a ReplyCType is used to load a CSL, the GUI should compare the
+  version numbers in the ReplyCType and the stored CSL - if they
+  don't match, then a warning should be generated.
+
+* Toolbox windows are always appearing ontop of the node browser
+
+* Network navigator window (JTree view on the network)
+
+* Zoomed out view of the current network level - for an example, view
+  the JGraph examples on the JGraph home page, or also try running
+  JGraphPad. Basically the zoomed out view is a separate toolbox window
+  which shows the complete network in minature, together with a
+  rectangle indicating where the currently selected Network browser is
+  positioned at.
+
+* It would also be nice in the Attributes dialog to have a description
+of the type you are clicked on, and the information on where that gets
+used.
+
+* The javadoc usage by the makefile is not including java files in
+  subdirectories two levels or more below nrs/
+
+* BUG-FIX: Object layering not working for variables. Cannot do a
+  send-to-back on a collection of variable that have not had their
+  layers previously adjusted.
+
+* BUG-AVOID: Make a check for variables within a Node that share either
+  the same Name or DisplayName, since the latter especially if often
+  used for JMenuItem text and event detection in the callback. For that
+  to work, the variables must all be unique.
+(END)

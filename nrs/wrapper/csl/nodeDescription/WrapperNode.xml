@@ -1,0 +1,10 @@
+<NodeDescription name='WrapperNode' displayName='Wrapper Node' rootNode='true' rootMinOccurs='0' rootMaxOccurs='1'>
+<Description>
+A simple component that spawns subprocesses to allow arbitrary programs to be executed with given arguments. 
+</Description>
+
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+
+<Contains type='ExecuteNode' minOccurs='1' maxOccurs='unbounded' />
+
+</NodeDescription>

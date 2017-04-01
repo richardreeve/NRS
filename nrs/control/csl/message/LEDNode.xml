@@ -1,0 +1,6 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0'
+name='LEDNode' >
+<Segment name='label' unit='string' />
+<Segment name='on' unit='boolean' />
+<Segment name='holdTime' unit='integer' />
+</Message>

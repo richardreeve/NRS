@@ -1,0 +1,88 @@
+Getting Started Writing a Java Component
+
+It is possible to write Java-based NRS components completely from scratch, that
+is, without using any of the current Java framework. This would require
+implementing the entire NRS protocol from the beginning. Although this approach
+is possible, it is very strongly discouraged, especially for new users to
+NRS. With this is mind, the Java framework was designed with as much flexibility
+as possible, allowing each designed to adopt their own design methodology. The
+rest of this document describes the recommended methodology, providing a concise
+outline to good design practice.
+
+Note that the best way to learn to write Java components, once this
+document has been read, is to look at existing components. NRS.control,
+NRS.wrapper and NRS.datalogger serve as good starting points for new
+users. NRS.gui is not a good example because it functions as a
+'special' component, which does not have CSL. 
+
+The Java code for NRS is in folder 'nrs2/nrs'. Component code is stored
+in a folder named after the component e.g. NRS.control is in
+'nrs2/nrs/control'. Java package names are taken from the 'nrs'
+directory, since the build scripts run from the top-level 'nrs2'
+directory. For example, the package name for the Control component is
+'nrs.control'. To be able to run your component NRS.myComponentonent,
+using the executable scripts setup, you must add it to configure.ac script 
+in 'nrs2' - see HOWTO_Add_New_Java_Script_To_Build_System.txt for more details.
+
+In your component's folder you will need to add a Makefile.am (for
+Makefile system) AppManager.java (Application manager),
+nrsmyComponent.java (Application entry-point) and PackageLogger.java
+(Application logging) files, which can be copied from an existing
+component's folder and altered for your component. These files
+constitute the basic setup for a component, using the recommended
+setup. You will then need to write a class MyComponent.java (you can
+look at ControlComponent.java and CalculationComponent.java for
+examples). This class will extend class 'nrs.core.base.BaseComponent',
+and you must override the methods handleMessageAt_DeleteNode and
+handleMessageAt_CreateNode, so that they create/delete instances of your
+nodes when required (this can also be copied and changed from other
+components). Then, depending on the type of component, i.e whether the
+component has a graphical user interface (GUI), additional files,
+excluding node files, may be required. For example, NRS.control does
+have a GUI, while NRS.wrapper does not. The recommended starting point is a file called MainFrame.java.
+
+For small components, or components with a small CSL description, it is possible
+to create one xml file containing the CSL description. This file could be stored in the
+'nrs2/nrs/myComponent' directory and the Makefile would locate it
+accordingly. However, for larger CSL descriptions (e.g. component with many
+nodes), the following structure is recommended for ease of use. Here the CSL for a
+component is stored in its own directory 'nrs2/nrs/myComponent/csl'. Within this directory there are then 2 folders, /nodeDescription, which contains the xml used by the GUI to
+create the nodes, and /message which contains xml used to describe the
+message types of the nodes. Each node you write must have a
+corresponding xml file named after it in both folders. For example, if you have 
+written a class MyNode.java, you will have 2 files named MyNode.xml, one 
+in 'csl/message' and one in 'csl/nodeDescription'. The file MyNode in 
+'/nodeDescription' will specify the description of the node according to the CSL
+standard, e.g. see
+'nrs/calculation/csl/nodeDescription/CalculationNode.xml'. The second
+xml file will describe the node's message type. Additionally, two other
+files are required. These, which can be seen in any of the example
+components, are the preamble and end xml files. The end file simply
+closes the root element of the xml file, while the preamble serves a
+more functional role. This file is used to describe the standard message
+types, units and basic types that the component recognises. For most
+components these two files are identical.
+
+To create nodes it is only necessary to extend from
+'nrs.core.base.Node', which inherits from 'nrs.core.base.Variable'. By
+convention, classes representing nodes are called xNode.java, where 'x'
+is the name of the node. If a node is a root node, then it is necessary,
+when this node is created, to add it to te BaseComponents list of root
+nodes. See one of the example Component classes for the appropriate code.
+
+A node must also implement the abstract method 'deliver', inherited from
+'nrs.core.base.Variable'. This method is used to deliver messages, which
+contain attribute values, targeted at the node. If a node has
+state-holding variables, their initial value should be set from the
+appropriate attribute value.
+
+To create variables it is necessary to instantiate objects of either a basic
+type, e.g. a string, or a unit, e.g. filename. Basic types are found in
+'nrs.core.type' and units are in 'nrs.core.unit'. Generally, variables
+are created in the constructor of a node. When calling the constructor
+of a variable it is necessary to define whether it is state-holding and
+self-updating. Also it is required to override two methods, both called
+deliver. One is identical to that required by nodes, the other is
+necessary for handling links on the same component. These methods are
+used to received messages and handle incoming data. Finally, it is also
+vital to add all variables to a variable manager.

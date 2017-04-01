@@ -1,0 +1,8 @@
+<NodeDescription name='TournamentSelectionNode' displayName='Binary Tournament Selection Node' rootNode='false'>
+<Description>
+Binary Tournament Selection Node.
+</Description>
+<InGroup name='SelectionNode' displayName='Type of GA Selection strategy' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='rate' displayName='Rate that fitter wins in tournament between two chromosomes (0 to 100%)' unitName='integer' defaultValue='75' isConst='false' inNRSNamespace='false' liveChange='false' />
+</NodeDescription>

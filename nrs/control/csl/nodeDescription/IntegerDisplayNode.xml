@@ -1,0 +1,12 @@
+<NodeDescription name='IntegerDisplayNode' displayName='Integer Display Node'>
+<Description>
+Represents a Swing JPanel with a JLabel and a JTextField for displaying integer numbers.
+</Description>
+<Attribute name='name' displayName='Node name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+<Attribute name='label' displayName='Label for label' unitName='string' isConst='false'  inNRSNamespace='false' liveChange='false'  />
+<Variable name='Input' displayName='Input' messageType='integer' selfUpdating='false' stateHolding='true' >
+<Interface direction='in' minOccurs='1' maxOccurs='unbounded' autoConnect='false' />
+<Interface direction='log' minOccurs='0' maxOccurs='0' autoConnect='false' />
+<Interface direction='out' minOccurs='0' maxOccurs='unbounded' autoConnect='false' />
+</Variable>
+</NodeDescription>

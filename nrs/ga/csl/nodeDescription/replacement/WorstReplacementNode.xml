@@ -1,0 +1,7 @@
+<NodeDescription name='WorstReplacementNode' displayName='Worst Replacement Node' rootNode='false'>
+<Description>
+Worst Replacement Node.
+</Description>
+<InGroup name='ReplacementNode' displayName='Type of GA Replacement strategy' />
+<Attribute name='name' displayName='Name' unitName='vnname' isConst='false' inNRSNamespace='true' liveChange='false' />
+</NodeDescription>

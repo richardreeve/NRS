@@ -1,0 +1,3 @@
+<Message xmlns='http://www.ipab.inf.ed.ac.uk/cricketlab/nrs/csl/1.0' name='ButtonNode' >
+<Segment name='label' unit='string' />
+</Message>
