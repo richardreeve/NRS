@@ -22,5 +22,5 @@
 lib_LTLIBRARIES = libBMFInterface.la
 libBMFInterface_la_SOURCES = FileBMFInterface.cc BMFParser.cc
 #libBMFInterface_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

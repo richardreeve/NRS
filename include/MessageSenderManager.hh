@@ -24,7 +24,6 @@
 #ifndef _MESSAGE_SENDER_MANAGER_HH
 #define _MESSAGE_SENDER_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VoidManager.hh"

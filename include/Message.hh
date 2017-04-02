@@ -24,8 +24,6 @@
 #ifndef _MESSAGE_HH
 #define _MESSAGE_HH
 
-#pragma interface
-
 #include <vector>
 
 #include "IntelligentStore.hh"

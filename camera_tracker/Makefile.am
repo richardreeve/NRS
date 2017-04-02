@@ -42,5 +42,5 @@ rescalib_SOURCES = ColourCluster.cc ColourClusterSet.cc \
 rescalib_LDFLAGS = $(OPENCV_LIBRARY) $(CCVT_LIBRARY) \
 	 -L../camera -L../Base -L../Type -L../Unit -L../Message -lWebcam \
 	-lopencv -lhighgui -lccvt -lBase -lTypes -lUnits -lMessages -lDummyPlugin
-INCLUDES = -I$(top_srcdir)/include $(OPENCV_INCLUDE) $(CCVT_INCLUDE)
+AM_CPPFLAGS = -I$(top_srcdir)/include $(OPENCV_INCLUDE) $(CCVT_INCLUDE)
 SUBDIRS =

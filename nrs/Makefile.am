@@ -102,8 +102,6 @@ NRS.wrapper$(EXEEXT): Makefile
 
 if JAVADOC_ACTIVE
 
-htmldir = $(prefix)/share/$(PACKAGE)-$(VERSION)/html/javadoc
-
 noinst_PROGRAMS = doc.timestamp
 
 doc_timestamp_SOURCES = $(shell find ${srcdir}/.. -name "*.java")

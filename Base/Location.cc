@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Executive.hh"
 #include "Location.hh"
 

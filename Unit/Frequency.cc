@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Frequency.hh"
 #include "FrequencyManager.hh"
 #include "VariableNodeDirector.hh"

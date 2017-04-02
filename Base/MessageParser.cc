@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageParser.hh"
 #include "MessageStore.hh"
 #include "PMLParser.hh"

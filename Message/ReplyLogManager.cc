@@ -22,6 +22,7 @@
  */
 
 #include <string>
+
 #include "ReplyLog.hh"
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
@@ -32,8 +33,6 @@
 #include "ExternalInterface.hh"
 #include "Interface.hh"
 #include "Target.hh"
-
-#pragma implementation
 #include "ReplyLogManager.hh"
 
 namespace

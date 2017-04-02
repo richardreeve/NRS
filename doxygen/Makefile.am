@@ -23,10 +23,6 @@ SUBDIRS =
 
 if DOXYGEN_ACTIVE
 
-htmldir = $(prefix)/share/$(PACKAGE)-$(VERSION)/html/doxygen
-
-pdfdir = $(prefix)/share/$(PACKAGE)-$(VERSION)/doc
-
 noinst_PROGRAMS = doc.timestamp
 
 doc_timestamp_SOURCES = $(filter-out ${top_srcdir}/camera_tracker/%	\

@@ -24,7 +24,6 @@
 #ifndef _CREATE_NODE_MANAGER_HH
 #define _CREATE_NODE_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

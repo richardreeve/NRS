@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include <string>
 
 #include "Evaluation.hh"

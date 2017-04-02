@@ -24,8 +24,6 @@
 #ifndef _PERIODIC_TRIGGER_HH
 #define _PERIODIC_TRIGGER_HH
 
-#pragma interface
-
 #include "Node.hh"
 #include "Variable.hh"
 #include "VariableManager.hh"

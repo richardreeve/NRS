@@ -24,7 +24,6 @@
 #ifndef _REPLY_VNID_MANAGER_HH
 #define _REPLY_VNID_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

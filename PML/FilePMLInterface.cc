@@ -29,8 +29,6 @@
 #include "ArgumentDirector.hh"
 #include "ArgumentFielder.hh"
 #include "PMLParser.hh"
-
-#pragma implementation
 #include "FilePMLInterface.hh"
 
 namespace NRS

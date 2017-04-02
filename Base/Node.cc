@@ -23,7 +23,6 @@
 
 #include <list>
 
-#pragma implementation
 #include "Node.hh"
 #include "Variable.hh"
 #include "VariableNodeDirector.hh"

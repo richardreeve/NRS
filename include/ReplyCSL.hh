@@ -24,7 +24,6 @@
 #ifndef _REPLY_CSL_HH
 #define _REPLY_CSL_HH
 
-#pragma interface
 #include <string>
 #include <map>
 

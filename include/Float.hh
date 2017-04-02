@@ -24,8 +24,6 @@
 #ifndef _FLOAT_HH
 #define _FLOAT_HH
 
-#pragma interface
-
 #include <string>
 #include <vector>
 

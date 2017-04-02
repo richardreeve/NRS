@@ -34,7 +34,6 @@ java_JAVA = \
 	FindWindow.class  \
 	DisplayWindow.class
 
-
 # Not sure if this is needed, or what use is made of it. For a hint to
 # its use, see the Makefile eventually produced, and search for its
 # existence there.
@@ -56,9 +55,8 @@ SOURCEPATH = ${top_srcdir}/@JAVA_GUI_PATH@
 # the 'top_builddir' variable
 DESTPATH = ${top_builddir}/@JAVA_GUI_PATH@
 
-
-%.class : %.java ;
-	@JAVAC@ -d $(DESTPATH) -sourcepath $(SOURCEPATH) $<
+%.class: %.java
+	@JAVAC@ -d $(DESTPATH) -classpath $(SOURCEPATH):${DESTPATH} $<
 
 classjava.stamp: $(java_JAVA)
 	echo timestamp > classjava.stamp

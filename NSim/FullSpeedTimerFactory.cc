@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "TimerFactory.hh"
 #include "SimTime.hh"
 #include "Timer.hh"

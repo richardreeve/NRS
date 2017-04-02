@@ -25,7 +25,7 @@ csldir = $(prefix)/share/$(PACKAGE)-$(VERSION)/csl
 
 csl_DATA = Khepera2.xml Atmel.xml
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS = atmel_csl kh2_csl common_csl
 
 SUFFIXES = .srec .hex .xml

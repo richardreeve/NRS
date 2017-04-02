@@ -24,8 +24,6 @@
 #ifndef _AXON_SPIKE_HH
 #define _AXON_SPIKE_HH
 
-#pragma interface
-
 #include <queue>
 #include <cmath>
 

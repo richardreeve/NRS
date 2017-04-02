@@ -25,9 +25,7 @@
 #include <dlfcn.h>
 #include <libgen.h>
 
-#pragma implementation
 #include "VariableNodeDirector.hh"
-
 #include "VariableManager.hh"
 #include "NodeFactory.hh"
 #include "Variable.hh"

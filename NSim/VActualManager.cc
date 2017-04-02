@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "VActualManager.hh"
 
 namespace

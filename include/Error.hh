@@ -25,9 +25,8 @@
 #define _ERROR_HH
 
 #include <string>
-#include "Variable.hh"
 
-#pragma interface
+#include "Variable.hh"
 
 namespace NRS
 {

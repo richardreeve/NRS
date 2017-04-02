@@ -36,8 +36,6 @@
 
 #include "BufferedInterface.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Interface

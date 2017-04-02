@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "TrackerSingleton.hh"
 
 NRS::Tracker::TrackerSingleton* NRS::Tracker::TrackerSingleton::sTrackerSingleton;

@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Conductance.hh"
 #include "ConductanceManager.hh"
 #include "FloatManager.hh"

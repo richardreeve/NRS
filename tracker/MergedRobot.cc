@@ -21,6 +21,5 @@
  *
  */
 
-#pragma implementation
 #include "MergedRobot.hh"
 

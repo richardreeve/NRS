@@ -26,7 +26,6 @@
 
 #include <cstring>
 
-#pragma interface
 #include "Exception.hh"
 #include "ArgumentFielder.hh"
 

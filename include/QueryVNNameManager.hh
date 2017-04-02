@@ -24,7 +24,6 @@
 #ifndef _QUERY_VNNAME_MANAGER_HH
 #define _QUERY_VNNAME_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

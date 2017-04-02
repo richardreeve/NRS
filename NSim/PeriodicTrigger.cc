@@ -21,5 +21,4 @@
  *
  */
 
-#pragma implementation
 #include "PeriodicTrigger.hh"

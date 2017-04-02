@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Filename.hh"
 #include "FilenameManager.hh"
 #include "StringLiterals.hh"

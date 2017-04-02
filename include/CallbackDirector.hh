@@ -25,10 +25,9 @@
 #define _CALLBACK_DIRECTOR_HH
 
 #include <vector>
+
 #include "Exception.hh"
 #include "Types.hh"
-
-#pragma interface
 
 namespace NRS
 {

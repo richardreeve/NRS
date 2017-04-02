@@ -24,8 +24,6 @@
 #ifndef _SEGMENT_DESCRIPTION_HH
 #define _SEGMENT_DESCRIPTION_HH
 
-#pragma interface
-
 #include <iostream>
 #include <string>
 

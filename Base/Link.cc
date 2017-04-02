@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include "Encoding.hh"
 #include "Exception.hh"
 #include "IntelligentStore.hh"

@@ -24,7 +24,6 @@
 #ifndef _SPIKING_NEURON_HH
 #define _SPIKING_NEURON_HH
 
-#pragma interface
 #include <string>
 
 #include "Node.hh"

@@ -22,6 +22,7 @@
  */
 
 #include <string>
+
 #include "VariableNodeDirector.hh"
 #include "StringLiterals.hh"
 #include "NodeFactory.hh"
@@ -30,8 +31,6 @@
 #include "Target.hh"
 #include "ReplyLanguage.hh"
 #include "QueryLanguageManager.hh"
-
-#pragma implementation
 #include "QueryLanguage.hh"
 
 NRS::Message::QueryLanguage::QueryLanguage( std::string aName ) :

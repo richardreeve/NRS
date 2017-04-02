@@ -24,8 +24,6 @@
 #ifndef _EVALUATION_HH
 #define _EVALUATION_HH
 
-#pragma interface
-
 #include "Float.hh"
 
 namespace NRS

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "StringRestriction.hh"
 #include "Types.hh"
 #include "VNName.hh"

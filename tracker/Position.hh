@@ -24,8 +24,8 @@
 #ifndef _POSITION_HH
 #define _POSITION_HH
 
-#pragma interface
 #include <string>
+
 #include "Node.hh"
 #include "Types.hh"
 #include "Variable.hh"

@@ -24,7 +24,6 @@
 #ifndef _REPLY_PORT_HH
 #define _REPLY_PORT_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

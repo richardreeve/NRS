@@ -27,7 +27,6 @@
 #include <vector>
 #include <string>
 
-#pragma interface
 #include "Exception.hh"
 #include "Types.hh"
 

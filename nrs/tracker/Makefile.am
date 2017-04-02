@@ -19,4 +19,4 @@
 # For further information in the first instance contact:
 # Richard Reeve <richardr@inf.ed.ac.uk>
 
-SUBDIRS = palette stickgui robottrack sticktrack
+SUBDIRS = palette stickgui robottrack sticktrack jointmanager

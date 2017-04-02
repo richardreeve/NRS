@@ -28,8 +28,6 @@
 #include <map>
 #include "Variable.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Message

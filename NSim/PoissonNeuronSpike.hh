@@ -24,8 +24,6 @@
 #ifndef _POISSON_NEURON_SPIKE_HH
 #define _POISSON_NEURON_SPIKE_HH
 
-#pragma interface
-
 #include "Spike.hh"
 #include "Boolean.hh"
 

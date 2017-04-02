@@ -32,8 +32,6 @@
 #include "Restriction.hh"
 #include "Limit.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Type

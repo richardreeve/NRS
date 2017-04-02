@@ -26,8 +26,6 @@
 #include "Target.hh"
 #include "ReplyMaxLogManager.hh"
 #include "CallbackDirector.hh"
-
-#pragma implementation
 #include "ReplyMaxLog.hh"
 
 NRS::Message::ReplyMaxLog::ReplyMaxLog( std::string aName ) :

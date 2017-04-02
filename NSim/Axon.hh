@@ -24,11 +24,8 @@
 #ifndef _AXON_HH
 #define _AXON_HH
 
-#pragma interface
-
 #include "Variable.hh"
 #include "Node.hh"
-
 #include "VariableManager.hh"
 #include "Exception.hh"
 #include "NodeFactory.hh"

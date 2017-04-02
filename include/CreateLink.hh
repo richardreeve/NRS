@@ -24,7 +24,6 @@
 #ifndef _CREATE_LINK_HH
 #define _CREATE_LINK_HH
 
-#pragma interface
 #include <string>
 
 #include "Callback.hh"

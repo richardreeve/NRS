@@ -24,8 +24,6 @@
 #ifndef _CONDUCTANCE_BASED_SYNAPSE_OUTPUT_HH
 #define _CONDUCTANCE_BASED_SYNAPSE_OUTPUT_HH
 
-#pragma interface
-
 #include "ConductanceBasedSynapseGActual.hh"
 #include "Voltage.hh"
 

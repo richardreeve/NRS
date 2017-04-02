@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "IVectorSegment.hh"
 
 void NRS::Type::IVectorSegment::useRawData( const uint8_t *dataPtr,

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "VoidManager.hh"
 
 namespace NRS

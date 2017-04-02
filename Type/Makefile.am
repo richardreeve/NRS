@@ -30,5 +30,5 @@ libTypes_la_SOURCES = IntegerRestriction.cc FloatRestriction.cc		\
 	RouteManager.cc #Vector.cc VectorManager.cc
 
 #libTypes_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

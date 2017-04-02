@@ -29,8 +29,6 @@
 #include "Variable.hh"
 #include "Exception.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Type

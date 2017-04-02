@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Capacitance.hh"
 #include "CapacitanceManager.hh"
 #include "VariableNodeDirector.hh"

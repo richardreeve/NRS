@@ -24,7 +24,6 @@
 #ifndef _MESSAGE_DESCRIPTION_HH
 #define _MESSAGE_DESCRIPTION_HH
 
-#pragma interface
 #include <string>
 #include <vector>
 

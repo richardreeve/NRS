@@ -24,7 +24,6 @@
 #ifndef _NODE_FACTORY_HH
 #define _NODE_FACTORY_HH
 
-#pragma interface
 #include <iostream>
 #include <list>
 #include <map>
@@ -327,7 +326,7 @@ namespace NRS
        *
        **/
       std::vector< std::string >
-      NRS::Base::NodeFactory::getVariableNames() const;
+      getVariableNames() const;
 
 
       /// Get VariableDescription for a specific variable

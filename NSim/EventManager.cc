@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "EventManager.hh"
 
 namespace

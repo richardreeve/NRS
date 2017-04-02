@@ -24,8 +24,6 @@
 #ifndef _ATTRIBUTE_LITERALS_HH
 #define _ATTRIBUTE_LITERALS_HH
 
-#pragma interface
-
 #include "StringLiterals.hh"
 
 namespace NRS

@@ -24,8 +24,6 @@
 #ifndef _SPIKINGNEURONVACTUAL_HH
 #define _SPIKINGNEURONVACTUAL_HH
 
-#pragma interface
-
 #include "Voltage.hh"
 
 namespace NRS

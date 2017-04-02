@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include <cstring>
 #include <iomanip>
 #include <iostream>

@@ -24,9 +24,7 @@
 #include <sstream>
 #include <string>
 
-#pragma implementation
 #include "ErrorManager.hh"
-
 #include "Error.hh"
 #include "VariableManager.hh"
 #include "VariableNodeDirector.hh"

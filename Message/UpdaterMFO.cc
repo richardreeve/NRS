@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "UpdaterMFO.hh"
 #include "Variable.hh"
 

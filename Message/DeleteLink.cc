@@ -21,8 +21,6 @@
  *
  */
 
-
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "DeleteLink.hh"
 #include "DeleteLinkManager.hh"

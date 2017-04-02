@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Activate.hh"
 #include "VariableNodeDirector.hh"
 

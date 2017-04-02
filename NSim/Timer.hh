@@ -24,7 +24,6 @@
 #ifndef _TIMER_HH
 #define _TIMER_HH
 
-#pragma interface
 #include <string>
 
 #include "Node.hh"

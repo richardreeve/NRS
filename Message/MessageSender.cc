@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageSender.hh"
 #include "VariableManager.hh"
 #include "VariableNodeDirector.hh"

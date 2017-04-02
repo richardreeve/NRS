@@ -24,8 +24,6 @@
 #ifndef _SPIKING_NEURON_SPIKE_HH
 #define _SPIKING_NEURON_SPIKE_HH
 
-#pragma interface
-
 #include "Spike.hh"
 
 namespace NRS

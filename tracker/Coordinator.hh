@@ -24,7 +24,6 @@
 #ifndef _COORDINATOR_HH
 #define _COORDINATOR_HH
 
-#pragma interface
 #include "Node.hh"
 #include "NodeFactory.hh"
 #include "VariableManager.hh"

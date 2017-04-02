@@ -30,5 +30,5 @@ NRS_genBMF_LDADD = -L../Base -L../Type -L../Unit -L../Message \
 	-lBase -lTypes -lUnits -lMessages -lDummyPlugin -lxerces-c
 NRS_genBMF_LDFLAGS = -export-dynamic -lltdl -ldl -lxerces-c
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "Callback.hh"
 #include "CallbackDirector.hh"

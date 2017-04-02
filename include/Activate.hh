@@ -24,8 +24,6 @@
 #ifndef _ACTIVATE_HH
 #define _ACTIVATE_HH
 
-
-#pragma interface
 #include <string>
 
 #include "Boolean.hh"

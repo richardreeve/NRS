@@ -23,7 +23,6 @@
 
 #include <sstream>
 
-#pragma implementation
 #include "IntegerSegment.hh"
 #include "MessageStore.hh"
 #include "Types.hh"

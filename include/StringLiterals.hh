@@ -28,8 +28,6 @@
 #include "Types.hh"
 #include "Exception.hh"
 
-#pragma interface
-
 #define LITERAL( x, y ) static const char *x() \
 { \
   static const char *p = y; \

@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Time.hh"
 #include "TimeManager.hh"
 #include "FloatManager.hh"

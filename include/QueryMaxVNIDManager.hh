@@ -24,12 +24,9 @@
 #ifndef _QUERY_MAX_VNID_MANAGER_HH
 #define _QUERY_MAX_VNID_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"
-
-#pragma interface
 
 namespace NRS
 {

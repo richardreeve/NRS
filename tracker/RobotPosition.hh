@@ -24,7 +24,6 @@
 #ifndef _ROBOTPOSITION_HH
 #define _ROBOTPOSITION_HH
 
-#pragma interface
 #include <string>
 #include "StringSegment.hh"
 #include "Position.hh"

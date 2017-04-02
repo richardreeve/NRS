@@ -20,3 +20,6 @@
 # Richard Reeve <richardr@inf.ed.ac.uk>
 
 SUBDIRS = @SUBDIRS@
+ACLOCAL_AMFLAGS="-Im4"
+AM_LDFLAGS="-L/usr/local/lib"
+AM_CPPFLAGS= -I$(top_srcdir)/include $(STD_CPPFLAGS)

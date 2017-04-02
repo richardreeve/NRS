@@ -24,7 +24,6 @@
 #ifndef _TIMER_MANAGER_HH
 #define _TIMER_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "Timer.hh"

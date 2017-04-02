@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include "SummedCurrent.hh"
 #include "FloatSegment.hh"
 #include "VariableNodeDirector.hh"

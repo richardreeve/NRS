@@ -21,9 +21,7 @@
  *
  */
 
-#pragma implementation
 #include "ArgumentFielder.hh"
-
 #include "Exception.hh"
 
 void

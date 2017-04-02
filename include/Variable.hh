@@ -24,7 +24,6 @@
 #ifndef _VARIABLE_HH
 #define _VARIABLE_HH
 
-#pragma interface
 #include <list>
 #include <map>
 #include <string>

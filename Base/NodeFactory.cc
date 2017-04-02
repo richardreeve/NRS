@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageFunctionObject.hh"
 #include "MessageStore.hh"
 #include "Node.hh"

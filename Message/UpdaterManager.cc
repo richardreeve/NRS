@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "UpdaterManager.hh"
 #include "Updater.hh"
 

@@ -26,10 +26,9 @@
 
 #include <string>
 #include <map>
+
 #include "Exception.hh"
 #include "ArgumentFielder.hh"
-
-#pragma interface
 
 namespace NRS
 {

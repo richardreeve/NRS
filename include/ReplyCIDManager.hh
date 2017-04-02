@@ -24,7 +24,6 @@
 #ifndef _REPLY_CID_MANAGER_HH
 #define _REPLY_CID_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "ReplyManager.hh"

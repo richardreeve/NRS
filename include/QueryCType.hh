@@ -24,7 +24,6 @@
 #ifndef _QUERY_CTYPE_HH
 #define _QUERY_CTYPE_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

@@ -24,7 +24,6 @@
 #ifndef _INTEGER_MANAGER_HH
 #define _INTEGER_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

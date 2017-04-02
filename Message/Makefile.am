@@ -62,5 +62,5 @@ libMessages_la_SOURCES =  Activate.cc \
 # 	SetErrorRoute.cc SetErrorRouteManager.cc
 
 #libMessages_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

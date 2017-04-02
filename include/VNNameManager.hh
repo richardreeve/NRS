@@ -26,7 +26,6 @@
 
 #include <string>
 
-#pragma interface
 #include "StringManager.hh"
 
 namespace NRS

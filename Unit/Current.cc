@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Current.hh"
 #include "CurrentManager.hh"
 #include "VariableNodeDirector.hh"

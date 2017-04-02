@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "IntegerManager.hh"
 #include "IntegerSegment.hh"
 #include "Integer.hh"

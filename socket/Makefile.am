@@ -22,7 +22,7 @@
 noinst_LTLIBRARIES = libSockets.la
 libSockets_la_SOURCES = Socket.cc ClientSocket.cc ServerSocket.cc
 #libSockets_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 noinst_PROGRAMS = testclient testserver
 testclient_SOURCES = simple_client_main.cc

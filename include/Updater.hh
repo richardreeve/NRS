@@ -24,7 +24,6 @@
 #ifndef _UPDATER_HH
 #define _UPDATER_HH
 
-#pragma interface
 #include <string>
 
 #include "Void.hh"

@@ -29,9 +29,7 @@
 #include <algorithm>
 #include <libgen.h>
 
-#pragma implementation
 #include "PluginDirector.hh"
-
 #include "StringLiterals.hh"
 #include "Plugin.hh"
 #include "VariableNodeDirector.hh"

@@ -22,7 +22,6 @@
  */
 
 
-#pragma implementation
 #include <map>
 #include <string>
 

@@ -24,9 +24,6 @@
 #ifndef _SPIKINGNEURONITOTAL_HH
 #define _SPIKINGNEURONITOTAL_HH
 
-#pragma interface
-
-
 #include "Current.hh"
 #include "Float.hh"
 //#include "Conductance.hh"

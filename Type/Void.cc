@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "VariableNodeDirector.hh"
 #include "Void.hh"
 #include "VoidManager.hh"

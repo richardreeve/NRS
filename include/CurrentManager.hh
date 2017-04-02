@@ -26,7 +26,6 @@
 
 #include <string>
 
-#pragma interface
 #include "FloatManager.hh"
 
 namespace NRS

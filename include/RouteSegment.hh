@@ -26,7 +26,6 @@
 
 #include <string>
 
-#pragma interface
 #include "Types.hh"
 #include "Segment.hh"
 #include "MessageStore.hh"

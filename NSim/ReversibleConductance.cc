@@ -23,7 +23,7 @@
 
 #include <list>
 #include <string>
-#pragma implementation
+
 #include "ReversibleConductance.hh"
 #include "ReversibleConductanceManager.hh"
 

@@ -31,7 +31,6 @@
 #include "VariableNodeDirector.hh"
 #include "ArgumentDirector.hh"
 
-#pragma implementation "PluginDirector.hh"
 #include "PluginDirector.hh"
 
 namespace

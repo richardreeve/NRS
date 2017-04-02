@@ -25,7 +25,7 @@
 lib_LTLIBRARIES = libWebcam.la
 libWebcam_la_SOURCES = Webcam.cc ImageFormat.cc
 KERNELDIR = @KERNELDIR@
-INCLUDES = $(OPENCV_INCLUDE) $(CCVT_INCLUDE) -I$(top_srcdir)/include -I${KERNELDIR}/drivers/usb -I${KERNELDIR}/drivers/usb/media
+AM_CPPFLAGS = $(OPENCV_INCLUDE) $(CCVT_INCLUDE) -I$(top_srcdir)/include -I${KERNELDIR}/drivers/usb -I${KERNELDIR}/drivers/usb/media
 
 bin_PROGRAMS = camcheck camgrab
 camcheck_SOURCES = camcheck.cc

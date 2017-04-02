@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "Evaluation.hh"
 #include "Exception.hh"

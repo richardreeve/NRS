@@ -31,12 +31,11 @@ tracker_la_SOURCES = TrackerLibrary.cc \
 coordinator_la_SOURCES = CoordinatorLibrary.cc \
                          Coordinator.cc CoordinatorManager.cc CoordinatorFactory.cc \
                          MergedRobot.cc MergedRobotFactory.cc MergedRobotManager.cc \
-                         Position.cc MergedRobotPosition.cc 
-                     
+                         Position.cc MergedRobotPosition.cc
 
 tracker_la_LDFLAGS = -module -avoid-version
 coordinator_la_LDFLAGS = -module -avoid-version
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =
 
 

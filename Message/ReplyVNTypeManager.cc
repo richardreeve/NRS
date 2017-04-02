@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "AttributeLiterals.hh"
 #include "Executive.hh"
 #include "ReplyVNType.hh"

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "CallbackDirector.hh"
 
 namespace

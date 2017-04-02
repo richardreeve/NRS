@@ -20,7 +20,7 @@
  * Richard Reeve <richardr@inf.ed.ac.uk>
  *
  */
-#pragma implementation
+
 #include "Executive.hh"
 #include "MainLoopManager.hh"
 #include "MainLoop.hh"

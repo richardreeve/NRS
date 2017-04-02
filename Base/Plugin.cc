@@ -30,8 +30,6 @@
 #include "PluginDirector.hh"
 #include "StringLiterals.hh"
 #include "Exception.hh"
-
-#pragma implementation
 #include "Plugin.hh"
 
 typedef int entrypoint();
@@ -67,6 +65,10 @@ NRS::Base::Plugin::Plugin( std::string aName ) : iHandle( NULL )
       (iName.substr( iName.length()-3, 3 ) == ".so"))
     {
       iName = iName.substr( 0, iName.length() - 3 );
+    } else if ((iName.length() > 6) && 
+      (iName.substr( iName.length()-6, 6 ) == ".dylib"))
+    {
+      iName = iName.substr( 0, iName.length() - 6 );
     }
 
   if ( thePD.hasPlugin( iName ) )

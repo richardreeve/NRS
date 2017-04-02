@@ -24,9 +24,6 @@
 #ifndef _SPIKE_HH
 #define _SPIKE_HH
 
-
-#pragma interface
-
 #include "Void.hh"
 
 namespace NRS

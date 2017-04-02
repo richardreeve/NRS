@@ -30,7 +30,7 @@ NRS_component_LDADD = ../Type/libTypes.la ../Unit/libUnits.la \
 
 NRS_component_LDFLAGS = -export-dynamic -lltdl -ldl -lxerces-c
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =
 
 # INSERT: add new component alias copying one of the links below. The

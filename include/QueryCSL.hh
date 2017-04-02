@@ -24,7 +24,6 @@
 #ifndef _QUERY_CSL_HH
 #define _QUERY_CSL_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

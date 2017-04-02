@@ -21,7 +21,6 @@
  *
  */
 
-#pragma interface
 #include <map>
 #include <string>
 

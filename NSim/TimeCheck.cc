@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Time.hh"
 #include "TimeCheck.hh"
 

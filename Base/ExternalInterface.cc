@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include <sstream>
 
 #include "ExternalInterface.hh"

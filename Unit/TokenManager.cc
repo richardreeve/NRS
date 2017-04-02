@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Token.hh"
 #include "TokenManager.hh"
 #include "StringManager.hh"

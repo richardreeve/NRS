@@ -24,8 +24,6 @@
 #ifndef _BOOLEAN_HH
 #define _BOOLEAN_HH
 
-#pragma interface
-
 #include <string>
 #include <vector>
 

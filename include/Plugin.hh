@@ -23,10 +23,9 @@
 
 #ifndef _PLUGIN_HH
 #define _PLUGIN_HH
+
 #include <string>
 #include <ltdl.h>
-
-#pragma interface
 
 namespace NRS
 {

@@ -24,7 +24,6 @@
 #ifndef _FILE_BMF_INTERFACE_HH
 #define _FILE_BMF_INTERFACE_HH
 
-#pragma interface
 #include <string>
 
 #include "FileInterface.hh"

@@ -1,4 +1,14 @@
 Makefile.in
 configure
 aclocal.m4
-autom4te.cache
+autom4te.cache/
+ltmain.sh
+config.h.in
+obj/
+m4/
+compile
+config.guess
+config.sub
+depcomp
+install-sh
+missing

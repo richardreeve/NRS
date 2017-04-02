@@ -24,9 +24,7 @@
 #include <sstream>
 #include <string>
 
-#pragma implementation
 #include "SetErrorRouteManager.hh"
-
 #include "SetErrorRoute.hh"
 #include "VariableManager.hh"
 #include "VariableNodeDirector.hh"

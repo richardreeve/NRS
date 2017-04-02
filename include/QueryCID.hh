@@ -24,7 +24,6 @@
 #ifndef _QUERY_CID_HH
 #define _QUERY_CID_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

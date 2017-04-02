@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Exception.hh"
 #include "ArgumentDirector.hh"
 #include "StringLiterals.hh"

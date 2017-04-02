@@ -24,7 +24,6 @@
 #ifndef _TRACKERUPDATER_HH
 #define _TRACKERUPDATER_HH
 
-#pragma interface
 #include <string>
 #include "VariableManager.hh"
 #include "VariableNodeDirector.hh"

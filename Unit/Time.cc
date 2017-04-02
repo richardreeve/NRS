@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Time.hh"
 #include "TimeManager.hh"
 #include "VariableNodeDirector.hh"

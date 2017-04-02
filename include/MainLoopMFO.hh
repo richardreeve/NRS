@@ -24,7 +24,6 @@
 #ifndef _MAIN_LOOP_MFO_HH
 #define _MAIN_LOOP_MFO_HH
 
-#pragma interface
 #include "MessageFunctionObject.hh"
 
 namespace NRS

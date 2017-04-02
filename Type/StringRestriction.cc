@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "StringRestriction.hh"
 
 NRS::Type::StringRestriction::

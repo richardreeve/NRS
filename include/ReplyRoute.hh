@@ -24,7 +24,6 @@
 #ifndef _REPLY_ROUTE_HH
 #define _REPLY_ROUTE_HH
 
-#pragma interface
 #include <map>
 #include <string>
 

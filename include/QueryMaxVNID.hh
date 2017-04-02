@@ -24,7 +24,6 @@
 #ifndef _QUERY_MAXVNID_HH
 #define _QUERY_MAXVNID_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

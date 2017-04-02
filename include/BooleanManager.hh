@@ -24,7 +24,6 @@
 #ifndef _BOOLEAN_MANAGER_HH
 #define _BOOLEAN_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

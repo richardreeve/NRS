@@ -49,8 +49,7 @@ SOURCEPATH = ${top_srcdir}/@JAVA_GUI_PATH@
 # the 'top_builddir' variable
 DESTPATH = ${top_builddir}/@JAVA_GUI_PATH@
 
-
-%.class : %.java ;
+%.class: %.java
 	@JAVAC@ -d $(DESTPATH) -sourcepath $(SOURCEPATH) $<
 
 classjava.stamp: $(java_JAVA)

@@ -25,7 +25,6 @@
 #define _V_ACTUAL_MANAGER
 
 #include <VoltageManager.hh>
-#pragma interface
 
 namespace NRS
 {

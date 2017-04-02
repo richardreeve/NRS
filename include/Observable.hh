@@ -25,6 +25,7 @@
 #define _OBSERVABLE_HH
 
 #include <list>
+
 #include "Types.hh"
 
 namespace NRS

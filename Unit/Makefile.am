@@ -31,5 +31,5 @@ libUnits_la_SOURCES = Capacitance.cc CapacitanceManager.cc	\
 	VNName.cc VNNameManager.cc				\
 	Compass.cc CompassManager.cc
 #libUnits_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

@@ -23,7 +23,7 @@
 
 #include <list>
 #include <string>
-#pragma implementation
+
 #include "Integer.hh"
 #include "IntegerManager.hh"
 #include "IntegerSegment.hh"

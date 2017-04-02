@@ -22,6 +22,7 @@
  */
 
 #include <string>
+
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
 #include "ExternalInterface.hh"
@@ -29,8 +30,6 @@
 #include "Target.hh"
 #include "ReplyLog.hh"
 #include "QueryLogManager.hh"
-
-#pragma implementation
 #include "QueryLog.hh"
 
 NRS::Message::QueryLog::QueryLog( std::string aName ) :

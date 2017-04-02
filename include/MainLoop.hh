@@ -26,7 +26,6 @@
 
 #include <string>
 
-#pragma interface
 #include "Void.hh"
 
 namespace NRS

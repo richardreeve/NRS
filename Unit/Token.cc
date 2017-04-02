@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "StringLiterals.hh"
 #include "Token.hh"
 #include "VariableNodeDirector.hh"

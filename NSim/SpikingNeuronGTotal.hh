@@ -24,9 +24,6 @@
 #ifndef _SPIKINGNEURONGTOTAL_HH
 #define _SPIKINGNEURONGTOTAL_HH
 
-#pragma interface
-
-
 #include "Conductance.hh"
 //#include "ReversibleConductance.hh"
 //#include "Updater.hh"

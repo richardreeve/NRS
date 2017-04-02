@@ -29,10 +29,9 @@
 #include <exception>
 #include <sstream>
 #include <iostream>
+
 #include "Types.hh"
 #include "ArgumentFielder.hh"
-
-#pragma interface
 
 // Useful macro for use in call to Exception constructors
 #define _FL_  __FILE__, __LINE__

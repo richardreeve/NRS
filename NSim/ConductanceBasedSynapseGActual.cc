@@ -21,6 +21,4 @@
  *
  */
 
-#pragma implementation
-
 #include "ConductanceBasedSynapseGActual.hh"

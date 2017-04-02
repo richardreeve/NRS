@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include <string>
 
 #include "ReversibleConductanceManager.hh"

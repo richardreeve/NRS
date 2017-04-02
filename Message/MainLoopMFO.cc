@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MainLoopMFO.hh"
 #include "Variable.hh"
 

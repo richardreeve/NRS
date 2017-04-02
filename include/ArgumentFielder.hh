@@ -27,8 +27,6 @@
 #include <list>
 #include <string>
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

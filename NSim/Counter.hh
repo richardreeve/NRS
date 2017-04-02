@@ -24,7 +24,6 @@
 #ifndef _COUNTER_HH
 #define _COUNTER_HH
 
-#pragma interface
 #include "Void.hh"
 #include "Node.hh"
 #include "VariableManager.hh"

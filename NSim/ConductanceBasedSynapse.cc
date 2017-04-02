@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include "Capacitance.hh"
 #include "Conductance.hh"
 #include "ConductanceBasedSynapse.hh"

@@ -42,5 +42,5 @@ dummy_la_SOURCES = DummyLibrary.cc
 dummy_la_LDFLAGS = -module -avoid-version
 
 #libBase_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS= -I$(top_srcdir)/include $(STD_CPPFLAGS)
 SUBDIRS =

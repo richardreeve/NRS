@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Exception.hh"
 #include "MainLoop.hh"
 #include "VariableManager.hh"

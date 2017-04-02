@@ -24,7 +24,6 @@
 #ifndef _REPLY_ROUTE_MANAGER_HH
 #define _REPLY_ROUTE_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "ReplyManager.hh"

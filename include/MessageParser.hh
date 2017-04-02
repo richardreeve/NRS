@@ -24,8 +24,6 @@
 #ifndef _MESSAGE_PARSER_HH
 #define _MESSAGE_PARSER_HH
 
-#pragma interface
-
 #include "MessageStore.hh"
 #include "RouteSegment.hh"
 #include "Target.hh"

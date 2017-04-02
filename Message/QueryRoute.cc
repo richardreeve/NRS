@@ -21,8 +21,6 @@
  *
  */
 
-
-#pragma implementation
 #include <list>
 #include <string>
 

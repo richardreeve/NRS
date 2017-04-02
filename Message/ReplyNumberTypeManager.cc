@@ -23,6 +23,7 @@
 
 #include <string>
 #include <sstream>
+
 #include "ReplyNumberType.hh"
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
@@ -33,8 +34,6 @@
 #include "ExternalInterface.hh"
 #include "Interface.hh"
 #include "Target.hh"
-
-#pragma implementation
 #include "ReplyNumberTypeManager.hh"
 
 namespace

@@ -24,9 +24,6 @@
 #ifndef _EVENT_HH
 #define _EVENT_HH
 
-
-#pragma interface
-
 #include "Void.hh"
 
 namespace NRS

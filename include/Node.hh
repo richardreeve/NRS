@@ -32,8 +32,6 @@
 #include "VariableNodeDirector.hh"
 #include "NodeFactory.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

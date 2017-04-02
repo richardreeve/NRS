@@ -21,12 +21,12 @@
  *
  */
 
-#pragma implementation
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+
 #include <xercesc/sax/SAXParseException.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 
@@ -48,8 +48,12 @@ namespace NRS
       sXercesHandle = dlopen( "libxerces-c.so", RTLD_NOW | RTLD_GLOBAL );
       if (!sXercesHandle)
 	{
+      sXercesHandle = dlopen( "libxerces-c.dylib", RTLD_NOW | RTLD_GLOBAL );
+      if (!sXercesHandle)
+	{
 	  _ABORT_( "xerces-c library not found" );
 	}
+  }
       // XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
     }
     
@@ -67,7 +71,7 @@ NRS::Base::CSLParser::CSLParser( std::string aName, std::string aFilename ) :
   iInMessage( false ), iInSegment( false ), iFound( false )
 {
   setDoNamespaces( true );
-  setDoValidation( false );
+  //setDoValidation( false );
   setDoSchema( false );
   setExitOnFirstFatalError( true );
   installAdvDocHandler( this );
@@ -145,7 +149,7 @@ void NRS::Base::CSLParser::startElement( const XERCES_CPP_NAMESPACE::
 					      RefVectorOf< 
 					      XERCES_CPP_NAMESPACE::
 					      XMLAttr > &attrList,
-					      const unsigned int attrCount,
+					      const XMLSize_t attrCount,
 					      const bool isEmpty,
 					      const bool isRoot )
 {
@@ -241,13 +245,13 @@ void NRS::Base::CSLParser::docComment( const XMLCh *const comment )
 }
 
 void NRS::Base::CSLParser::docCharacters( const XMLCh* const chars,
-					       const unsigned int length,
+					       const XMLSize_t length,
 					       const bool cdataSection )
 {
 }
 
 void NRS::Base::CSLParser::ignorableWhitespace( const XMLCh* const chars,
-						     const unsigned int length,
+						     const XMLSize_t length,
 						     const bool cdataSection )
 {
 }

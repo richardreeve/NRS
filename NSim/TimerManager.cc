@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "TimerManager.hh"
 
 namespace

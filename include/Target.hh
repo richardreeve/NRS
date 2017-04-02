@@ -24,8 +24,6 @@
 #ifndef _TARGET_HH
 #define _TARGET_HH
 
-#pragma interface
-
 #include <string>
 #include <vector>
 

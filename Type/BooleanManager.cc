@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "BooleanManager.hh"
 #include "BooleanSegment.hh"
 #include "Boolean.hh"

@@ -21,8 +21,6 @@
  *
  */
 
-#pragma implementation
-
 #include "BooleanSegment.hh"
 #include "CreateLink.hh"
 #include "CreateNode.hh"

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Restriction.hh"
 
 NRS::Base::Restriction::Restriction( Enum::Type aType ) :

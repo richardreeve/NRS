@@ -24,7 +24,6 @@
 #ifndef _POISSON_NEURON_HH
 #define _POISSON_NEURON_HH
 
-#pragma interface
 #include <string>
 
 #include "Node.hh"

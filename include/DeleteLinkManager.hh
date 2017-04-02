@@ -24,7 +24,6 @@
 #ifndef _DELETE_LINK_MANAGER_HH
 #define _DELETE_LINK_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

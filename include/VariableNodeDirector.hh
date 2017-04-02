@@ -24,7 +24,6 @@
 #ifndef _VARIABLE_NODE_DIRECTOR_HH
 #define _VARIABLE_NODE_DIRECTOR_HH
 
-#pragma interface
 #include <iostream>
 #include <list>
 #include <map>

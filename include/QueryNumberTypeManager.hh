@@ -28,8 +28,6 @@
 #include <string>
 #include "QueryManager.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

@@ -24,8 +24,6 @@
 #ifndef _INTEGER_HH
 #define _INTEGER_HH
 
-#pragma interface
-
 #include <string>
 #include <vector>
 

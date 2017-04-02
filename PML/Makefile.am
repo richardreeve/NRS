@@ -22,5 +22,5 @@
 lib_LTLIBRARIES = libPMLInterface.la
 libPMLInterface_la_SOURCES = FilePMLInterface.cc PMLParser.cc
 #libPMLInterface_la_LDFLAGS = -static
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS= -I$(top_srcdir)/include $(STD_CPPFLAGS)
 SUBDIRS =

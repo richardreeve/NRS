@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Compass.hh"
 #include "CompassManager.hh"
 #include "VariableNodeDirector.hh"

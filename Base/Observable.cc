@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Observable.hh"
 #include "Types.hh"
 

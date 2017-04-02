@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageStore.hh"
 
 void NRS::Base::MessageStore::reset()

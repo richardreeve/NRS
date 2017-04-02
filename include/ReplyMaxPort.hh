@@ -24,7 +24,6 @@
 #ifndef _REPLY_MAXPORT_HH
 #define _REPLY_MAXPORT_HH
 
-#pragma interface
 #include <string>
 #include <map>
 

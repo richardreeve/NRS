@@ -24,8 +24,6 @@
 #ifndef _CONDUCTANCE_BASED_SYNAPSE_GACTUAL_HH
 #define _CONDUCTANCE_BASED_SYNAPSE_GACTUAL_HH
 
-#pragma interface
-
 #include <cmath>
 #include "Time.hh"
 #include "Updater.hh"

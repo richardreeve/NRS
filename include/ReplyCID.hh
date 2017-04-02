@@ -29,8 +29,6 @@
 #include "Variable.hh"
 #include "Target.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

@@ -27,8 +27,6 @@
 #include <string>
 #include "ReplyManager.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

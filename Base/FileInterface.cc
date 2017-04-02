@@ -21,8 +21,6 @@
  *
  */
 
-
-#pragma implementation
 #include <cstring>
 #include <list>
 #include <signal.h>

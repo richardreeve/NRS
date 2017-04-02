@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "RouteSegment.hh"
 
 void NRS::Type::RouteSegment::useRawData( const uint8_t *dataPtr,

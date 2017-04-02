@@ -24,7 +24,6 @@
 #ifndef _MERGEDROBOTPOSITION_HH
 #define _MERGEDROBOTPOSITION_HH
 
-#pragma interface
 #include <string>
 #include "Position.hh"
 

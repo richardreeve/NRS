@@ -24,8 +24,6 @@
 #ifndef _BMF_PARSER_HH
 #define _BMF_PARSER_HH
 
-#pragma interface
-
 #include "MessageParser.hh"
 
 namespace NRS

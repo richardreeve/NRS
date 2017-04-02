@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Capacitance.hh"
 #include "CapacitanceManager.hh"
 #include "FloatManager.hh"

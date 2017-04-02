@@ -24,7 +24,6 @@
 #ifndef _MESSAGE_FUNCTION_OBJECT_HH
 #define _MESSAGE_FUNCTION_OBJECT_HH
 
-#pragma interface
 #include <string>
 
 #include "Types.hh"

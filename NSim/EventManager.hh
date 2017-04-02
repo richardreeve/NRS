@@ -24,9 +24,8 @@
 #ifndef _EVENT_MANAGER_HH
 #define _EVENT_MANAGER_HH
 
-#pragma interface
-
 #include <iostream>
+
 #include "VoidManager.hh"
 
 namespace NRS

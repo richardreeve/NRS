@@ -27,8 +27,6 @@
 #include <string>
 #include "Void.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Message

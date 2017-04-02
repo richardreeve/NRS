@@ -54,8 +54,8 @@ SOURCEPATH = ${top_srcdir}/@JAVA_GUI_PATH@
 DESTPATH = ${top_builddir}/@JAVA_GUI_PATH@
 
 
-%.class : %.java ;
-	@JAVAC@ -d $(DESTPATH) -sourcepath $(SOURCEPATH) $<
+%.class: %.java
+	@JAVAC@ -d $(DESTPATH) -classpath $(SOURCEPATH):${DESTPATH} $<
 
 classjava.stamp: $(java_JAVA)
 	echo timestamp > classjava.stamp

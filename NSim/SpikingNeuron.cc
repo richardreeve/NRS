@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Capacitance.hh"
 #include "Conductance.hh"
 #include "Current.hh"

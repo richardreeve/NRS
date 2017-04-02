@@ -30,8 +30,6 @@
 #include "VariableManager.hh"
 #include "Variable.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Type

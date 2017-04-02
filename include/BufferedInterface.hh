@@ -24,7 +24,6 @@
 #ifndef _BUFFERED_INTERFACE_HH
 #define _BUFFERED_INTERFACE_HH
 
-#pragma interface
 #include <map>
 
 #include "Callback.hh"

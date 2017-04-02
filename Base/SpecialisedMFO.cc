@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "SpecialisedMFO.hh"
 #include "Variable.hh"
 

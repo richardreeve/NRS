@@ -26,10 +26,9 @@
 
 #include <iostream>
 #include <string>
+
 #include "Exception.hh"
 #include "Types.hh"
-
-#pragma interface
 
 namespace NRS
 {

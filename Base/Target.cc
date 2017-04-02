@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Target.hh"
 #include "DeleteLink.hh"
 #include "Executive.hh"

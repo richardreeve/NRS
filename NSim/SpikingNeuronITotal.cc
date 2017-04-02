@@ -21,13 +21,11 @@
  *
  */
 
-#pragma implementation
 #include "FloatSegment.hh"
 #include "Exception.hh"
 #include "MessageFunctionObject.hh"
 #include "VariableNodeDirector.hh"
 #include "SpikingNeuronITotal.hh"
-
 
 NRS::Simulator::SpikingNeuronITotal::SpikingNeuronITotal( std::string aName ) : 
   Unit::Current( aName ), 

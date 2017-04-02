@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageSenderMFO.hh"
 #include "Variable.hh"
 

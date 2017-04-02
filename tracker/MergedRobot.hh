@@ -24,7 +24,6 @@
 #ifndef _MERGEDROBOT_HH
 #define _MERGEDROBOT_HH
 
-#pragma interface
 #include "Void.hh"
 #include "Node.hh"
 #include "NodeFactory.hh"

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Exception.hh"
 #include "FloatSegment.hh"
 #include "Node.hh"

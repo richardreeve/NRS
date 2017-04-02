@@ -23,7 +23,6 @@
 
 #include <iostream>
 
-#pragma implementation
 #include "VariableInfo.hh"
 #include "Exception.hh"
 #include "SegmentDescription.hh"

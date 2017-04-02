@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "IntegerSegment.hh"
 #include "IntelligentStore.hh"

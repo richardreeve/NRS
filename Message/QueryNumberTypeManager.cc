@@ -23,6 +23,7 @@
 
 #include <string>
 #include <sstream>
+
 #include "QueryNumberType.hh"
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
@@ -32,8 +33,6 @@
 #include "Target.hh"
 #include "ExternalInterface.hh"
 #include "Interface.hh"
-
-#pragma implementation
 #include "QueryNumberTypeManager.hh"
 
 namespace

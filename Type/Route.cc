@@ -23,7 +23,7 @@
 
 #include <list>
 #include <string>
-#pragma implementation
+
 #include "Route.hh"
 #include "RouteManager.hh"
 #include "RouteSegment.hh"

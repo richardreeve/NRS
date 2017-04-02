@@ -24,5 +24,5 @@ plugin_LTLIBRARIES = audiogen.la
 audiogen_la_SOURCES = AudioGenLibrary.cc
 #	AudioGenerator.cc
 audiogen_la_LDFLAGS = -module -avoid-version
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =

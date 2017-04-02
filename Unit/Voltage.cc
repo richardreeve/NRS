@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Voltage.hh"
 #include "VoltageManager.hh"
 #include "VariableNodeDirector.hh"

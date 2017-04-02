@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include <cmath>
 
 #include "Exception.hh"

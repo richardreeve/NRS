@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Frequency.hh"
 #include "FrequencyManager.hh"
 #include "FloatManager.hh"

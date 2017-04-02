@@ -24,7 +24,6 @@
 #ifndef _SIM_TIME_HH
 #define _SIM_TIME_HH
 
-#pragma interface
 #include <string>
 #include <sys/time.h>
 #include <unistd.h>

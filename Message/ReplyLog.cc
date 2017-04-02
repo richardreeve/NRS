@@ -26,8 +26,6 @@
 #include "Target.hh"
 #include "ReplyLogManager.hh"
 #include "CallbackDirector.hh"
-
-#pragma implementation
 #include "ReplyLog.hh"
 
 NRS::Message::ReplyLog::ReplyLog( std::string aName ) :

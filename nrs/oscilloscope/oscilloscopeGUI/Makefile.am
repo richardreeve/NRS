@@ -62,7 +62,7 @@ DESTPATH = ${top_builddir}/@JAVA_GUI_PATH@
 # corresponding class also appears in the destination directory, and
 # that class file is the one used during java compilation for
 # type-resolution.
-%.class : %.java ;
+%.class: %.java
 	@JAVAC@ -d $(DESTPATH) -classpath $(SOURCEPATH):${DESTPATH} $<
 
 classjava.stamp: $(java_JAVA)

@@ -24,7 +24,6 @@
 #ifndef _ROUTE_MANAGER_HH
 #define _ROUTE_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

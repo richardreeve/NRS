@@ -23,8 +23,6 @@ SUBDIRS =
 
 if DOCS_ACTIVE
 
-pdfdir = $(prefix)/share/$(PACKAGE)-$(VERSION)/doc
-
 SUFFIXES = .pdf .tex .eps .dia
 # dummy targets to build documentation
 noinst_PROGRAMS = images doc

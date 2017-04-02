@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BVectorSegment.hh"
 
 void NRS::Type::BVectorSegment::useRawData( const uint8_t *dataPtr,

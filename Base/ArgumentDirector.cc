@@ -21,11 +21,11 @@
  *
  */
 
-#pragma implementation
 #include <list>
 #include <map>
 #include <sstream>
 #include <string>
+#include <libgen.h>
 
 #include "ArgumentDirector.hh"
 #include "ArgumentFielder.hh"

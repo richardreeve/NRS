@@ -24,7 +24,6 @@
 #ifndef _EXTERNAL_INTERFACE_HH
 #define _EXTERNAL_INTERFACE_HH
 
-#pragma interface
 #include <string>
 
 #include "MessageParser.hh"

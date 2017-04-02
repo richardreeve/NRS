@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "StringLiterals.hh"
 #include "VNName.hh"
 #include "VariableNodeDirector.hh"

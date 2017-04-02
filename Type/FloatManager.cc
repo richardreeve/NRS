@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "FloatManager.hh"
 #include "FloatSegment.hh"
 #include "Float.hh"

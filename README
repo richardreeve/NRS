@@ -17,10 +17,10 @@ greatly appreciate 3 things:
 INSTALLATION
 ------------
 
-The first time you extract the code from CVS you need to run:
+The first time you extract the code from the git repository you need to run:
 
 aclocal
-libtoolize
+glibtoolize
 autoheader
 automake --add-missing
 autoreconf

@@ -24,8 +24,6 @@
 #ifndef _PERIODIC_TRIGGER_EVENT_HH
 #define _PERIODIC_TRIGGER_EVENT_HH
 
-#pragma interface
-
 #include "Event.hh"
 #include "Time.hh"
 #include "VariableManager.hh"

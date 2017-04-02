@@ -24,9 +24,6 @@
 #ifndef _TRACKINGDATA_HH
 #define _TRACKINGDATA_HH
 
-#pragma interface
-
-
 namespace NRS
 {
   namespace Tracker

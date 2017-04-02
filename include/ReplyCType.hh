@@ -24,7 +24,6 @@
 #ifndef _REPLY_CTYPE_HH
 #define _REPLY_CTYPE_HH
 
-#pragma interface
 #include <map>
 #include <string>
 

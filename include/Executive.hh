@@ -30,8 +30,6 @@
 #include "ArgumentFielder.hh"
 #include "Exception.hh"
 
-#pragma interface
-
 /// The namespace for all NRS components.
 namespace NRS
 {

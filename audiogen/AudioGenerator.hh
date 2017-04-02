@@ -24,8 +24,6 @@
 #ifndef _AUDIO_GENERATOR_HH
 #define _AUDIO_GENERATOR_HH
 
-#pragma interface
-
 #include "Filename.hh"
 #include "Node.hh"
 

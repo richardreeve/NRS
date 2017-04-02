@@ -24,7 +24,6 @@
 #ifndef _TIME_CHECK_HH
 #define _TIME_CHECK_HH
 
-#pragma interface
 #include <string>
 
 #include "Node.hh"

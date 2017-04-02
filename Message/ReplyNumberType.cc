@@ -26,8 +26,6 @@
 #include "Target.hh"
 #include "ReplyNumberTypeManager.hh"
 #include "CallbackDirector.hh"
-
-#pragma implementation
 #include "ReplyNumberType.hh"
 
 NRS::Message::ReplyNumberType::ReplyNumberType( std::string aName ) :

@@ -24,8 +24,6 @@
 #ifndef _BOOLEAN_ENVELOPE_BOOLEAN_HH
 #define _BOOLEAN_ENVELOPE_BOOLEAN_HH
 
-#pragma interface
-
 #include "Boolean.hh"
 #include "Time.hh"
 #include "VariableManager.hh"

@@ -21,9 +21,8 @@
  *
  */
 
-#pragma implementation
-
 #include <cmath>
+
 #include "SpikingNeuronVActual.hh"
 #include "FloatSegment.hh"
 #include "MessageFunctionObject.hh"

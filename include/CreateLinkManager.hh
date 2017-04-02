@@ -24,7 +24,6 @@
 #ifndef _CREATE_LINK_MANAGER_HH
 #define _CREATE_LINK_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

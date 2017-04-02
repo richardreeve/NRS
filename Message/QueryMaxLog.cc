@@ -22,14 +22,13 @@
  */
 
 #include <string>
+
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
 #include "StringLiterals.hh"
 #include "Target.hh"
 #include "ReplyMaxLog.hh"
 #include "QueryMaxLogManager.hh"
-
-#pragma implementation
 #include "QueryMaxLog.hh"
 
 NRS::Message::QueryMaxLog::QueryMaxLog( std::string aName ) :

@@ -24,7 +24,6 @@
 #ifndef _ROBOT_HH
 #define _ROBOT_HH
 
-#pragma interface
 #include "Node.hh"
 #include "NodeFactory.hh"
 #include "VariableManager.hh"

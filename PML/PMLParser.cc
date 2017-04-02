@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include <dlfcn.h>
 #include <map>
 #include <xercesc/sax/SAXParseException.hpp>
@@ -53,8 +52,12 @@ namespace NRS
       sXercesHandle = dlopen( "libxerces-c.so", RTLD_NOW | RTLD_GLOBAL );
       if (!sXercesHandle)
 	{
+      sXercesHandle = dlopen( "libxerces-c.dylib", RTLD_NOW | RTLD_GLOBAL );
+      if (!sXercesHandle)
+	{
 	  _ABORT_( "xerces-c library not found" );
 	}
+  }
       // XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
     }
     
@@ -76,7 +79,7 @@ NRS::Interface::PMLParser::PMLParser( std::string aName ) :
   iDiscard( false )
 {
   setDoNamespaces( true );
-  setDoValidation( false );
+  //setDoValidation( false );
   setDoSchema( false );
   setExitOnFirstFatalError( true );
   installAdvDocHandler( this );
@@ -855,7 +858,7 @@ void NRS::Interface::PMLParser::docCharacters( const XMLCh* const chars,
 }
 
 void NRS::Interface::PMLParser::ignorableWhitespace( const XMLCh* const chars,
-						     const unsigned int length,
+						     const XMLSize_t length,
 						     const bool cdataSection )
 {
 }

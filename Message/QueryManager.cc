@@ -24,6 +24,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+
 #include "Executive.hh"
 #include "VariableManager.hh"
 #include "UnsignedManager.hh"
@@ -33,8 +34,6 @@
 #include "Interface.hh"
 #include "Target.hh"
 #include "Executive.hh"
-
-#pragma implementation
 #include "QueryManager.hh"
 
 

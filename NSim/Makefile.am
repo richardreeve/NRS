@@ -49,7 +49,7 @@ nsim_la_SOURCES = NSim.cc NSimFactory.cc NSimManager.cc RealTimeError.cc \
 # 	BooleanEnvelope.cc BooleanEnvelopeBoolean.cc
 
 nsim_la_LDFLAGS = -module -avoid-version
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 SUBDIRS =
 
 

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "MessageSenderManager.hh"
 #include "MessageSender.hh"
 

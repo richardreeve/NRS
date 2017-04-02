@@ -24,7 +24,6 @@
 #ifndef _INTELLIGENT_STORE_HH
 #define _INTELLIGENT_STORE_HH
 
-#pragma interface
 #include <vector>
 
 #include "Exception.hh"

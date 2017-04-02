@@ -24,7 +24,6 @@
 #ifndef _NSIM_HH
 #define _NSIM_HH
 
-#pragma interface
 #include "Node.hh"
 #include "NodeFactory.hh"
 #include "VariableManager.hh"

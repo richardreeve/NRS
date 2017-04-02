@@ -24,7 +24,6 @@
 #ifndef _SPECIALISED_MFO_HH
 #define _SPECIALISED_MFO_HH
 
-#pragma interface
 #include "MessageFunctionObject.hh"
 
 namespace NRS

@@ -24,7 +24,6 @@
 #ifndef _STRING_RESTRICTION_HH
 #define _STRING_RESTRICTION_HH
 
-#pragma interface
 #include <memory>
 #include <iostream>
 #include <string>

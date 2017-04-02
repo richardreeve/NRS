@@ -26,8 +26,6 @@
 #include "Target.hh"
 #include "ReplyLanguageManager.hh"
 #include "CallbackDirector.hh"
-
-#pragma implementation
 #include "ReplyLanguage.hh"
 
 NRS::Message::ReplyLanguage::ReplyLanguage( std::string aName ) :

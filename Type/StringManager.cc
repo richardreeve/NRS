@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "StringManager.hh"
 #include "StringSegment.hh"
 #include "String.hh"

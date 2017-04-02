@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Conductance.hh"
 #include "FloatSegment.hh"
 #include "MessageFunctionObject.hh"

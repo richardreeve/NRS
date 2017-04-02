@@ -24,7 +24,6 @@
 #ifndef _DELETE_NODE_HH
 #define _DELETE_NODE_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

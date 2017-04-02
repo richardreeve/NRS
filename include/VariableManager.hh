@@ -24,7 +24,6 @@
 #ifndef _VARIABLE_MANAGER_HH
 #define _VARIABLE_MANAGER_HH
 
-#pragma interface
 #include <string>
 #include <vector>
 

@@ -27,12 +27,11 @@
 #include <memory>
 #include <iostream>
 #include <string>
+
 #include "Exception.hh"
 #include "Types.hh"
 #include "Restriction.hh"
 #include "Limit.hh"
-
-#pragma interface
 
 namespace NRS
 {

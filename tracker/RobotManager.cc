@@ -21,9 +21,7 @@
  *
  */
 
-#pragma implementation
 #include "TokenManager.hh"
-
 
 namespace NRS
 {

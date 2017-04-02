@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "TimerFactory.hh"
 
 namespace

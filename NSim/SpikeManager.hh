@@ -24,7 +24,6 @@
 #ifndef _SPIKE_MANAGER_HH
 #define _SPIKE_MANAGER_HH
 
-#pragma interface
 #include "VoidManager.hh"
 
 namespace NRS

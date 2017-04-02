@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Current.hh"
 #include "CurrentManager.hh"
 #include "FloatManager.hh"

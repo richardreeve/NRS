@@ -24,7 +24,6 @@
 #ifndef _SUM_HH
 #define _SUM_HH
 
-#pragma interface
 #include "Float.hh"
 
 namespace NRS

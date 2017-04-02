@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "SpikeManager.hh"
 
 namespace

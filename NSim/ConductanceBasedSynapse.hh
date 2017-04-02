@@ -24,7 +24,6 @@
 #ifndef _CONDUCTANCEBASEDSYNAPSE_HH
 #define _CONDUCTANCEBASEDSYNAPSE_HH
 
-#pragma interface
 #include <string>
 
 #include "Variable.hh"

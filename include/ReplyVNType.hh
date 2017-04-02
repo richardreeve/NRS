@@ -24,7 +24,6 @@
 #ifndef _REPLY_VNTYPE_HH
 #define _REPLY_VNTYPE_HH
 
-#pragma interface
 #include <string>
 #include <map>
 

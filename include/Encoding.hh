@@ -27,14 +27,10 @@
 #include <vector>
 #include <string>
 
-#pragma interface
-
 #include "IntelligentStore.hh"
 #include "MessageDescription.hh"
 #include "MessageStore.hh"
 #include "Types.hh"
-
-#pragma interface
 
 namespace NRS
 {

@@ -24,9 +24,6 @@
 #ifndef _SUMMED_CURRENT_HH
 #define _SUMMED_CURRENT_HH
 
-
-#pragma interface
-
 #include "Current.hh"
 
 namespace NRS

@@ -24,7 +24,6 @@
 #ifndef _QUERY_MAXPORT_HH
 #define _QUERY_MAXPORT_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

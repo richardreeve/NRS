@@ -24,7 +24,6 @@
 #ifndef _DELETE_LINK_HH
 #define _DELETE_LINK_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

@@ -21,10 +21,7 @@
  *
  */
 
-
-#pragma implementation
 #include "SetErrorRoute.hh"
-
 #include "StringLiterals.hh"
 #include "SetErrorRouteManager.hh"
 #include "Target.hh"

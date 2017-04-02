@@ -24,7 +24,6 @@
 #include <cstdlib>
 #include <sstream>
 
-#pragma implementation
 #include "FloatSegment.hh"
 #include "MessageStore.hh"
 #include "Types.hh"

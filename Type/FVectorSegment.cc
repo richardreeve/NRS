@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "FVectorSegment.hh"
 
 void NRS::Type::FVectorSegment::useRawData( const uint8_t *dataPtr,

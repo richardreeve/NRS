@@ -24,7 +24,6 @@
 #ifndef _UPDATER_MANAGER_HH
 #define _UPDATER_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VoidManager.hh"

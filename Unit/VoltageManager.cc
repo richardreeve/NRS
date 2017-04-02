@@ -23,7 +23,6 @@
 
 #include <string>
 
-#pragma implementation
 #include "Voltage.hh"
 #include "VoltageManager.hh"
 #include "FloatManager.hh"

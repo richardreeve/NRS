@@ -24,7 +24,6 @@
 #ifndef _FLOAT_MANAGER_HH
 #define _FLOAT_MANAGER_HH
 
-#pragma interface
 #include <string>
 
 #include "VariableManager.hh"

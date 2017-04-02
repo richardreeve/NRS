@@ -24,10 +24,10 @@
 #ifndef _TRACKERSINGLETON_HH
 #define _TRACKERSINGLETON_HH
 
-#pragma interface
 #include <iostream>
 #include <string>
 #include <map>
+
 #include "StringLiterals.hh"
 #include "TrackingData.hh"
 

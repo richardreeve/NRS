@@ -24,8 +24,6 @@
 #ifndef _PML_PARSER_HH
 #define _PML_PARSER_HH
 
-#pragma interface
-
 #include <sstream>
 #include <string>
 #include <map>
@@ -223,7 +221,7 @@ namespace NRS
        *                      content from the CDATA section.
        */
       void ignorableWhitespace( const XMLCh* const chars,
-				const unsigned int length,
+				const XMLSize_t length,
 				const bool cdataSection );
 
       /// callback for processing instruction

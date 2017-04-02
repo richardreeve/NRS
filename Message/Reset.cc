@@ -22,7 +22,6 @@
  */
 
 
-#pragma implementation
 #include "Reset.hh"
 #include "ResetManager.hh"
 #include "StringLiterals.hh"

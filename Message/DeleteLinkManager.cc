@@ -22,7 +22,6 @@
  */
 
 
-#pragma implementation
 #include <string>
 
 #include "AttributeLiterals.hh"

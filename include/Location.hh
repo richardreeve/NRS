@@ -24,7 +24,6 @@
 #ifndef _LOCATION_HH
 #define _LOCATION_HH
 
-#pragma interface
 #include <string>
 
 #include "MessageStore.hh"

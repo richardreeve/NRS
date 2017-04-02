@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 
 void NRS::Type::BooleanSegment::useRawData( const uint8_t *dataPtr,

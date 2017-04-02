@@ -24,7 +24,6 @@
 #ifndef _QUERY_VNTYPE_HH
 #define _QUERY_VNTYPE_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

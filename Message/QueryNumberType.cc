@@ -22,6 +22,7 @@
  */
 
 #include <string>
+
 #include "VariableNodeDirector.hh"
 #include "StringLiterals.hh"
 #include "NodeFactory.hh"
@@ -31,8 +32,6 @@
 #include "ReplyNumberType.hh"
 #include "QueryNumberTypeManager.hh"
 #include "Types.hh"
-
-#pragma implementation
 #include "QueryNumberType.hh"
 
 NRS::Message::QueryNumberType::QueryNumberType( std::string aName ) :

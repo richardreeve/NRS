@@ -24,8 +24,6 @@
 #ifndef _TIME_CHECKER_HH
 #define _TIME_CHECKER_HH
 
-#pragma interface
-
 #include "Time.hh"
 #include "Boolean.hh"
 

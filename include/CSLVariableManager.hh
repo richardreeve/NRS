@@ -24,11 +24,11 @@
 #ifndef _CSL_VARIABLE_MANAGER_HH
 #define _CSL_VARIABLE_MANAGER_HH
 
-#pragma interface
 #include <vector>
 
 #include "SegmentDescription.hh"
 #include "VariableManager.hh"
+
 namespace NRS
 {
   namespace Base

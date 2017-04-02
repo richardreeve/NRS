@@ -31,8 +31,6 @@
 #include "ExternalInterfaceDirector.hh"
 #include "Types.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

@@ -24,8 +24,8 @@
 #ifndef _POSITIONMANAGER_HH
 #define _POSITIONMANAGER_HH
 
-#pragma implementation
 #include <string>
+
 #include "Position.hh"
 #include "StringLiterals.hh"
 #include "IntegerManager.hh"

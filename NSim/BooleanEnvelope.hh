@@ -24,8 +24,6 @@
 #ifndef _BOOLEAN_ENVELOPE_HH
 #define _BOOLEAN_ENVELOPE_HH
 
-#pragma interface
-
 #include "Node.hh"
 #include "Variable.hh"
 #include "VariableManager.hh"

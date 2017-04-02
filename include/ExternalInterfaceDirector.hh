@@ -24,8 +24,6 @@
 #ifndef _EXTERNAL_INTERFACE_DIRECTOR_HH
 #define _EXTERNAL_INTERFACE_DIRECTOR_HH
 
-#pragma interface
-
 #include <list>
 #include <map>
 #include <vector>
@@ -157,7 +155,7 @@ namespace NRS
        **/
       bool hasExternalInterface( const unsigned_t port ) const
       {
-	if ((port < 0) || (port >= iPortEIVector.size()))
+	if (port >= iPortEIVector.size())
 	  return false;
 	return ( iPortEIVector[ port ] != NULL );
       }

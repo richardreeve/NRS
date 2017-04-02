@@ -25,7 +25,6 @@
 #include <string>
 #include <limits>
 
-#pragma implementation
 #include "ReplyManager.hh"
 #include "VariableManager.hh"
 #include "UnsignedManager.hh"

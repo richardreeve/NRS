@@ -24,7 +24,6 @@
 #ifndef _REPLY_VNNAME_HH
 #define _REPLY_VNNAME_HH
 
-#pragma interface
 #include <string>
 #include <map>
 

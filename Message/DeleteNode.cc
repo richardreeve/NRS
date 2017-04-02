@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "DeleteNode.hh"
 #include "StringLiterals.hh"

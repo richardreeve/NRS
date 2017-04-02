@@ -24,7 +24,6 @@
 #ifndef _BOOLEAN_SEGMENT_HH
 #define _BOOLEAN_SEGMENT_HH
 
-#pragma interface
 #include "Types.hh"
 #include "Segment.hh"
 #include "MessageStore.hh"

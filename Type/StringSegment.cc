@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "StringSegment.hh"
 
 void NRS::Type::StringSegment::useRawData( const uint8_t *dataPtr,

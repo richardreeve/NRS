@@ -28,8 +28,6 @@
 #include <string>
 #include <vector>
 
-#pragma interface
-
 #include "Encoding.hh"
 #include "Exception.hh"
 #include "Message.hh"

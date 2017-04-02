@@ -24,7 +24,6 @@
 #ifndef _REAL_TIME_ERROR_HH
 #define _REAL_TIME_ERROR_HH
 
-#pragma interface
 #include <string>
 #include <sys/time.h>
 #include <unistd.h>

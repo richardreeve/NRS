@@ -24,7 +24,6 @@
 #ifndef _INTEGER_SEGMENT_HH
 #define _INTEGER_SEGMENT_HH
 
-#pragma interface
 #include "Types.hh"
 #include "Segment.hh"
 #include "MessageStore.hh"

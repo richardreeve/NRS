@@ -24,7 +24,6 @@
 #ifndef _CREATE_NODE_HH
 #define _CREATE_NODE_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

@@ -24,7 +24,6 @@
 #ifndef _CAMERASINGLETON_HH
 #define _CAMERASINGLETON_HH
 
-#pragma interface
 #include <iostream>
 #include <string>
 #include <map>

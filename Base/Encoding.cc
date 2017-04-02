@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "BooleanSegment.hh"
 #include "Encoding.hh"
 #include "MessageDescription.hh"

@@ -24,8 +24,6 @@
 #ifndef _CSL_PARSER_HH
 #define _CSL_PARSER_HH
 
-#pragma interface
-
 #include <string>
 #include <vector>
 #include <xercesc/framework/LocalFileInputSource.hpp>
@@ -117,7 +115,7 @@ namespace NRS
 			 const XERCES_CPP_NAMESPACE::
 			 RefVectorOf< XERCES_CPP_NAMESPACE::XMLAttr >
 			 &attrList,
-			 const unsigned int attrCount,
+			 const XMLSize_t attrCount,
 			 const bool isEmpty,
 			 const bool isRoot );
 
@@ -179,7 +177,7 @@ namespace NRS
        *                      content from the CDATA section.
        */
       void docCharacters( const XMLCh* const chars,
-			  const unsigned int length,
+			  const XMLSize_t length,
 			  const bool cdataSection );
 
       /// callback for ignorable whitespace
@@ -200,7 +198,7 @@ namespace NRS
        *                      content from the CDATA section.
        */
       void ignorableWhitespace( const XMLCh* const chars,
-				const unsigned int length,
+				const XMLSize_t length,
 				const bool cdataSection );
 
       /// callback for processing instruction

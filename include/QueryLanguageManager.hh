@@ -26,9 +26,8 @@
 
 #include <iostream>
 #include <string>
-#include "QueryManager.hh"
 
-#pragma interface
+#include "QueryManager.hh"
 
 namespace NRS
 {

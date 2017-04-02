@@ -22,14 +22,13 @@
  */
 
 #include <string>
+
 #include "VariableNodeDirector.hh"
 #include "ExternalInterfaceDirector.hh"
 #include "StringLiterals.hh"
 #include "Target.hh"
 #include "ReplyNumLog.hh"
 #include "QueryNumLogManager.hh"
-
-#pragma implementation
 #include "QueryNumLog.hh"
 
 NRS::Message::QueryNumLog::QueryNumLog( std::string aName ) :

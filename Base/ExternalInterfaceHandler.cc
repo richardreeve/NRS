@@ -22,7 +22,6 @@
  */
 
 
-#pragma implementation
 #include "ExternalInterfaceHandler.hh"
 #include "ExternalInterfaceDirector.hh"
 #include "ExternalInterface.hh"

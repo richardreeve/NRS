@@ -24,7 +24,6 @@
 #ifndef _QUERY_ROUTE_HH
 #define _QUERY_ROUTE_HH
 
-#pragma interface
 #include <string>
 
 #include "Target.hh"

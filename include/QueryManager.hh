@@ -30,8 +30,6 @@
 
 #error unused
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

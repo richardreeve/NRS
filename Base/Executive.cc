@@ -20,7 +20,7 @@
  * Richard Reeve <richardr@inf.ed.ac.uk>
  *
  */
-#pragma implementation
+
 #include <sstream>
 #include <unistd.h>
 

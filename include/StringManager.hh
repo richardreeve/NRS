@@ -27,8 +27,6 @@
 #include <string>
 #include "VariableManager.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

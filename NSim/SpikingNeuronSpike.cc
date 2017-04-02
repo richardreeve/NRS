@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "FloatSegment.hh"
 #include "MessageFunctionObject.hh"
 #include "VariableNodeDirector.hh"

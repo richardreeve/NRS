@@ -26,10 +26,9 @@
 
 #include <string>
 #include <list>
+
 #include "Variable.hh"
 #include "Types.hh"
-
-#pragma interface
 
 namespace NRS
 {

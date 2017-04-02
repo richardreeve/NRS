@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Exception.hh"
 #include "Restriction.hh"
 #include "SegmentDescription.hh"

@@ -28,8 +28,6 @@
 #include "ArgumentDirector.hh"
 #include "ArgumentFielder.hh"
 #include "BMFParser.hh"
-
-#pragma implementation
 #include "FileBMFInterface.hh"
 
 namespace NRS

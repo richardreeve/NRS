@@ -28,8 +28,6 @@
 #include <string>
 #include "VoidManager.hh"
 
-#pragma interface
-
 namespace NRS
 {
   namespace Base

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "ResetManager.hh"
 
 #include "Reset.hh"

@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Conductance.hh"
 #include "ConductanceManager.hh"
 #include "VariableNodeDirector.hh"

@@ -24,7 +24,6 @@
 #ifndef _EVALUATOR_HH
 #define _EVALUATOR_HH
 
-#pragma interface
 #include "Boolean.hh"
 #include "Node.hh"
 #include "NodeFactory.hh"

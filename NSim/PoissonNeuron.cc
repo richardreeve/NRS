@@ -21,7 +21,6 @@
  *
  */
 
-#pragma implementation
 #include "Boolean.hh"
 #include "PoissonNeuron.hh"
 #include "Time.hh"

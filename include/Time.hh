@@ -26,7 +26,6 @@
 
 #include <string>
 
-#pragma interface
 #include "VariableManager.hh"
 #include "Float.hh"
 
