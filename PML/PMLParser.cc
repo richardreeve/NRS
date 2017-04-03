@@ -79,7 +79,7 @@ NRS::Interface::PMLParser::PMLParser( std::string aName ) :
   iDiscard( false )
 {
   setDoNamespaces( true );
-  //setDoValidation( false );
+  setDoValidation( false );
   setDoSchema( false );
   setExitOnFirstFatalError( true );
   installAdvDocHandler( this );

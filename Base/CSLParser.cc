@@ -71,7 +71,7 @@ NRS::Base::CSLParser::CSLParser( std::string aName, std::string aFilename ) :
   iInMessage( false ), iInSegment( false ), iFound( false )
 {
   setDoNamespaces( true );
-  //setDoValidation( false );
+  setDoValidation( false );
   setDoSchema( false );
   setExitOnFirstFatalError( true );
   installAdvDocHandler( this );
