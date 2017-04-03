@@ -42,7 +42,7 @@ namespace NRS
 
     /// This is the CSL Parser class
     class CSLParser : public XERCES_CPP_NAMESPACE::SAXParser,
-		      public XERCES_CPP_NAMESPACE::ErrorHandler
+                      public XERCES_CPP_NAMESPACE::ErrorHandler
     {
     public:
       /// Simple constructor
@@ -110,14 +110,14 @@ namespace NRS
        *                 root element.
        */
       void startElement( const XERCES_CPP_NAMESPACE::XMLElementDecl &elemDecl,
-			 const unsigned int urlId,
-			 const XMLCh * const elemPrefix,
-			 const XERCES_CPP_NAMESPACE::
-			 RefVectorOf< XERCES_CPP_NAMESPACE::XMLAttr >
-			 &attrList,
-			 const XMLSize_t attrCount,
-			 const bool isEmpty,
-			 const bool isRoot );
+                         const unsigned int urlId,
+                         const XMLCh * const elemPrefix,
+                         const XERCES_CPP_NAMESPACE::
+                         RefVectorOf< XERCES_CPP_NAMESPACE::XMLAttr >
+                         &attrList,
+                         const XMLSize_t attrCount,
+                         const bool isEmpty,
+                         const bool isRoot );
 
       /// callback for element end
       /**
@@ -134,13 +134,13 @@ namespace NRS
        *                   only when namespace processing is enabled.
        */
       void endElement( const XERCES_CPP_NAMESPACE::XMLElementDecl& elemDecl,
-		       const unsigned int urlId,
-		       const bool isRoot,
-		       const XMLCh* const elemPrefix );
+                       const unsigned int urlId,
+                       const bool isRoot,
+                       const XMLCh* const elemPrefix );
 
       /// callback for start of entity reference
       void startEntityReference( const XERCES_CPP_NAMESPACE::XMLEntityDecl
-				 &entDecl );
+                                 &entDecl );
 
       /// callback for end of entity reference
       /**
@@ -152,7 +152,7 @@ namespace NRS
        *                entity declaration information.
        */
       void endEntityReference( const XERCES_CPP_NAMESPACE::XMLEntityDecl
-			       &entDecl );
+                               &entDecl );
       
       /// callback for a comment
       /**
@@ -177,8 +177,8 @@ namespace NRS
        *                      content from the CDATA section.
        */
       void docCharacters( const XMLCh* const chars,
-			  const XMLSize_t length,
-			  const bool cdataSection );
+                          const XMLSize_t length,
+                          const bool cdataSection );
 
       /// callback for ignorable whitespace
       /**
@@ -198,8 +198,8 @@ namespace NRS
        *                      content from the CDATA section.
        */
       void ignorableWhitespace( const XMLCh* const chars,
-				const XMLSize_t length,
-				const bool cdataSection );
+                                const XMLSize_t length,
+                                const bool cdataSection );
 
       /// callback for processing instruction
       /**
@@ -217,7 +217,7 @@ namespace NRS
        *
        */
        void docPI( const XMLCh* const target,
-		  const XMLCh* const data );
+                   const XMLCh* const data );
 
       /// callback for parser warning
       /**
@@ -282,13 +282,50 @@ namespace NRS
        *            wrapping another exception.
        */
       void fatalError( const XERCES_CPP_NAMESPACE::SAXParseException &exc );
-      
-      /// callback to reset errors
+
+      // -----------------------------------------------------------------------
+      //  Implementation of the XMLErrorReporter interface
+      // -----------------------------------------------------------------------
+
+      /** @name Implementation of the XMLErrorReporter Interface. */
       /**
-       * Reset the Error handler object on its reuse
+       * This method is used to report back errors found while parsing the
+       * XML file. The driver will call the corresponding user installed
+       * SAX Error Handler methods: 'fatal', 'error', 'warning' depending
+       * on the severity of the error. This classification is defined by
+       * the XML specification.
        *
-       * This method helps in reseting the Error handler object
-       * implementational defaults each time the Error handler is begun.
+       * @param errCode An integer code for the error.
+       * @param msgDomain A const pointer to an Unicode string representing
+       *                  the message domain to use.
+       * @param errType An enumeration classifying the severity of the error.
+       * @param errorText A const pointer to an Unicode string representing
+       *                  the text of the error message.
+       * @param systemId  A const pointer to an Unicode string representing
+       *                  the system id of the XML file where this error
+       *                  was discovered.
+       * @param publicId  A const pointer to an Unicode string representing
+       *                  the public id of the XML file where this error
+       *                  was discovered.
+       * @param lineNum   The line number where the error occurred.
+       * @param colNum    The column number where the error occurred.
+       * @see ErrorHandler
+       */
+      void error(const unsigned int                errCode,
+                 const XMLCh* const                msgDomain,
+                 const XMLErrorReporter::ErrTypes  errType,
+                 const XMLCh* const                errorText,
+                 const XMLCh* const                systemId,
+                 const XMLCh* const                publicId,
+                 const XMLFileLoc                  lineNum,
+                 const XMLFileLoc                  colNum);
+
+      /**
+       * This method allows the user installed Error Handler
+       * callback to 'reset' itself.
+       *
+       * <b>This method is a no-op for this SAX driver
+       * implementation.</b>
        *
        */
       void resetErrors();

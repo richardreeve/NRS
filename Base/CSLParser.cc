@@ -27,6 +27,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <xercesc/parsers/SAXParser.hpp>
+#include <xercesc/sax/HandlerBase.hpp>
+#include <xercesc/util/XMLString.hpp>
 #include <xercesc/sax/SAXParseException.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 
@@ -47,14 +50,14 @@ namespace NRS
     {
       sXercesHandle = dlopen( "libxerces-c.so", RTLD_NOW | RTLD_GLOBAL );
       if (!sXercesHandle)
-	{
-      sXercesHandle = dlopen( "libxerces-c.dylib", RTLD_NOW | RTLD_GLOBAL );
-      if (!sXercesHandle)
-	{
-	  _ABORT_( "xerces-c library not found" );
-	}
-  }
-      // XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
+        {
+          sXercesHandle = dlopen( "libxerces-c.dylib", RTLD_NOW | RTLD_GLOBAL );
+          if (!sXercesHandle)
+            {
+              _ABORT_( "xerces-c library not found" );
+            }
+        }
+      XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
     }
     
     __attribute__ ((destructor)) void sax_exit()
@@ -70,8 +73,8 @@ NRS::Base::CSLParser::CSLParser( std::string aName, std::string aFilename ) :
   iLFIS( NULL ), iName( aName ), iFilename( aFilename ),
   iInMessage( false ), iInSegment( false ), iFound( false )
 {
+  setValidationScheme( Val_Never );
   setDoNamespaces( true );
-  setDoValidation( false );
   setDoSchema( false );
   setExitOnFirstFatalError( true );
   installAdvDocHandler( this );
@@ -142,16 +145,16 @@ void NRS::Base::CSLParser::resetDocument()
 }
 
 void NRS::Base::CSLParser::startElement( const XERCES_CPP_NAMESPACE::
-					      XMLElementDecl &elemDecl,
-					      const unsigned int urlId,
-					      const XMLCh * const elemPrefix,
-					      const XERCES_CPP_NAMESPACE::
-					      RefVectorOf< 
-					      XERCES_CPP_NAMESPACE::
-					      XMLAttr > &attrList,
-					      const XMLSize_t attrCount,
-					      const bool isEmpty,
-					      const bool isRoot )
+                                         XMLElementDecl &elemDecl,
+                                         const unsigned int urlId,
+                                         const XMLCh * const elemPrefix,
+                                         const XERCES_CPP_NAMESPACE::
+                                         RefVectorOf< 
+                                         XERCES_CPP_NAMESPACE::
+                                         XMLAttr > &attrList,
+                                         const XMLSize_t attrCount,
+                                         const bool isEmpty,
+                                         const bool isRoot )
 {
   char *ptr =
     XERCES_CPP_NAMESPACE::XMLString::transcode( elemDecl.getBaseName() );
@@ -165,11 +168,11 @@ void NRS::Base::CSLParser::startElement( const XERCES_CPP_NAMESPACE::
     {
       const XERCES_CPP_NAMESPACE::XMLAttr *attr = attrList.elementAt( i );
       char *anURIName = XERCES_CPP_NAMESPACE::
-	XMLString::transcode( getURIText( attr->getURIId() ) );
+        XMLString::transcode( getURIText( attr->getURIId() ) );
       char *anAttName = XERCES_CPP_NAMESPACE::
-	XMLString::transcode( attr->getName() );
+        XMLString::transcode( attr->getName() );
       char *anAttValue = XERCES_CPP_NAMESPACE::
-	XMLString::transcode( attr->getValue() );
+        XMLString::transcode( attr->getValue() );
 
       attrMap[ anAttName ] = anAttValue;
   
@@ -181,34 +184,34 @@ void NRS::Base::CSLParser::startElement( const XERCES_CPP_NAMESPACE::
   if (!iInMessage)
     {
       if (eltName == "Message")
-	_DEBUG_( attrMap[ "name" ] );
+        _DEBUG_( attrMap[ "name" ] );
       if ((eltName == "Message") && (attrMap[ "name" ] == iName))
-	{
-	  iFound = true;
-	  iInMessage = true;
-	}
+        {
+          iFound = true;
+          iInMessage = true;
+        }
     }
   else if (!iInSegment)
     {
       if (eltName == "Segment")
-	{
-	  _DEBUG_( attrMap[ "name" ] );
-	  _DEBUG_( attrMap[ "unit" ] );
-	  const VariableManager &theVM = VariableNodeDirector::getDirector().
-	    getVariableManager( attrMap[ "unit" ] );
-	  iSegmentDescription.push_back( theVM.getSegmentDescription( 0 ) );
-	  iSegmentDescription.back().setAttributeName( attrMap[ "name" ] );
-	  iSegmentDescription.back().
-	    setInContents( (attrMap[ "segmentInContents" ] == "true") );
-	}
+        {
+          _DEBUG_( attrMap[ "name" ] );
+          _DEBUG_( attrMap[ "unit" ] );
+          const VariableManager &theVM = VariableNodeDirector::getDirector().
+            getVariableManager( attrMap[ "unit" ] );
+          iSegmentDescription.push_back( theVM.getSegmentDescription( 0 ) );
+          iSegmentDescription.back().setAttributeName( attrMap[ "name" ] );
+          iSegmentDescription.back().
+            setInContents( (attrMap[ "segmentInContents" ] == "true") );
+        }
     }
 }
 
 void NRS::Base::CSLParser::endElement( const XERCES_CPP_NAMESPACE::
-					    XMLElementDecl &elemDecl,
-					    const unsigned int urlId,
-					    const bool isRoot,
-					    const XMLCh* const elemPrefix )
+                                       XMLElementDecl &elemDecl,
+                                       const unsigned int urlId,
+                                       const bool isRoot,
+                                       const XMLCh* const elemPrefix )
 {
   char *ptr =
     XERCES_CPP_NAMESPACE::XMLString::transcode( elemDecl.getBaseName() );
@@ -219,24 +222,24 @@ void NRS::Base::CSLParser::endElement( const XERCES_CPP_NAMESPACE::
   if (iInSegment)
     {
       if (eltName == "Segment")
-	iInSegment = false;
+        iInSegment = false;
     }
   else if (iInMessage)
     {
       if (eltName == "Message")
-	iInMessage = false;
+        iInMessage = false;
     }
 }
 
 void NRS::Base::CSLParser::startEntityReference( const
-						      XERCES_CPP_NAMESPACE::
-						      XMLEntityDecl &entDecl )
+                                                 XERCES_CPP_NAMESPACE::
+                                                 XMLEntityDecl &entDecl )
 {
 }
 
 void NRS::Base::CSLParser::endEntityReference( const
-						    XERCES_CPP_NAMESPACE::
-						    XMLEntityDecl &entDecl )
+                                               XERCES_CPP_NAMESPACE::
+                                               XMLEntityDecl &entDecl )
 {
 }
 
@@ -245,14 +248,14 @@ void NRS::Base::CSLParser::docComment( const XMLCh *const comment )
 }
 
 void NRS::Base::CSLParser::docCharacters( const XMLCh* const chars,
-					       const XMLSize_t length,
-					       const bool cdataSection )
+                                          const XMLSize_t length,
+                                          const bool cdataSection )
 {
 }
 
 void NRS::Base::CSLParser::ignorableWhitespace( const XMLCh* const chars,
-						     const XMLSize_t length,
-						     const bool cdataSection )
+                                                const XMLSize_t length,
+                                                const bool cdataSection )
 {
 }
 
@@ -300,6 +303,28 @@ void NRS::Base::CSLParser::fatalError( const XERCES_CPP_NAMESPACE::
 	   << ", char " << exc.getColumnNumber()
 	   << "\n Message: "
 	   << aMes );
+  
+  XERCES_CPP_NAMESPACE::XMLString::release( &aSId );
+  XERCES_CPP_NAMESPACE::XMLString::release( &aMes );
+}
+
+void NRS::Base::CSLParser::error(const unsigned int                errCode,
+                                 const XMLCh* const                msgDomain,
+                                 const XMLErrorReporter::ErrTypes  errType,
+                                 const XMLCh* const                errorText,
+                                 const XMLCh* const                systemId,
+                                 const XMLCh* const                publicId,
+                                 const XMLFileLoc                  lineNum,
+                                 const XMLFileLoc                  colNum)
+{
+  char *aSId = XERCES_CPP_NAMESPACE::XMLString::transcode( systemId );
+  char *aMes = XERCES_CPP_NAMESPACE::XMLString::transcode( errorText );
+  
+  _ERROR_( "Error code: " << errCode << " System ID " << aSId
+           << ", line " << lineNum
+           << ", char " << colNum
+           << "\n Message: "
+           << aMes );
   
   XERCES_CPP_NAMESPACE::XMLString::release( &aSId );
   XERCES_CPP_NAMESPACE::XMLString::release( &aMes );
