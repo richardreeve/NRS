@@ -1,3 +1,52 @@
+Neural Robotic System
+=====================
+
+NB: This is a recovered archive of some code used to run neural
+simulations to control Khepera and Koala robots from the early 2000s,
+released thanks to Tim Lukins, who said it was a shame no-one could
+find it any longer no matter how useless it might be!
+
+History
+-------
+
+The need for this program arose in the 1990's --- Barbara Webb, Tom
+Scutt and others wrote software to carry out neural simulations for
+modelling cricket phonotaxis. The code was completely rewritten
+between 2000 and 2002 by Richard Reeve to be a more general purpose
+tool for neural simulation, designed to connect to robots and sensors
+for realtime control. It also acquired a scripting language to allow
+runtime modification of networks to maximise ease of use. This was the
+first Neural Robotic System (NRS).
+
+The final iteration of this code was v1.2 which included what is
+described below as NRS.nsim, NRS.tui, NRS.realtime, NRS.robot and
+NRS.tracker. Initial versions of NRS.grapher and NRS.router were
+developed at this time also, though they were not fully integrated
+into the system. This system remains fully functioning, but various
+problems were identified which would be difficult to resolve with the
+current codebase, not least the idiosyncratic communication mechanisms
+which combined with the lack of a design document to cause
+difficulties for others to add extra functionalities to the codebase.
+
+In 2003 it was decided to redesign the system, taking the best
+elements of the old, but putting in a new properly structured
+framework to allow components to be added with relative ease by other
+programmers; this was partly because more programmers were available
+to work on the code, and partly because desirable features were
+discovered which it would have been difficult to add to the old system.
+
+The communication mechanisms for the system evolved from discussions
+over many years at the Telluride Neuromorphic Engineering workshop on
+Address Event Representation and how to extend it.
+
+Documentation
+-------------
+
+See the documentation in doc/ for full details on the system.
+
+Preamble
+--------
+
 This software is free software released on the GNU General Public
 License - see COPYING for license details. Whilst you are under no
 further obligations than those outlined in the license, we would
@@ -25,10 +74,11 @@ autoheader
 automake --add-missing
 autoreconf
 
-This only needs to be done after you first check out the CVS code. For
-other times when the makefiles need to be updated, just use autoreconf.
-If you are using a source snapshot not from CVS this first step should
-not be necessary.
+This only needs to be done after you first check out the git code. For
+other times when the makefiles need to be updated, just use
+autoreconf. You will very likely have to install some packages at this
+point. You also need to set the envirnoment variable XERCES to point
+to the xercesImpl.jar file containing the Xerces Java implementation.
 
 Then choose an installation directory and add <installdir>/bin to your
 PATH enviroment variable, e.g. in your .bashrc add:
@@ -103,7 +153,7 @@ need to do:
    the NRS sources, as indicated above, but including the
    --enable-camera option.
 
-   Example (which works on Edinburgh DICE computers):
+   Example:
 
   > OPENCV_INCDIR=/disk/cricketlab/include
   > OPENCV_LIBDIR=/disk/cricketlab/lib
@@ -111,8 +161,5 @@ need to do:
   > CCVT_LIBDIR=/disk/cricketlab/lib
 
   > configure --prefix=/home/richardr/install --enable-camera
-
-Note that on the robotlab DICE machines all these files are installed
-in /disk/cricketlab
 
 4. Continue building NRS as normal, i.e., make, make install, etc.
